@@ -1,4 +1,4 @@
-# 🖥️ Reparar Ordenador | Informática a Tope
+[# 🖥️ Reparar Ordenador | Informática a Tope
 
 Bienvenido a la web oficial del canal **Reparar Ordenador**, un espacio dedicado a ayudarte a resolver problemas informáticos de forma clara, práctica y accesible.  
 Aquí encontrarás tutoriales, guías, herramientas, trucos y recursos para **Windows, Android, hardware, software, optimización, reparación y mucho más**.
@@ -64,3 +64,4 @@ Este proyecto está en evolución constante. Si deseas aportar ideas, sugerencia
 - 🌐 Web: **https://repararordenador.github.io**  
 - ▶️ YouTube: **https://youtube.com/@repararordenador**  
 - 📩 Contacto: *(próximamente)*  
+](https://repararordenador.github.io/)
