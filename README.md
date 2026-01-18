@@ -64,4 +64,3 @@ Este proyecto está en evolución constante. Si deseas aportar ideas, sugerencia
 - 🌐 Web: **https://repararordenador.github.io**  
 - ▶️ YouTube: **https://youtube.com/@repararordenador**  
 - 📩 Contacto: *(próximamente)*  
-](https://repararordenador.github.io/)
