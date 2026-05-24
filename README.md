@@ -21,6 +21,9 @@ Este sitio está en constante crecimiento. Muy pronto podrás navegar por seccio
 
 ## 📚 Secciones principales
 
+### El "Low Latency Profile" Oculto de Windows 11
+👉 [Ir a la sección](https://repararordenador.github.io/low-latency-profile-windows-11.html)
+
 ### 🔧 Reparación y Solución de Problemas  
 👉 [Ir a la sección](reparacion.md)
 
