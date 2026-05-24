@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reparar Ordenador | Informática a Tope</title>
+
+<meta name="description"
+content="Tutoriales avanzados de Windows 11, optimización, reparación de PC, Android, hardware, redes y soluciones informáticas reales.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================
+   VARIABLES
+========================= */
+
+:root{
+
+    --bg:#050816;
+    --bg2:#0a1022;
+
+    --card:#101827;
+
+    --primary:#00d9ff;
+    --secondary:#7c4dff;
+    --green:#00ff9d;
+
+    --text:#eef5ff;
+    --muted:#9db0d0;
+
+    --border:rgba(255,255,255,.08);
+
+    --shadow:
+        0 0 25px rgba(0,217,255,.18);
+
+}
+
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:'Rajdhani',sans-serif;
+
+    background:
+        radial-gradient(circle at top left,
+        rgba(0,217,255,.08),
+        transparent 30%),
+
+        radial-gradient(circle at bottom right,
+        rgba(124,77,255,.12),
+        transparent 35%),
+
+        linear-gradient(180deg,
+        var(--bg),
+        var(--bg2));
+
+    color:var(--text);
+
+    overflow-x:hidden;
+}
+
+/* =========================
+   FONDO TECH
+========================= */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+
+    background-size:40px 40px;
+
+    pointer-events:none;
+
+    z-index:-1;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+nav{
+
+    position:sticky;
+    top:0;
+
+    z-index:999;
+
+    backdrop-filter:blur(12px);
+
+    background:rgba(5,8,22,.7);
+
+    border-bottom:1px solid var(--border);
+
+    padding:18px 6%;
+}
+
+.nav-container{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.logo{
+
+    font-family:'Orbitron',sans-serif;
+
+    font-size:1.3rem;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    background:
+        linear-gradient(
+        90deg,
+        var(--primary),
+        #fff,
+        var(--secondary));
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.nav-links{
+
+    display:flex;
+    gap:25px;
+    flex-wrap:wrap;
+}
+
+.nav-links a{
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.nav-links a:hover{
+
+    color:var(--primary);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+
+    min-height:92vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:60px 20px;
+}
+
+.hero-content{
+
+    max-width:1100px;
+}
+
+.hero h1{
+
+    font-family:'Orbitron',sans-serif;
+
+    font-size:5rem;
+
+    line-height:1.1;
+
+    margin-bottom:25px;
+
+    background:
+        linear-gradient(
+        90deg,
+        var(--primary),
+        #ffffff,
+        var(--secondary));
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+
+    color:var(--muted);
+
+    font-size:1.3rem;
+
+    line-height:1.9;
+
+    margin-bottom:45px;
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+
+    padding:17px 32px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.35s;
+}
+
+.btn-primary{
+
+    background:
+        linear-gradient(
+        90deg,
+        var(--primary),
+        #0099ff);
+
+    color:#000;
+
+    box-shadow:var(--shadow);
+}
+
+.btn-primary:hover{
+
+    transform:
+        translateY(-5px)
+        scale(1.03);
+}
+
+.btn-secondary{
+
+    border:1px solid var(--border);
+
+    color:var(--text);
+
+    background:rgba(255,255,255,.04);
+}
+
+.btn-secondary:hover{
+
+    border-color:var(--primary);
+
+    background:rgba(255,255,255,.08);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+
+    width:92%;
+
+    max-width:1350px;
+
+    margin:auto;
+}
+
+/* =========================
+   TITLES
+========================= */
+
+.section-title{
+
+    text-align:center;
+
+    font-size:2.4rem;
+
+    margin-bottom:60px;
+
+    font-family:'Orbitron',sans-serif;
+}
+
+.section-title::after{
+
+    content:"";
+
+    width:140px;
+    height:4px;
+
+    display:block;
+
+    margin:18px auto;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+        90deg,
+        var(--primary),
+        var(--secondary));
+}
+
+/* =========================
+   FEATURED
+========================= */
+
+.featured{
+
+    padding:70px;
+
+    margin-bottom:90px;
+
+    border-radius:30px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+        145deg,
+        rgba(16,24,39,.9),
+        rgba(9,14,25,.9));
+
+    border:1px solid var(--border);
+
+    box-shadow:
+        0 0 45px rgba(0,217,255,.12);
+}
+
+.featured::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-100px;
+    right:-100px;
+
+    width:320px;
+    height:320px;
+
+    background:
+        radial-gradient(circle,
+        rgba(0,217,255,.18),
+        transparent 70%);
+}
+
+.featured h2{
+
+    font-size:2.2rem;
+
+    margin-bottom:25px;
+
+    color:var(--primary);
+}
+
+.featured p{
+
+    color:var(--muted);
+
+    line-height:1.9;
+
+    margin-bottom:35px;
+
+    max-width:900px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(290px,1fr));
+
+    gap:28px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    padding:35px;
+
+    border-radius:24px;
+
+    background:
+        rgba(16,24,39,.75);
+
+    border:1px solid var(--border);
+
+    backdrop-filter:blur(10px);
+
+    transition:.35s;
+
+    box-shadow:var(--shadow);
+}
+
+.card:hover{
+
+    transform:
+        translateY(-8px);
+
+    border-color:var(--primary);
+}
+
+.card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-120px;
+
+    background:
+        radial-gradient(circle,
+        rgba(0,217,255,.09),
+        transparent 60%);
+}
+
+.card h3{
+
+    position:relative;
+
+    z-index:2;
+
+    font-size:1.4rem;
+
+    margin-bottom:18px;
+
+    color:var(--primary);
+}
+
+.card p{
+
+    position:relative;
+
+    z-index:2;
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+    margin-bottom:22px;
+}
+
+.card a{
+
+    position:relative;
+
+    z-index:2;
+
+    color:var(--green);
+
+    text-decoration:none;
+
+    font-weight:700;
+}
+
+/* =========================
+   DONATION SECTION
+========================= */
+
+.donation-section{
+
+    margin:120px 0;
+}
+
+.donation-box{
+
+    position:relative;
+
+    overflow:hidden;
+
+    text-align:center;
+
+    padding:70px 40px;
+
+    border-radius:35px;
+
+    background:
+        linear-gradient(
+        145deg,
+        rgba(16,24,39,.95),
+        rgba(7,12,22,.95));
+
+    border:1px solid rgba(0,217,255,.2);
+
+    box-shadow:
+        0 0 50px rgba(0,217,255,.15),
+        0 0 90px rgba(124,77,255,.08);
+}
+
+.donation-box::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-150px;
+
+    background:
+        radial-gradient(circle,
+        rgba(0,217,255,.16),
+        transparent 55%);
+
+    animation:glow 6s linear infinite;
+}
+
+@keyframes glow{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.1);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+}
+
+.donation-box h2{
+
+    position:relative;
+
+    z-index:2;
+
+    font-size:2.8rem;
+
+    margin-bottom:25px;
+
+    font-family:'Orbitron',sans-serif;
+
+    background:
+        linear-gradient(
+        90deg,
+        var(--primary),
+        #fff,
+        var(--secondary));
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.donation-box p{
+
+    position:relative;
+
+    z-index:2;
+
+    max-width:850px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    line-height:2;
+
+    font-size:1.15rem;
+
+    margin-bottom:40px;
+}
+
+.benefits{
+
+    position:relative;
+
+    z-index:2;
+
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+    margin-bottom:45px;
+}
+
+.benefit{
+
+    padding:14px 22px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    transition:.3s;
+}
+
+.benefit:hover{
+
+    transform:translateY(-4px);
+
+    border-color:var(--primary);
+}
+
+.donate-btn{
+
+    position:relative;
+
+    z-index:2;
+
+    display:inline-block;
+
+    padding:20px 42px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    font-size:1.15rem;
+
+    font-weight:800;
+
+    color:#000;
+
+    background:
+        linear-gradient(
+        90deg,
+        var(--primary),
+        var(--green));
+
+    box-shadow:
+        0 0 35px rgba(0,217,255,.45);
+
+    transition:.35s;
+}
+
+.donate-btn:hover{
+
+    transform:
+        translateY(-5px)
+        scale(1.04);
+}
+
+.donation-note{
+
+    position:relative;
+
+    z-index:2;
+
+    display:block;
+
+    margin-top:28px;
+
+    color:#8093b1;
+}
+
+/* =========================
+   YOUTUBE
+========================= */
+
+.youtube{
+
+    text-align:center;
+
+    margin:100px 0;
+}
+
+.youtube p{
+
+    color:var(--muted);
+
+    margin-bottom:30px;
+
+    font-size:1.1rem;
+}
+
+.youtube-btn{
+
+    display:inline-block;
+
+    padding:18px 35px;
+
+    border-radius:15px;
+
+    background:#ff0033;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.35s;
+}
+
+.youtube-btn:hover{
+
+    transform:scale(1.05);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    border-top:1px solid var(--border);
+
+    margin-top:80px;
+
+    padding:45px 20px;
+
+    text-align:center;
+
+    background:#04060d;
+}
+
+footer p{
+
+    color:var(--muted);
+
+    margin-bottom:20px;
+}
+
+.footer-links{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.footer-links a{
+
+    color:var(--primary);
+
+    text-decoration:none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .hero h1{
+
+        font-size:3rem;
+    }
+
+    .hero p{
+
+        font-size:1.1rem;
+    }
+
+    .featured{
+
+        padding:40px;
+    }
+
+    .donation-box{
+
+        padding:50px 25px;
+    }
+
+    .donation-box h2{
+
+        font-size:2rem;
+    }
+
+    .benefits{
+
+        flex-direction:column;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <div class="nav-container">
+
+        <div class="logo">
+            REPARAR ORDENADOR
+        </div>
+
+        <div class="nav-links">
+
+            <a href="#secciones">Secciones</a>
+            <a href="#youtube">YouTube</a>
+            <a href="#donar">Apoyar</a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            INFORMÁTICA A TOPE
+        </h1>
+
+        <p>
+            Tutoriales avanzados, reparación de PC,
+            optimización extrema, Windows 11, Android,
+            hardware, rendimiento gaming, redes,
+            mantenimiento y soluciones informáticas reales.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#secciones" class="btn btn-primary">
+                Explorar Contenido
+            </a>
+
+            <a href="https://youtube.com/@repararordenador"
+               target="_blank"
+               class="btn btn-secondary">
+
+                Canal de YouTube
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- MAIN -->
+
+<div class="container">
+
+    <!-- FEATURED -->
+
+    <section class="featured">
+
+        <h2>
+            🔥 Low Latency Profile Oculto de Windows 11
+        </h2>
+
+        <p>
+            Descubre uno de los perfiles ocultos más interesantes
+            de Windows 11 para mejorar la latencia,
+            reducir micro-stuttering y optimizar el rendimiento
+            general del sistema en gaming y tareas exigentes.
+        </p>
+
+        <a href="https://repararordenador.github.io/low-latency-profile-windows-11.html"
+           class="btn btn-primary">
+
+           Ver Guía Completa
+
+        </a>
+
+    </section>
+
+    <!-- SECCIONES -->
+
+    <h2 class="section-title" id="secciones">
+        📚 Secciones Principales
+    </h2>
+
+    <div class="grid">
+
+        <div class="card">
+
+            <h3>🔧 Reparación y Problemas</h3>
+
+            <p>
+                Soluciones para errores de Windows,
+                pantallazos azules, drivers,
+                fallos de arranque, audio y hardware.
+            </p>
+
+            <a href="reparacion.html">
+                Entrar →
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h3>⚙️ Optimización y Rendimiento</h3>
+
+            <p>
+                Mejora FPS, reduce consumo de RAM,
+                optimiza SSD y acelera Windows
+                al máximo.
+            </p>
+
+            <a href="optimizacion.html">
+                Entrar →
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h3>🛠️ Herramientas y Utilidades</h3>
+
+            <p>
+                Software recomendado, utilidades técnicas
+                y herramientas de reparación y diagnóstico.
+            </p>
+
+            <a href="herramientas.html">
+                Entrar →
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h3>📱 Android en PC</h3>
+
+            <p>
+                WSA, emulación Android,
+                virtualización, ADB y optimización móvil.
+            </p>
+
+            <a href="android-pc.html">
+                Entrar →
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h3>🧰 Hardware y Mantenimiento</h3>
+
+            <p>
+                SSD, RAM, temperaturas,
+                limpieza, montaje y mantenimiento profesional.
+            </p>
+
+            <a href="hardware.html">
+                Entrar →
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h3>🌐 Seguridad y Redes</h3>
+
+            <p>
+                DNS, WiFi, privacidad,
+                navegadores, seguridad informática
+                y redes avanzadas.
+            </p>
+
+            <a href="seguridad-redes.html">
+                Entrar →
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- DONACIONES -->
+
+    <section class="donation-section" id="donar">
+
+        <div class="donation-box">
+
+            <h2>
+                ❤️ Apoya el Proyecto
+            </h2>
+
+            <p>
+                Reparar Ordenador continúa creciendo gracias al apoyo
+                de la comunidad. Si este contenido te ha ayudado
+                a mejorar tu PC, solucionar errores,
+                aprender informática o recuperar rendimiento,
+                puedes apoyar el proyecto con una pequeña donación.
+            </p>
+
+            <div class="benefits">
+
+                <div class="benefit">
+                    ⚡ Más tutoriales avanzados
+                </div>
+
+                <div class="benefit">
+                    🔧 Nuevas guías y herramientas
+                </div>
+
+                <div class="benefit">
+                    🖥️ Mejor contenido técnico real
+                </div>
+
+                <div class="benefit">
+                    🚀 Más optimización y rendimiento
+                </div>
+
+            </div>
+
+            <a href="https://paypal.me/RepararOrdenador"
+               target="_blank"
+               class="donate-btn">
+
+               ❤️ Hacer una Donación
+
+            </a>
+
+            <span class="donation-note">
+
+                Cualquier ayuda, por pequeña que sea,
+                ayuda a mantener el proyecto activo.
+
+            </span>
+
+        </div>
+
+    </section>
+
+    <!-- YOUTUBE -->
+
+    <section class="youtube" id="youtube">
+
+        <h2 class="section-title">
+            🎥 Canal de YouTube
+        </h2>
+
+        <p>
+            Tutoriales completos, optimización avanzada,
+            reparación de sistemas y contenido técnico actualizado.
+        </p>
+
+        <a href="https://youtube.com/@repararordenador"
+           target="_blank"
+           class="youtube-btn">
+
+           Ir al Canal
+
+        </a>
+
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 Reparar Ordenador | Informática a Tope
+    </p>
+
+    <div class="footer-links">
+
+        <a href="https://repararordenador.github.io">
+            Web Oficial
+        </a>
+
+        <a href="https://youtube.com/@repararordenador">
+            YouTube
+        </a>
+
+        <a href="https://paypal.me/RepararOrdenador">
+            Donaciones
+        </a>
+
+    </div>
+
+</footer>
+
+</body>
+</html>
