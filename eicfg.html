@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Configurador ei.cfg Avanzado 2026 · RepararOrdenador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-deep: #02040a;
+            --bg-surface: #0d1117;
+            --card-glass: rgba(22, 27, 34, 0.9);
+            --border-color: #30363d;
+            --neon-blue: #58a6ff;
+            --neon-cyan: #00e0ff;
+            --success-emerald: #238636;
+            --warning-orange: #d29922;
+            --danger-red: #f85149;
+            --text-primary: #c9d1d9;
+            --text-light: #f0f6ff;
+            --text-muted: #8b949e;
+            --terminal-dark: #010409;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% 0%, #161b22 0%, var(--bg-deep) 70%);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Rejilla tecnológica de fondo */
+        .grid-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(88, 166, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(88, 166, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: 0; pointer-events: none;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 2.5rem; position: relative; z-index: 2; }
+
+        /* Encabezado */
+        .tech-header { text-align: center; margin-bottom: 3.5rem; }
+        .channel-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(88, 166, 255, 0.1); backdrop-filter: blur(8px);
+            padding: 0.6rem 1.5rem; border-radius: 50px; border: 1px solid rgba(88, 166, 255, 0.3);
+            margin-bottom: 1.5rem; font-weight: 600; color: var(--neon-cyan); letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 3.8rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff 30%, var(--neon-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* Dashboard Interactivo */
+        .dashboard { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem; margin-bottom: 4rem; }
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+
+        .card {
+            background: var(--card-glass); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 1.8rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+        }
+        .card:hover { transform: translateY(-4px); border-color: var(--neon-cyan); box-shadow: 0 12px 30px rgba(0, 224, 255, 0.15); }
+        .card.active-card { border: 2px solid var(--neon-cyan); background: rgba(88, 166, 255, 0.05); }
+        .card.recommended-card { border-left: 5px solid var(--success-emerald); }
+
+        .rec-tag {
+            position: absolute; top: 15px; right: 15px; background: var(--success-emerald);
+            font-size: 0.65rem; font-weight: 800; padding: 4px 12px; border-radius: 20px; color: var(--text-light);
+        }
+
+        .badge-mode { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--neon-blue); font-weight: 600; margin-bottom: 0.8rem; display: block; }
+        .card h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700; }
+        
+        pre {
+            background: var(--terminal-dark); padding: 1.2rem; border-radius: 12px; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem; color: #79c0ff; border: 1px solid #21262d; margin: 15px 0; overflow-x: auto;
+        }
+
+        /* Panel Lateral */
+        .info-panel {
+            background: var(--bg-surface); border-radius: 24px; border: 1px solid var(--border-color);
+            padding: 2.5rem; position: sticky; top: 2rem; height: fit-content; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .panel-meta-box { background: rgba(0,0,0,0.4); padding: 1.2rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); margin: 1.5rem 0; }
+
+        .terminal-sim {
+            background: #040d21; border-radius: 12px; padding: 1.2rem; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem; border-left: 4px solid var(--neon-cyan); color: #a2d2ff; margin-top: 1.5rem;
+            min-height: 70px; display: flex; align-items: center; position: relative;
+        }
+        
+        /* Cursor parpadeante de la terminal */
+        .typed-cursor {
+            opacity: 1; animation: blink 0.7s infinite; color: var(--neon-cyan); margin-left: 2px;
+        }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+
+        .btn-copy-panel {
+            background: linear-gradient(135deg, var(--neon-blue), #1f6feb); color: var(--text-light); border: none; padding: 1.2rem;
+            width: 100%; border-radius: 14px; font-weight: 700; cursor: pointer; margin-top: 1.5rem; transition: 0.3s;
+            font-size: 1rem; letter-spacing: 0.5px;
+        }
+        .btn-copy-panel:hover { filter: brightness(1.2); box-shadow: 0 0 25px rgba(88, 166, 255, 0.4); }
+
+        /* SECCIÓN MEGAGUÍA SEO */
+        .seo-section {
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px;
+            padding: 4rem; margin-top: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .seo-section h2 { font-size: 2.2rem; color: var(--text-light); margin-bottom: 1.5rem; font-weight: 800; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        .seo-section h3 { font-size: 1.5rem; color: var(--neon-blue); margin-top: 2.5rem; margin-bottom: 1rem; font-weight: 700; }
+        .seo-section p { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 1.5rem; line-height: 1.8; }
+        .seo-section ul { margin-left: 2rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        .seo-section li { margin-bottom: 0.6rem; }
+        
+        .alert-box {
+            background: rgba(210, 153, 34, 0.1); border-left: 4px solid var(--warning-orange);
+            padding: 1.5rem; border-radius: 12px; margin: 2rem 0; color: #e3b341;
+        }
+        .alert-box h4 { font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
+
+        .legal-box {
+            background: rgba(248, 81, 73, 0.05); border: 1px solid rgba(248, 81, 73, 0.2);
+            padding: 2rem; border-radius: 16px; margin-top: 3.5rem; font-size: 0.9rem; color: var(--text-muted);
+        }
+
+        .toast-notify {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            background: var(--success-emerald); color: var(--text-light); padding: 1rem 2.5rem;
+            border-radius: 50px; font-weight: 700; opacity: 0; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); font-size: 0.95rem;
+        }
+
+        @media (max-width: 1100px) { .dashboard { grid-template-columns: 1fr; } .seo-section { padding: 2rem; } }
+    </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="container">
+    
+    <div class="tech-header">
+        <div class="channel-badge">
+            <i class="fab fa-youtube"></i> youtube.com/@repararordenador
+        </div>
+        <h1>Configurador Avanzado ei.cfg</h1>
+        <p style="color: var(--text-secondary); font-size: 1.2rem;">Control absoluto sobre las ediciones del instalador oficial de Windows</p>
+    </div>
+
+    <div class="dashboard">
+        <div class="cards-area">
+            <div class="grid-cards">
+                
+                <div class="card recommended-card" onclick="updatePanel('menu')" id="card-menu">
+                    <div class="rec-tag"><i class="fas fa-crown"></i> RECOMENDADO</div>
+                    <span class="badge-mode">[MODO LIBERTAD TOTAL]</span>
+                    <h3>Desbloquear Selector</h3>
+                    <pre>[Channel]
+Retail
+
+[VL]
+0</pre>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary)">Elimina la imposición automática de la BIOS/UEFI. Obliga al instalador a desplegar el menú interactivo con todas las ediciones.</p>
+                </div>
+
+                <div class="card" onclick="updatePanel('pro')" id="card-pro">
+                    <span class="badge-mode">[MODO MODIFICACIÓN DIRECTA]</span>
+                    <h3>Forzar Windows Pro</h3>
+                    <pre>[EditionID]
+Professional
+[Channel]
+Retail
+[VL]
+0</pre>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary)">Omite pantallas de confirmación e instala de forma automatizada la edición Professional sobreescribiendo claves OEM básicas.</p>
+                </div>
+
+                <div class="card" onclick="updatePanel('home')" id="card-home">
+                    <span class="badge-mode">[MODO RESTAURACIÓN ESTÁNDAR]</span>
+                    <h3>Forzar Windows Home</h3>
+                    <pre>[EditionID]
+Core
+[Channel]
+Retail
+[VL]
+0</pre>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary)">Ajusta la variable interna de Windows a 'Core' para forzar la edición Home básica de consumo sin verificar componentes externos.</p>
+                </div>
+
+                <div class="card" onclick="updatePanel('volume')" id="card-volume">
+                    <span class="badge-mode">[MODO ENTORNO CORPORATIVO]</span>
+                    <h3>Canal Volumen (VL)</h3>
+                    <pre>[Channel]
+Volume
+
+[VL]
+1</pre>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary)">Modifica la estructura de licenciamiento para imágenes corporativas. Prepara el sistema para servidores KMS o claves MAK.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h2 id="panelTitle" style="color: var(--text-light); font-weight: 800; font-size: 1.6rem; margin-bottom: 0.5rem;">Detalles del Mapeo</h2>
+            <p id="panelDesc" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Cargando análisis estructural...</p>
+            
+            <div class="panel-meta-box">
+                <span style="display:block; font-size: 0.75rem; color: var(--neon-cyan); font-weight: bold; margin-bottom: 6px; letter-spacing: 1px;">RUTA DE INYECCIÓN OBLIGATORIA:</span>
+                <code style="font-family: 'JetBrains Mono'; font-size: 0.9rem; color: var(--text-light); word-break: break-all;">USB:\sources\ei.cfg</code>
+            </div>
+
+            <div class="terminal-sim">
+                <span id="terminalText">> </span><span class="typed-cursor">|</span>
+            </div>
+
+            <button class="btn-copy-panel" onclick="copyConfig()">
+                <i class="far fa-copy" style="margin-right: 8px;"></i> COPIAR CÓDIGO EI.CFG
+            </button>
+        </div>
+    </div>
+
+    <div class="seo-section">
+        <h2>Guía Definitiva de Configuración Avanzada del Archivo ei.cfg (2026)</h2>
+        <p>Cuando realizamos un despliegue limpio de sistemas operativos como <strong>Windows 11</strong> o <strong>Windows 10</strong> mediante unidades de almacenamiento USB creadas con herramientas como <strong>Rufus</strong>, es habitual toparse con un comportamiento restrictivo impuesto por los fabricantes de ordenadores portátiles y de sobremesa de marca. Este fenómeno consiste en el bloqueo automático del asistente de instalación, el cual decide instalar de forma predeterminada e irreversible la edición <strong>Windows Home</strong>, privando al administrador de sistemas o al técnico especializado de la capacidad de elegir ediciones superiores como <strong>Windows 11 Pro</strong> o <strong>Windows 11 Education</strong>.</p>
+        
+        <p>Este problema no se debe a un fallo de la imagen ISO oficial descargada de los servidores de Microsoft, sino a una característica lógica programada en el código del archivo <code>setup.exe</code>. Al arrancar, el instalador consulta las tablas de configuración avanzadas de la interfaz de firmware extensible en la placa base (<strong>ACPI MSDM</strong> o el subsistema **BIOS/UEFI**). Si el firmware del hardware contiene una clave de producto inyectada de fábrica (licencia OEM Digital Product Key), el software lee esta firma digital y la prioriza para agilizar el proceso del usuario doméstico común, forzando la edición que corresponde a dicha firma.</p>
+
+        <h3>¿Qué es realmente el archivo ei.cfg y cómo interactúa con el kernel de instalación?</h3>
+        <p>El archivo <strong>ei.cfg</strong> (Edition Configuration File) es un meta-archivo de texto plano con codificación ANSI o UTF-8 que el motor de instalación de Windows busca activamente dentro del directorio raíz de recursos del medio de arranque, específicamente en la subcarpeta denominada <code>\sources\</code>. Su existencia actúa como una directiva de anulación sobre los parámetros automáticos de inicialización del asistente. No altera el binario base ni rompe el cifrado del sistema operativo; simplemente redefine las variables lógicas que determinan los flujos de la interfaz del usuario (UI) durante la fase previa al formateo y volcado del formato de imagen de Windows (archivo .WIM o .ESD).</p>
+
+        <div class="alert-box">
+            <h4><i class="fas fa-exclamation-triangle"></i> Error Crítico Común: Extensiones Ocultas de Archivos</h4>
+            <p>Un porcentaje extremadamente alto de usuarios comete el error de editar este archivo en el Bloc de Notas de Windows manteniendo activada la opción predeterminada del explorador de archivos 'Ocultar extensiones de archivo para tipos de archivo conocidos'. Esto provoca que el archivo se guarde realmente bajo el nombre de <code>ei.cfg.txt</code>. El instalador ignorará por completo este formato y continuará leyendo la BIOS. Asegúrate siempre de configurar el tipo de guardado como "Todos los archivos (*.*)" y verificar que la extensión final sea puramente <code>.cfg</code>.</p>
+        </div>
+
+        <h3>Análisis minucioso de la estructura del archivo ei.cfg</h3>
+        <p>Un archivo de configuración de edición estructurado de forma completa puede contener tres secciones independientes delimitadas por corchetes angulares, las cuales mapean de forma estricta el motor de asignación del sistema:</p>
+        
+        <ul>
+            <li><strong>[EditionID]:</strong> Indica la variante exacta del kernel y paquetes de características que se deben cargar. Si se omite, el instalador no encuentra ninguna restricción directa y activa el selector visual interactivo, siempre y cuando la imagen ISO utilizada sea del tipo "Multi-Edition". Los valores válidos para esta sección mapean ID internos del registro de Windows: <code>Professional</code> para la versión Pro, <code>Core</code> para la versión Home básica, y <code>Education</code> o <code>Enterprise</code> para sus respectivas ramas distribuidas.</li>
+            <li><strong>[Channel]:</strong> Determina el canal de distribución del sistema de licencias (Licensing Channel Style). Admite tres strings de configuración específicos: <code>Retail</code> (adecuado para licencias comerciales de caja o digitales independientes), <code>OEM</code> (diseñado para integradores de sistemas de hardware) y <code>Volume</code> (para arquitecturas empresariales centralizadas). El uso de la directiva <code>Retail</code> es clave para anular la lectura restrictiva del canal de fábrica.</li>
+            <li><strong>[VL]:</strong> Abreviatura directa de Volume License (Licencia por Volumen). Es un parámetro de tipo booleano o binario que le aclara al instalador la naturaleza del modelo de activación remota. Requiere un valor numérico estricto: <code>0</code> para indicar que la plataforma de activación no pertenece al canal de volumen (canales de consumo o retail) y <code>1</code> para entornos corporativos automatizados que dependen de infraestructuras de servidores KMS (Key Management Service) o arquitecturas MAK (Multiple Activation Key).</li>
+        </ul>
+
+        <h3>Desmitificación técnica: Lo que ei.cfg NO puede hacer</h3>
+        <p>Existe una gran confusión en foros especializados y comunidades técnicas sobre las propiedades mágicas de este archivo. Es mandatorio aclarar que el archivo <strong>ei.cfg bajo ningún concepto añade código, añade funciones ni descarga versiones</strong> que no estuvieran ya físicamente comprimidas dentro del archivo maestro de instalación del USB (<code>install.wim</code> o <code>install.esd</code>). Si utilizas una imagen ISO modificada o una ISO filtrada que solo contenga de manera interna la edición Windows Home, inyectar el archivo ei.cfg configurado en modo Professional provocará un error crítico de detención del asistente de instalación, informando que la edición solicitada no se encuentra disponible en los vectores de origen.</p>
+
+        <div class="legal-box">
+            <p><strong><i class="fas fa-balance-scale"></i> CLÁUSULA DE TRANSPARENCIA Y DECLARACIÓN LEGAL:</strong> El contenido y la herramienta proporcionados en esta plataforma web tienen fines estrictamente educativos, pedagógicos y de soporte técnico profesional para optimizar los procesos de despliegue de sistemas de software dentro del marco legal de administración de infraestructuras de IT. El uso del archivo <code>ei.cfg</code> es un método oficial documentado por Microsoft en sus guías de implementación técnica para desarrolladores (MSDN / Microsoft Learn).</p>
+            <p style="margin-top: 1rem;">Esta herramienta <strong>NO es un activador de licencias, NO genera claves de producto falsas, NO realiza modificaciones sobre los sistemas de protección anticopia (DRM) de Windows, ni vulnera los términos de servicio de Microsoft</strong>. Modificar el comportamiento del instalador para acceder a la edición Windows Pro o a la lista de selección no exime bajo ningún concepto al usuario final de la obligación legal de poseer y registrar una clave de activación de producto válida y legítima (Product Key) para activar el sistema operativo una vez concluida su instalación.</p>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 3.5rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 2rem;">
+        <i class="fas fa-shield-alt"></i> Panel de Control Avanzado ei.cfg · Diseñado para el Canal Técnico de RepararOrdenador · 2026
+    </footer>
+</div>
+
+<div id="toast" class="toast-notify">✔ CONFIGURACIÓN COPIADA AL PORTAPAPELES</div>
+
+<script>
+    // Diccionario con comandos reales del motor de Windows setup
+    const masterData = {
+        menu: {
+            title: "Desbloquear Selector Universal",
+            code: "[Channel]\nRetail\n\n[VL]\n0",
+            desc: "Configuración reina para el tutorial. Al omitir completamente la etiqueta [EditionID], el asistente de instalación detecta que no hay una versión forzada por archivo, rompe la imposición de la clave de fábrica de la BIOS/UEFI y despliega el menú completo en pantalla con todas las variantes del USB.",
+            term: "setup.exe --ignore-firmware-licensing --show-ui"
+        },
+        pro: {
+            title: "Forzar Windows 10/11 Pro",
+            code: "[EditionID]\nProfessional\n[Channel]\nRetail\n[VL]\n0",
+            desc: "Fuerza directamente la carga y despliegue del entorno Professional de Windows. Es la configuración recomendada si deseas automatizar por completo el proceso de instalación en entornos limpios evitando que el instalador pregunte qué versión deseas.",
+            term: "setup.exe --image-index=Professional --channel=Retail"
+        },
+        home: {
+            title: "Forzar Windows 10/11 Home",
+            code: "[EditionID]\nCore\n[Channel]\nRetail\n[VL]\n0",
+            desc: "Establece el instalador en modo de consumo base. La variable interna 'Core' le indica al motor de despliegue que debe volcar la arquitectura estándar de Windows Home ignorando el resto de características del paquete.",
+            term: "setup.exe --image-index=Core --channel=Retail"
+        },
+        volume: {
+            title: "Canal Volumen Empresa",
+            code: "[Channel]\nVolume\n\n[VL]\n1",
+            desc: "Habilita de forma nativa la compatibilidad corporativa de Windows. El instalador omite la petición estándar de claves comerciales en la fase de arranque y prepara el registro para recibir activaciones centralizadas KMS.",
+            term: "setup.exe --channel=Volume --volume-licensing=1"
+        }
+    };
+
+    let selectedCode = masterData.menu.code;
+    let typewriterTimeout = null;
+
+    // Función pura para recrear el efecto máquina de escribir
+    function typeEffect(text, elementId, speed = 40) {
+        let i = 0;
+        const element = document.getElementById(elementId);
+        element.innerHTML = "> "; // Resetea el prompt
+        
+        if (typewriterTimeout) {
+            clearTimeout(typewriterTimeout);
+        }
+
+        function type() {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+                typewriterTimeout = setTimeout(type, speed);
+            }
+        }
+        type();
+    }
+
+    function updatePanel(configType) {
+        selectedCode = masterData[configType].code;
+        document.getElementById('panelTitle').innerText = masterData[configType].title;
+        document.getElementById('panelDesc').innerText = masterData[configType].desc;
+        
+        // Lanzar efecto de escritura en el string técnico real
+        typeEffect(masterData[configType].term, 'terminalText', 35);
+        
+        document.querySelectorAll('.card').forEach(card => card.classList.remove('active-card'));
+        document.getElementById('card-' + configType).classList.add('active-card');
+    }
+
+    async function copyConfig() {
+        try {
+            await navigator.clipboard.writeText(selectedCode);
+            const toast = document.getElementById('toast');
+            toast.style.opacity = "1";
+            toast.style.transform = "translateX(-50%) translateY(-10px)";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateX(-50%) translateY(0)";
+            }, 2000);
+        } catch (err) {
+            alert("Error al acceder al portapapeles. Copia el texto manualmente.");
+        }
+    }
+
+    // Arranque inicial automático en el modo recomendado
+    updatePanel('menu');
+</script>
+</body>
+</html>
