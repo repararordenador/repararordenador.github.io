@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Configurador ei.cfg Avanzado 2026 @RepararOrdenador</title>
     
-    <!-- MEJORA SEO: JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -27,27 +26,76 @@
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "mainEntity": [{
-        "@type": "Question",
-        "name": "¿Qué es el archivo ei.cfg?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Es un archivo de configuración que se coloca en la carpeta sources de un USB booteable de Windows para omitir la clave de producto y seleccionar manualmente la edición a instalar."
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Qué es exactamente el archivo ei.cfg?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Es un archivo de configuración basado en texto plano que se coloca manualmente dentro de la carpeta \\sources\\ de tu medio de instalación USB de Windows. Su función principal es anular los datos de la tabla ACPI MSDM de la placa base, permitiéndote omitir la clave de producto por defecto y forzar el menú de selección de arquitectura o ediciones."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué falla el Selector en instalaciones Offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Muchos usuarios descubren que al dejar el selector de edición libre, terminan con una versión de Windows llamada 'Pro N'. Esto es especialmente común cuando se instala Windows sin cable de red y sin Wi-Fi. La razón técnica es que el archivo install.wim contiene múltiples índices, y sin instrucciones precisas ni conexión, el motor de despliegue elige la variante europea 'N' por orden jerárquico."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué se instala la versión Pro N automáticamente y cómo se evita?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sucede porque el instalador offline de Microsoft procesa las listas en orden alfabético/estructural inverso si no hay conexión para geolocalizar el equipo. Las versiones N carecen del software Windows Media Player y códecs de sistema. La forma definitiva de evitarlo es usando nuestra opción 'Forzar Windows Pro' que prescribe el parámetro estricto Professional."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Dónde debe colocarse exactamente el archivo ei.cfg?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El archivo debe guardarse obligatoriamente en el directorio '\\sources\\' de la unidad USB booteable que contiene el instalador de Windows (por ejemplo, E:\\sources\\ei.cfg). Si lo pones en la raíz del USB, el asistente de instalación lo ignorará por completo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué diferencia hay entre Retail y Volume en el campo [Channel]?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El canal Retail está destinado a las licencias comerciales estándar, adquiridas en tiendas o licencias digitales OEM vinculadas al hardware. El canal Volume (VL) está diseñado para entornos empresariales que validan sus sistemas de forma masiva a través de servidores corporativos KMS o mediante claves múltiples MAK."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué ocurre si mi archivo se guarda como ei.cfg.txt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Si el Bloc de notas le añade la extensión oculta .txt, el sistema de instalación no lo procesará y seguirá leyendo la clave Home de la BIOS. Para solucionarlo en Windows, debes activar la casilla 'Extensiones de nombre de archivo' en el Explorador y renombrarlo borrando el .txt sobrante."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Funciona ei.cfg si el USB tiene un archivo install.esd en vez de install.wim?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, funciona de forma idéntica. El archivo ei.cfg interactúa directamente con el binario setup.exe al arrancar la instalación, por lo que no importa si las imágenes del sistema vienen comprimidas en formato ESD (habitual en la herramienta Media Creation Tool) o en formato WIM nativo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿El uso de ei.cfg activa o piratea Windows de forma ilegal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, en absoluto. ei.cfg es una herramienta de despliegue oficial y legítima documentada por Microsoft (MSDN). Su único propósito es seleccionar qué versión de Windows se va a instalar en el disco duro. Una vez instalado el sistema operativo, requerirá obligatoriamente de una clave de licencia válida o activación digital para operar con normalidad."
+          }
         }
-      }, {
-        "@type": "Question",
-        "name": "¿Por qué se instala Windows Pro N automáticamente?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Sucede en instalaciones offline porque el instalador no puede validar la región y selecciona el último índice disponible. Se recomienda forzar 'Professional' para evitarlo."
-        }
-      }]
+      ]
     }
     </script>
 
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts: Inter + JetBrains Mono -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -158,6 +206,27 @@
         .seo-section h3 { font-size: 1.5rem; color: var(--neon-blue); margin-top: 2.5rem; margin-bottom: 1rem; font-weight: 700; }
         .seo-section p { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 1.5rem; line-height: 1.8; }
         
+        /* ESTILO TECH ACORDION DE PREGUNTAS FRECUENTES INTERACTIVAS */
+        .faq-wrapper { margin-top: 2.5rem; }
+        .faq-item { 
+            background: rgba(1, 4, 9, 0.6); border: 1px solid var(--border-color); 
+            border-radius: 12px; margin-bottom: 1rem; overflow: hidden; transition: 0.3s;
+        }
+        .faq-item:hover { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(88, 166, 255, 0.1); }
+        .faq-trigger { 
+            width: 100%; padding: 1.2rem 1.5rem; background: transparent; border: none; 
+            color: var(--text-light); text-align: left; font-size: 1.1rem; font-weight: 600; 
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+        .faq-trigger i { color: var(--neon-cyan); transition: transform 0.3s; }
+        .faq-item.open .faq-trigger i { transform: rotate(180deg); }
+        .faq-content { 
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; 
+            padding: 0 1.5rem; color: var(--text-primary); font-size: 0.95rem; line-height: 1.7;
+        }
+        .faq-item.open .faq-content { padding-bottom: 1.5rem; max-height: 400px; }
+
         .experience-alert {
             background: rgba(248, 81, 73, 0.1); border: 1px solid var(--danger-red);
             padding: 2rem; border-radius: 20px; margin: 2rem 0;
@@ -188,12 +257,10 @@
         <p style="color: var(--text-secondary); font-size: 1.2rem;">Solución definitiva para el bloqueo de ediciones en Windows 10/11</p>
     </div>
 
-    <!-- DASHBOARD -->
     <div class="dashboard">
         <div class="cards-area">
             <div class="grid-cards">
                 
-                <!-- OPCIÓN 1: FORZAR PRO -->
                 <div class="card recommended-card" onclick="updatePanel('pro')" id="card-pro">
                     <div class="rec-tag"><i class="fas fa-crown"></i> RECOMENDADO</div>
                     <span class="badge-mode">[MÁXIMA COMPATIBILIDAD]</span>
@@ -207,7 +274,6 @@ Retail
                     <p style="font-size: 0.85rem; color: var(--text-secondary)">Evita la instalación accidental de la versión "Pro N" en instalaciones offline. Fuerza la edición con todos los códecs multimedia.</p>
                 </div>
 
-                <!-- OPCIÓN 2: SELECTOR -->
                 <div class="card" onclick="updatePanel('menu')" id="card-menu">
                     <span class="badge-mode">[LIBERTAD DE ELECCIÓN]</span>
                     <h3>Desbloquear Selector</h3>
@@ -219,7 +285,6 @@ Retail
                     <p style="font-size: 0.85rem; color: var(--text-secondary)">Muestra el menú con todas las versiones. <strong>Atención:</strong> En instalaciones sin internet puede forzar "Pro N" automáticamente.</p>
                 </div>
 
-                <!-- OPCIÓN 3: HOME -->
                 <div class="card" onclick="updatePanel('home')" id="card-home">
                     <span class="badge-mode">[RESTABLECER FÁBRICA]</span>
                     <h3>Forzar Windows Home</h3>
@@ -232,7 +297,6 @@ Retail
                     <p style="font-size: 0.85rem; color: var(--text-secondary)">Fuerza la edición "Core" (Home) ignorando cualquier otra configuración de la placa base.</p>
                 </div>
 
-                <!-- OPCIÓN 4: VOLUMEN -->
                 <div class="card" onclick="updatePanel('volume')" id="card-volume">
                     <span class="badge-mode">[ENTORNO EMPRESA]</span>
                     <h3>Canal Volumen (VL)</h3>
@@ -247,7 +311,6 @@ Volume
             </div>
         </div>
 
-        <!-- PANEL LATERAL -->
         <div class="info-panel">
             <h2 id="panelTitle" style="color: var(--text-light); font-weight: 800; font-size: 1.6rem; margin-bottom: 0.5rem;">Detalles del Mapeo</h2>
             <p id="panelDesc" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Analizando parámetros...</p>
@@ -267,25 +330,17 @@ Volume
         </div>
     </div>
 
-    <!-- ALERTA DE EXPERIENCIA REAL -->
     <div class="experience-alert">
         <h4><i class="fas fa-microchip"></i> REPORTE TÉCNICO: El problema de la "Edición N" en instalaciones Offline</h4>
         <p>Hemos comprobado en pruebas reales que al usar el <strong>Selector Universal</strong> (sin definir EditionID) en una <strong>instalación sin conexión a internet</strong>, Windows tiende a instalar por defecto la versión <strong>Windows 11 Pro N</strong>.</p>
         <p style="margin-top: 10px; font-size: 0.95rem; color: var(--text-primary);">Esto sucede porque el instalador, al no poder validar la región online, elige el último índice de la lista Pro. Las versiones <strong>N</strong> no incluyen códecs multimedia (fallan apps como Cámara o WhatsApp). Para evitar esto, usa la opción <strong>"Forzar Windows Pro"</strong> que incluye la etiqueta <code>Professional</code>.</p>
     </div>
 
-    <!-- GUÍA SEO CON MICRODATOS FAQ -->
-    <div class="seo-section" itemscope itemtype="https://schema.org/FAQPage">
+    <div class="seo-section">
         <h2>Guía de Configuración ei.cfg (Edición 2026)</h2>
-        <div itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
-            <h3 itemprop="name">¿Por qué falla el Selector en instalaciones Offline?</h3>
-            <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
-                <div itemprop="text">
-                    <p>Muchos usuarios descubren que al dejar el selector libre, terminan con una versión de Windows llamada <strong>"Pro N"</strong>. Esto es especialmente común cuando se instala Windows <strong>sin cable de red y sin Wi-Fi</strong>. La razón técnica es que el archivo <code>install.wim</code> contiene múltiples índices, y sin instrucciones precisas ni conexión, el motor de despliegue elige la variante europea "N" por orden jerárquico.</p>
-                </div>
-            </div>
-        </div>
         
+        <p>El archivo <code>ei.cfg</code> es la herramienta definitiva para administradores que necesitan saltarse la restricción de la BIOS/UEFI que obliga a instalar <strong>Windows Home</strong> en equipos comprados con licencia de fábrica.</p>
+
         <div class="alert-box">
             <p><strong>Truco Pro:</strong> Si ya instalaste la versión N por error, puedes descargar el "Media Feature Pack" desde Configuración > Características opcionales para recuperar los códecs, pero la clave Pro normal no te servirá para activarlo.</p>
         </div>
@@ -297,6 +352,83 @@ Volume
             <li><strong>[Channel]:</strong> Usa <code>Retail</code> para licencias estándar.</li>
             <li><strong>[VL]:</strong> <code>0</code> para usuarios normales, <code>1</code> para empresas.</li>
         </ul>
+
+        <h3>Preguntas Frecuentes / Terminal Knowledge Base</h3>
+        <div class="faq-wrapper">
+            
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿Qué es exactamente el archivo ei.cfg? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>Es un archivo de configuración basado en texto plano que se coloca manualmente dentro de la carpeta <code>\sources\</code> de tu medio de instalación USB de Windows. Su función principal es anular los datos de la tabla ACPI MSDM de la placa base, permitiéndote omitir la clave de producto por defecto y forzar el menú de selección de arquitectura o ediciones.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿Por qué falla el Selector en instalaciones Offline? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>Muchos usuarios descubren que al dejar el selector de edición libre, terminan con una versión de Windows llamada <strong>"Pro N"</strong>. Esto es especialmente común cuando se instala Windows <strong>sin cable de red y sin Wi-Fi</strong>. La razón técnica es que el archivo <code>install.wim</code> contiene múltiples índices, y sin instrucciones precisas ni conexión, el motor de despliegue elige la variante europea "N" por orden jerárquico.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿Por qué se instala la versión Pro N automáticamente y cómo se evita? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>Sucede porque el instalador offline de Microsoft procesa las listas en orden alfabético/estructural inverso si no hay conexión para geolocalizar el equipo. Las versiones N carecen del software Windows Media Player y códecs de sistema. La forma definitiva de evitarlo es usando nuestra opción <strong>"Forzar Windows Pro"</strong> que prescribe el parámetro estricto <code>Professional</code>.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿Dónde debe colocarse exactamente el archivo ei.cfg? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>El archivo debe guardarse obligatoriamente en el directorio <code>\sources\</code> de la unidad USB booteable que contiene el instalador de Windows (por ejemplo, <code>E:\sources\ei.cfg</code>). Si guardas el archivo en la raíz del pendrive, el asistente de instalación lo ignorará por completo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿Qué diferencia hay entre Retail y Volume en el campo [Channel]? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>El canal <strong>Retail</strong> está destinado a las licencias comerciales estándar, adquiridas en tiendas o licencias digitales OEM pregrabadas en fábrica. El canal <strong>Volume (VL)</strong> está diseñado para despliegues empresariales que validan sus sistemas de forma masiva a través de servidores de activación corporativos KMS o mediante claves múltiples MAK.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿Qué ocurre si mi archivo se guarda por error como ei.cfg.txt? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>Si el Bloc de notas le añade la extensión oculta <code>.txt</code>, el sistema de instalación no reconocerá sus instrucciones y seguirá leyendo la clave Home predeterminada de la placa base. Para solucionarlo, debes activar la casilla "Extensiones de nombre de archivo" en la pestaña Vista del Explorador de Windows y renombrar el archivo eliminando el <code>.txt</code> sobrante.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿Funciona ei.cfg si el USB tiene un archivo install.esd en vez de install.wim? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>Sí, funciona de forma idéntica. El archivo <code>ei.cfg</code> interactúa directamente con el binario ejecutable primario <code>setup.exe</code> al arrancar la instalación. Por lo tanto, no le afecta si las imágenes base de Windows vienen comprimidas en un archivo <code>install.esd</code> (habitual de la herramienta oficial Media Creation Tool) o en el contenedor tradicional de imágenes <code>install.wim</code>.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                    ¿El uso de ei.cfg activa o piratea Windows de forma ilegal? <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-content">
+                    <p>No, en absoluto. <code>ei.cfg</code> es una herramienta oficial y legítima de pre-despliegue documentada por Microsoft en MSDN. Su único propósito es forzar al asistente a desplegar una edición concreta en el disco duro. Una vez que el sistema operativo se inicialice por primera vez, requerirá obligatoriamente de una licencia, clave o activación digital en línea válida para operar con normalidad.</p>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <footer style="text-align: center; margin-top: 3.5rem; color: var(--text-muted); font-size: 0.85rem; padding-bottom: 2rem;">
@@ -369,6 +501,19 @@ Volume
             setTimeout(() => toast.style.opacity = "0", 2000);
         } catch (err) {
             console.error('Error al copiar: ', err);
+        }
+    }
+
+    // CONTROLADOR INTERACTIVO ACORDEÓN TECH PARA LAS FAQS
+    function toggleFaq(button) {
+        const item = button.parentElement;
+        const isOpen = item.classList.contains('open');
+        
+        // Cierra los demás de manera elegante para emular una terminal ordenada
+        document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+        
+        if (!isOpen) {
+            item.classList.add('open');
         }
     }
 
