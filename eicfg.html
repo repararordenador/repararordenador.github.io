@@ -5,6 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Configurador ei.cfg Avanzado 2026 @RepararOrdenador</title>
+    
+    <!-- MEJORA SEO: JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Configurador ei.cfg Avanzado",
+      "url": "https://youtube.com/@repararordenador",
+      "description": "Herramienta técnica para generar archivos ei.cfg y desbloquear ediciones de Windows 10 y 11.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Windows",
+      "author": {
+        "@type": "Organization",
+        "name": "RepararOrdenador"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "¿Qué es el archivo ei.cfg?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Es un archivo de configuración que se coloca en la carpeta sources de un USB booteable de Windows para omitir la clave de producto y seleccionar manualmente la edición a instalar."
+        }
+      }, {
+        "@type": "Question",
+        "name": "¿Por qué se instala Windows Pro N automáticamente?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sucede en instalaciones offline porque el instalador no puede validar la región y selecciona el último índice disponible. Se recomienda forzar 'Professional' para evitarlo."
+        }
+      }]
+    }
+    </script>
+
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts: Inter + JetBrains Mono -->
@@ -153,7 +193,7 @@
         <div class="cards-area">
             <div class="grid-cards">
                 
-                <!-- OPCIÓN 1: FORZAR PRO (CORREGIDA COMO RECOMENDADA) -->
+                <!-- OPCIÓN 1: FORZAR PRO -->
                 <div class="card recommended-card" onclick="updatePanel('pro')" id="card-pro">
                     <div class="rec-tag"><i class="fas fa-crown"></i> RECOMENDADO</div>
                     <span class="badge-mode">[MÁXIMA COMPATIBILIDAD]</span>
@@ -234,13 +274,17 @@ Volume
         <p style="margin-top: 10px; font-size: 0.95rem; color: var(--text-primary);">Esto sucede porque el instalador, al no poder validar la región online, elige el último índice de la lista Pro. Las versiones <strong>N</strong> no incluyen códecs multimedia (fallan apps como Cámara o WhatsApp). Para evitar esto, usa la opción <strong>"Forzar Windows Pro"</strong> que incluye la etiqueta <code>Professional</code>.</p>
     </div>
 
-    <!-- GUÍA SEO -->
-    <div class="seo-section">
+    <!-- GUÍA SEO CON MICRODATOS FAQ -->
+    <div class="seo-section" itemscope itemtype="https://schema.org/FAQPage">
         <h2>Guía de Configuración ei.cfg (Edición 2026)</h2>
-        <p>El archivo <code>ei.cfg</code> es la herramienta definitiva para administradores que necesitan saltarse la restricción de la BIOS/UEFI que obliga a instalar <strong>Windows Home</strong> en equipos comprados con licencia de fábrica.</p>
-        
-        <h3>Por qué falla el Selector en instalaciones Offline</h3>
-        <p>Muchos usuarios descubren que al dejar el selector libre, terminan con una versión de Windows llamada <strong>"Pro N"</strong>. Esto es especialmente común cuando se instala Windows <strong>sin cable de red y sin Wi-Fi</strong>. La razón técnica es que el archivo <code>install.wim</code> contiene múltiples índices, y sin instrucciones precisas ni conexión, el motor de despliegue elige la variante europea "N" por orden jerárquico.</p>
+        <div itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
+            <h3 itemprop="name">¿Por qué falla el Selector en instalaciones Offline?</h3>
+            <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+                <div itemprop="text">
+                    <p>Muchos usuarios descubren que al dejar el selector libre, terminan con una versión de Windows llamada <strong>"Pro N"</strong>. Esto es especialmente común cuando se instala Windows <strong>sin cable de red y sin Wi-Fi</strong>. La razón técnica es que el archivo <code>install.wim</code> contiene múltiples índices, y sin instrucciones precisas ni conexión, el motor de despliegue elige la variante europea "N" por orden jerárquico.</p>
+                </div>
+            </div>
+        </div>
         
         <div class="alert-box">
             <p><strong>Truco Pro:</strong> Si ya instalaste la versión N por error, puedes descargar el "Media Feature Pack" desde Configuración > Características opcionales para recuperar los códecs, pero la clave Pro normal no te servirá para activarlo.</p>
@@ -318,12 +362,17 @@ Volume
     }
 
     async function copyConfig() {
-        await navigator.clipboard.writeText(selectedCode);
-        const toast = document.getElementById('toast');
-        toast.style.opacity = "1";
-        setTimeout(() => toast.style.opacity = "0", 2000);
+        try {
+            await navigator.clipboard.writeText(selectedCode);
+            const toast = document.getElementById('toast');
+            toast.style.opacity = "1";
+            setTimeout(() => toast.style.opacity = "0", 2000);
+        } catch (err) {
+            console.error('Error al copiar: ', err);
+        }
     }
 
+    // Inicialización
     updatePanel('pro');
 </script>
 </body>
