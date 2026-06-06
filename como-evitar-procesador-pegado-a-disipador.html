@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cómo evitar que el procesador se pegue al disipador (Guía AM4/AM5)</title>
+    <meta name="description" content="¿Vas a cambiar tu disipador y temes romper los pines de tu CPU? Descubre el método definitivo para evitar que el procesador se quede pegado al disipador con esta guía paso a paso de Calin.">
+    <link rel="canonical" href="https://repararordenador.github.io/">
+    
+    <!-- Google Fonts - Clean Tech Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Structured Data for Perfect Google Indexing -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Cómo evitar que el procesador se pegue al disipador (Guía AM4/AM5)",
+      "description": "Protocolo definitivo paso a paso para desmontar el sistema de refrigeración de tu PC de forma 100% segura, evitando pines rotos en sockets AMD e Intel.",
+      "inLanguage": "es",
+      "url": "https://repararordenador.github.io/",
+      "mainEntityOfPage": "https://repararordenador.github.io/",
+      "genre": "Informática",
+      "keywords": "procesador pegado al disipador, como quitar disipador sin arrancar cpu, am4 procesador pegado, pasta termica cemento, reparar ordenador",
+      "articleSection": "Soporte Técnico PC",
+      "image": "https://repararordenador.github.io/desmontar-cpu.jpg",
+      "author": {
+        "@type": "Person",
+        "name": "Calin"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Reparar Ordenador",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://repararordenador.github.io/logo.png"
+        }
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "Cómo extraer un disipador sin arrancar el procesador",
+      "description": "Guía paso a paso para despegar de forma segura el cooler de la CPU sin dañar los pines del socket.",
+      "image": "https://repararordenador.github.io/desmontar-cpu.jpg",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Calentar la pasta térmica",
+          "text": "Enciende la computadora y ejecuta un juego pesado o un test de estrés durante unos minutos para ablandar la pasta."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Aflojar tornillos en cruz",
+          "text": "Desatornilla el disipador en forma de X de manera uniforme para evitar presiones desiguales peligrosas."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Girar antes de tirar",
+          "text": "Agarra firmemente el disipador y realiza giros leves hacia la izquierda y derecha para romper la succión."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Deslizar y levantar",
+          "text": "Una vez que gire libremente, desliza un poco hacia el lado y levanta con suavidad."
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        :root {
+            --google-blue: #1a73e8;
+            --google-gray-dark: #202124;
+            --google-gray-light: #f8f9fa;
+            --google-border: #dadce0;
+            --text-main: #3c4043;
+            --accent-warn: #d93025;
+            --accent-success: #137333;
+            --bg-success: #e6f4ea;
+            --bg-warn: #fce8e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-main);
+            background-color: #ffffff;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Google Sans', sans-serif;
+            color: var(--google-gray-dark);
+            font-weight: 500;
+        }
+
+        header {
+            border-bottom: 1px solid var(--google-border);
+            padding: 16px 24px;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--google-blue);
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        h1 {
+            font-size: 36px;
+            line-height: 1.25;
+            margin-bottom: 16px;
+            color: var(--google-gray-dark);
+        }
+
+        .meta-info {
+            font-size: 14px;
+            color: #70757a;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .lead {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #5f6368;
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 40px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--google-border);
+        }
+
+        h3 {
+            font-size: 18px;
+            margin: 24px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        /* Responsive Infographic Image Styling */
+        .article-image-container {
+            width: 100%;
+            margin: 32px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+            background-color: var(--google-gray-light);
+        }
+
+        .article-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .step-container {
+            margin: 32px 0;
+            border-left: 4px solid var(--google-blue);
+            padding-left: 20px;
+        }
+
+        .step {
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .step-title {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--google-gray-dark);
+            margin-bottom: 4px;
+        }
+
+        .step-badge {
+            display: inline-block;
+            font-size: 12px;
+            background-color: var(--google-gray-light);
+            color: #5f6368;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            border: 1px solid var(--google-border);
+        }
+
+        .callout-box {
+            background-color: var(--bg-warn);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 32px 0;
+            border-left: 4px solid var(--accent-warn);
+        }
+
+        .callout-box h3 {
+            color: var(--accent-warn);
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .callout-box p {
+            margin-bottom: 0;
+            color: #202124;
+        }
+
+        ul {
+            margin-left: 24px;
+            margin-bottom: 24px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        li strong {
+            color: var(--google-gray-dark);
+        }
+
+        footer {
+            background-color: var(--google-gray-light);
+            padding: 32px 24px;
+            text-align: center;
+            font-size: 14px;
+            color: #70757a;
+            border-top: 1px solid var(--google-border);
+            margin-top: 80px;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 28px; }
+            main { margin: 24px auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <a href="https://repararordenador.github.io/" class="logo">Reparar Ordenador</a>
+        </div>
+    </header>
+
+    <main>
+        <article>
+            <h1>Cómo evitar que el procesador se pegue al disipador (Guía AM4/AM5)</h1>
+            
+            <div class="meta-info">
+                <span>Por <strong>Calin</strong></span>
+                <span>•</span>
+                <span>Actualizado en 2026</span>
+            </div>
+
+            <p class="lead">Es una de las peores pesadillas de cualquier persona que arma o da mantenimiento a una PC: vas a quitar el disipador para limpiar o cambiar la pasta térmica, tiras de él, y ¡pum! El procesador AM4 sale arrancado del socket pegado a la base de cobre.</p>
+
+            <p>Esto pasa porque la pasta térmica vieja actúa como pegamento y el diseño de retención de AM4 (PGA) no bloquea el procesador por encima, solo sujeta los pines por los lados. Arrancar el procesador del socket por accidente puede doblar o romper los pines, dañando el componente de forma permanente. Si estás usando una plataforma AMD AM4 (como los Ryzen 3000 o 5000), el riesgo es extremadamente alto debido a su diseño de socket.</p>
+
+            <h2>El Método Seguro de Extracción</h2>
+            <p>A continuación, te mostramos el protocolo paso a paso que debes seguir para desmontar el sistema de refrigeración de forma 100% segura y libre de riesgos mecánicos.</p>
+
+            <!-- Infografía Visual Integrada -->
+            <div class="article-image-container">
+                <img src="desmontar-cpu.jpg" alt="Infografía paso a paso para desmontar de forma segura el cooler de la CPU sin arrancar el procesador" class="article-image" loading="lazy">
+            </div>
+
+            <div class="step-container">
+                <div class="step">
+                    <div class="step-badge">10-15 minutos antes</div>
+                    <div class="step-title">1. Calienta la pasta térmica</div>
+                    <p>No abras la PC estando fría. Enciende la computadora y ejecuta un juego pesado o un test de estrés (como Cinebench o Prime95) durante unos minutos. Esto ablandará la pasta térmica, reduciendo su efecto de "pegamento". APAGA y desconecta la PC por completo antes del siguiente paso.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-badge">Paso mecánico</div>
+                    <div class="step-title">2. Afloja los tornillos de forma cruzada</div>
+                    <p>Desatornilla el disipador en forma de "X" (un poco de cada esquina). No quites un tornillo por completo mientras los demás están apretados, ya que esto genera una presión desigual peligrosa sobre el procesador.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-badge">El secreto clave</div>
+                    <div class="step-title">3. Gira antes de tirar</div>
+                    <p><strong>NUNCA tires del disipador hacia arriba directamente.</strong> Agarra firmemente el cuerpo del disipador y realiza giros leves hacia la izquierda y la derecha (como si fuera una perilla). Sentirás cómo la succión de la pasta térmica se rompe de inmediato.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-badge">Extracción final</div>
+                    <div class="step-title">4. Desliza y levanta</div>
+                    <p>Una vez que sientas que el disipador gira libremente, deslízalo ligeramente hacia un lado antes de levantarlo con suavidad. El procesador se quedará totalmente seguro dentro de su socket.</p>
+                </div>
+            </div>
+
+            <div class="callout-box">
+                <h3>¿Qué hacer si ya se quedó pegado fuera de la PC?</h3>
+                <p>Si el procesador ya salió pegado al disipador, <strong>no intentes palanquearlo con un destornillador</strong> o herramientas filosas. Usa una secadora de pelo para calentar la base de cobre del disipador durante un par de minutos. Luego, usando guantes de látex, gira el procesador con cuidado desde los bordes del circuito impreso (PCB) para despegarlo de lado deslizando.</p>
+            </div>
+
+            <h2>Cómo prevenir que vuelva a suceder en el futuro</h2>
+            <ul>
+                <li><strong>Usa pastas térmicas de calidad:</strong> Las pastas térmicas ultra baratas o las que vienen preaplicadas de stock suelen resecarse mucho más rápido, convirtiéndose en una especie de cemento. Opta por marcas reconocidas (como Noctua NT-H1, Arctic MX-4/MX-6).</li>
+                <li><strong>Considera almohadillas térmicas de cambio de fase:</strong> Productos como el Honeywell PTM7950 o almohadillas de grafito no sufren este efecto de succión y ofrecen un rendimiento térmico excelente a largo plazo.</li>
+                <li><strong>Mantenimiento regular:</strong> No dejes la misma pasta térmica durante 5 años. Cambiarla cada 1 o 2 años evitará que se petrifique por completo bajo el bloque de refrigeración.</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Reparar Ordenador — Guías de Soporte de PC escritas por Calin.</p>
+    </footer>
+
+</body>
+</html>
