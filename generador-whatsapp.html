@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Enlaces de WhatsApp Gratis y Código QR - RepararOrdenador</title>
+    <meta name="description" content="Crea tu link de WhatsApp personalizado con mensaje automático en un clic. Incluye código QR gratis para tu negocio, web o tarjetas. Creado por Calin.">
+    <meta name="keywords" content="crear link whatsapp, generador enlace whatsapp, link con mensaje whatsapp, qr whatsapp gratis, repararordenador, calin whatsapp, crear qr gratis">
+    <link rel="canonical" href="https://repararordenador.github.io/">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-emerald-600 mb-4">Generador de Enlaces de WhatsApp y Códigos QR</h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Crea tu link personalizado con mensaje automático y obtén tu código QR al instante. Una herramienta 100% gratuita y sin anuncios desarrollada por 
+                <a href="https://repararordenador.github.io" class="text-emerald-600 hover:underline font-semibold">RepararOrdenador</a> y diseñada por 
+                <a href="https://youtube.com/@repararordenador" target="_blank" rel="noopener" class="text-red-600 hover:underline font-semibold">Calin</a>.
+            </p>
+        </header>
+
+        <main class="grid md:grid-cols-2 gap-8 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2" for="phone">1. Número de teléfono (Con prefijo internacional)</label>
+                    <input type="tel" id="phone" placeholder="Ej: 34600123456 (34 para España)" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-lg">
+                    <span class="text-xs text-slate-400 block mt-1">No incluyas el símbolo "+" ni espacios en blanco antes de los dígitos.</span>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2" for="message">2. Mensaje predefinido (Opcional)</label>
+                    <textarea id="message" rows="4" placeholder="Ej: Hola Calin, vengo de la web y me gustaría automatizar mis enlaces." class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+                </div>
+
+                <button onclick="generarTodo()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 shadow-md cursor-pointer text-center block">
+                    Generar Enlace y QR Gratis
+                </button>
+            </div>
+
+            <div id="resultado-box" class="flex flex-col justify-center items-center p-6 bg-slate-50 rounded-xl border border-dashed border-slate-300 opacity-60">
+                <p id="placeholder-text" class="text-slate-500 text-center">Introduce tus datos a la izquierda para generar tus herramientas de contacto instantáneamente.</p>
+                
+                <div id="resultados" class="w-full hidden space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Tu Enlace de WhatsApp:</label>
+                        <div class="flex">
+                            <input type="text" id="result-url" readonly class="w-full p-2 bg-white border border-slate-300 rounded-l-lg text-sm focus:outline-none">
+                            <button onclick="copiarLink()" class="bg-slate-700 hover:bg-slate-800 text-white px-4 rounded-r-lg font-medium text-sm cursor-pointer">Copiar</button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2 text-center">Tu Código QR Descargable:</label>
+                        <div id="qrcode" class="p-3 bg-white border rounded-lg shadow-inner"></div>
+                        <p class="text-xs text-slate-400 mt-2 text-center">Haz clic derecho sobre el QR o mantén pulsado para guardarlo en tu dispositivo.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <section class="mt-16 border-t border-slate-200 pt-12 max-w-none space-y-12">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">Guía Completa: ¿Qué es un generador de enlaces de WhatsApp y cómo beneficia a tu negocio?</h2>
+                <p class="text-slate-600 leading-relaxed mb-4">
+                    Un <strong>generador de enlaces de WhatsApp</strong> es una herramienta digital que transforma un número de teléfono convencional junto a un texto predefinido en una dirección URL estándar (o enlace corto `wa.me`). Al hacer clic en este enlace, el usuario abre directamente una conversación de chat con tu perfil, ya sea en la aplicación móvil o en WhatsApp Web, sin necesidad de realizar el tedioso proceso de guardar el contacto en su agenda telefónica.
+                </p>
+                <p class="text-slate-600 leading-relaxed">
+                    Esta optimización reduce drásticamente las barreras de comunicación ("fricción de usuario") e incrementa los ratios de conversión de tus canales digitales. Es idóneo para su uso en biografías de Instagram, botones de páginas de aterrizaje (landing pages), campañas de publicidad pagada y estrategias de atención al cliente automatizadas.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 text-sm text-slate-600">
+                <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-xs">
+                    <h3 class="font-bold text-slate-700 mb-2 text-emerald-600">Eliminación de la Fricción</h3>
+                    <p>Habitualmente, un usuario debe copiar un número, ir a su agenda, crear un contacto, sincronizar WhatsApp y finalmente escribir. Nuestro link acorta este proceso a un solo clic inmediato.</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-xs">
+                    <h3 class="font-bold text-slate-700 mb-2 text-emerald-600">Trazabilidad en Marketing</h3>
+                    <p>Al asignar textos predefinidos diferentes para cada red social (por ejemplo, uno para TikTok y otro para tu web), sabrás exactamente cuál de tus plataformas está captando más clientes.</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-xs">
+                    <h3 class="font-bold text-slate-700 mb-2 text-emerald-600">Fusión Omnicanal (QR)</h3>
+                    <p>La combinación del link corto con un código QR te permite unificar tu publicidad offline (carteles, tarjetas, escaparates) con la inmediatez de la mensajería digital interactiva.</p>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">Preguntas Frecuentes sobre Enlaces y Códigos QR de WhatsApp</h2>
+                <div class="space-y-6 text-slate-600 max-w-3xl mx-auto">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-700 mb-2">¿Cómo debo estructurar el número de teléfono con el prefijo?</h4>
+                        <p>Es indispensable añadir el código internacional del país antes del número móvil. Por ejemplo, si tu número está en España, añade 34 antes de tu móvil (quedando 34600123456). No debes incluir ceros adicionales al inicio, ni espacios, ni guiones, ni el símbolo (+).</p>
+                    </div>
+                    
+                    <div class="bg-white p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-700 mb-2">¿Los datos introducidos se almacenan en algún servidor?</h4>
+                        <p>No. Al ser una herramienta puramente estática programada en HTML y JavaScript moderno, el procesamiento de los datos y la renderización del código QR ocurren de manera 100% local en tu navegador. Tus datos telefónicos y comerciales están completamente seguros.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-700 mb-2">¿El enlace generado expira en algún momento?</h4>
+                        <p>No caduca nunca. Mientras el número de teléfono continúe activo en los servidores oficiales de WhatsApp y la estructura de la API oficial permanezca activa, tu enlace y tu código QR seguirán funcionando de forma indefinida.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-700 mb-2">¿Puedo usar este código QR impreso en materiales físicos?</h4>
+                        <p>Por supuesto. El código QR generado utiliza corrección de errores de nivel alto (High Level), lo que significa que mantendrá su legibilidad en smartphones incluso si el papel impreso sufre un ligero desgaste, suciedad o dobleces en su negocio.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-700 mb-2">¿Quién ha desarrollado esta herramienta?</h4>
+                        <p>Este sistema ha sido diseñado y optimizado a nivel SEO por <strong>Calin</strong> de <a href="https://youtube.com/@repararordenador" target="_blank" rel="noopener" class="text-emerald-600 font-semibold hover:underline">RepararOrdenador en YouTube</a>, proporcionando un entorno seguro, ultrarrápido y sin scripts invasivos de publicidad para la comunidad.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-16 pt-8 border-t border-slate-200 text-center text-sm text-slate-500 space-y-2">
+            <p>© Herramientas Gratuitas de <a href="https://repararordenador.github.io" class="hover:text-emerald-600 underline font-medium">RepararOrdenador</a>.</p>
+            <p>Desarrollado y optimizado por <strong>Calin</strong>. Visita nuestro canal de <a href="https://youtube.com/@repararordenador" target="_blank" rel="noopener" class="hover:text-red-600 underline font-medium">YouTube</a> para aprender más sobre tecnología, desarrollo y SEO.</p>
+        </footer>
+    </div>
+
+    <script>
+        function generarTodo() {
+            const phoneInput = document.getElementById('phone').value.trim();
+            const messageInput = document.getElementById('message').value.trim();
+            
+            if (!phoneInput) {
+                alert('Por favor, introduce un número de teléfono válido.');
+                return;
+            }
+
+            // Limpiar caracteres no numéricos del teléfono
+            const cleanPhone = phoneInput.replace(/[^0-9]/g, '');
+            // Codificar el texto para que sea compatible con una URL segura (espacios a %20, etc.)
+            const encodedMessage = encodeURIComponent(messageInput);
+            
+            // Construir la URL oficial utilizando la API de mensajería directa
+            const finalUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodedMessage}`;
+
+            // Actualizar interfaz: Ocultar marcador de posición y mostrar resultados
+            document.getElementById('placeholder-text').classList.add('hidden');
+            document.getElementById('resultado-box').classList.remove('opacity-60');
+            document.getElementById('resultados').classList.remove('hidden');
+
+            // Asignar el enlace generado al campo de texto de salida
+            document.getElementById('result-url').value = finalUrl;
+
+            // Resetear el contenedor gráfico del QR e imprimir el nuevo objeto
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: finalUrl,
+                width: 180,
+                height: 180,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+
+        function copiarLink() {
+            const copyText = document.getElementById('result-url');
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Compatibilidad estricta con iOS/Android
+            navigator.clipboard.writeText(copyText.value);
+            alert('¡Enlace de WhatsApp copiado al portapapeles con éxito!');
+        }
+    </script>
+</body>
+</html>
