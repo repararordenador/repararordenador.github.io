@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="FRP Bypass Utility - Herramienta definitiva para bypass de FRP en Android">
+    <title>FRP Bypass Utility | Herramienta avanzada</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c10;
+            color: #eef2ff;
+            overflow-x: hidden;
+        }
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --success: #10b981;
+            --dark-card: #111827;
+            --border-dim: rgba(255,255,255,0.08);
+        }
+        .bg-dark-grad {
+            background: radial-gradient(circle at 20% 30%, #0f111a 0%, #090b10 100%);
+        }
+        .navbar {
+            background: rgba(9, 11, 16, 0.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-dim);
+            padding: 0.8rem 0;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #e0e7ff, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .glass-card {
+            background: rgba(18, 22, 35, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 32px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+            border-color: rgba(79,70,229,0.4);
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e0e7ff, #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 1rem;
+        }
+        .shortcut-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 12px 6px;
+            text-align: center;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            text-decoration: none;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .shortcut-item:hover {
+            background: rgba(79,70,229,0.15);
+            border-color: var(--primary);
+            transform: scale(1.02);
+            color: white;
+        }
+        .shortcut-icon {
+            font-size: 28px;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(79,70,229,0.2);
+            border-radius: 24px;
+        }
+        .shortcut-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-dim);
+            padding-bottom: 0.8rem;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: #94a3b8;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 5px 12px rgba(79,70,229,0.3);
+        }
+        .tab-pane { display: none; animation: fade 0.2s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .utility-card {
+            background: linear-gradient(145deg, #0f172a, #0a0f1c);
+            border-radius: 40px;
+            padding: 1.8rem;
+            border: 1px solid rgba(79,70,229,0.3);
+        }
+        .btn-glow {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: 0.2s;
+            color: white;
+        }
+        .btn-glow:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(79,70,229,0.5);
+            color: white;
+        }
+        .result-box {
+            background: rgba(0,0,0,0.5);
+            border-radius: 24px;
+            padding: 1rem;
+            margin-top: 1.2rem;
+            border-left: 4px solid var(--success);
+        }
+        footer {
+            border-top: 1px solid var(--border-dim);
+            background: #05070a;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            width: 46px;
+            height: 46px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.2s;
+            z-index: 1040;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .back-to-top.show { opacity: 1; }
+        .back-to-top:hover { background: var(--primary-dark); transform: translateY(-3px);}
+        
+        @media (max-width: 768px) {
+            .shortcut-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); }
+            .section-title { font-size: 1.5rem; }
+        }
+        .btn-outline-light {
+            border-color: rgba(255,255,255,0.2);
+            color: #e2e8f0;
+        }
+        .btn-outline-light:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        select.form-select, input.form-control {
+            background-color: #1e1f2c;
+            border: 1px solid #2d3040;
+            color: white;
+        }
+        select.form-select:focus, input.form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(79,70,229,0.3);
+        }
+    </style>
+</head>
+<body class="bg-dark-grad">
+
+<!-- Simple navbar without external links -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">FRP BYPASS<span class="text-white"> UTILITY</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#unique-utility"><i class="fas fa-magic me-1"></i> Asistente FRP</a></li>
+                <li class="nav-item"><a class="nav-link" href="#shortcut-tools"><i class="fas fa-bolt me-1"></i> Atajos</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container mt-5 pt-5">
+    <!-- Hero section -->
+    <div class="row g-4 align-items-center mb-5">
+        <div class="col-lg-6">
+            <div class="badge bg-primary bg-opacity-25 text-primary px-3 py-2 rounded-pill mb-3">🔥 Bypass FRP 2025</div>
+            <h1 class="display-5 fw-bold">Acceso directo <span class="text-primary">y utilidad</span> profesional</h1>
+            <p class="lead text-light-emphasis">Herramienta todo-en-uno para saltar FRP en Android. Incluye atajos para Samsung, Xiaomi, Realme, OPPO, Motorola y más.</p>
+            <div class="d-flex gap-3 mt-3">
+                <a href="#unique-utility" class="btn btn-glow px-4"><i class="fas fa-robot me-2"></i> Asistente inteligente</a>
+                <a href="#shortcut-tools" class="btn btn-outline-light"><i class="fas fa-th-large"></i> Ver atajos</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="glass-card p-4 text-center">
+                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                <h3>✅ Métodos sin PC</h3>
+                <p class="small text-secondary">Actualizado para Android 11-14, One UI 6, HyperOS, Realme UI 5.0</p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap mt-2">
+                    <span class="badge bg-dark">Samsung</span>
+                    <span class="badge bg-dark">Xiaomi</span>
+                    <span class="badge bg-dark">Realme/OPPO</span>
+                    <span class="badge bg-dark">Motorola</span>
+                    <span class="badge bg-dark">Vivo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS con categorías + REALME incluido -->
+    <div class="glass-card p-4 mb-5" id="shortcut-tools">
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="general">⚡ Acceso Rápido</button>
+            <button class="tab-btn" data-tab="samsung">📱 Samsung</button>
+            <button class="tab-btn" data-tab="xiaomi">📲 Xiaomi/GetApps</button>
+            <button class="tab-btn" data-tab="realme">🎯 Realme / OPPO</button>
+            <button class="tab-btn" data-tab="brands">🏷️ Otras marcas</button>
+        </div>
+
+        <!-- Tab General (intents universales) -->
+        <div class="tab-pane active" id="tab-general">
+            <div class="shortcut-grid">
+                <a href="intent://com.android.settings/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-cog"></i></div><span class="shortcut-label">Ajustes</span></a>
+                <a href="intent://com.google.android.gms/#Intent;scheme=promote_smartlock_scheme;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-lock"></i></div><span class="shortcut-label">Smart Lock</span></a>
+                <a href="tel:" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-phone-alt"></i></div><span class="shortcut-label">Teléfono</span></a>
+                <a href="intent://com.google.android.googlequicksearchbox/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fab fa-google"></i></div><span class="shortcut-label">Google App</span></a>
+                <a href="intent://com.google.android.apps.maps/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-map-marker-alt"></i></div><span class="shortcut-label">Google Maps</span></a>
+                <a href="intent://com.google.android.youtube/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fab fa-youtube"></i></div><span class="shortcut-label">YouTube</span></a>
+                <a href="intent://com.android.chrome/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fab fa-chrome"></i></div><span class="shortcut-label">Chrome</span></a>
+                <a href="intent://com.google.android.accessibility.switchaccess/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-universal-access"></i></div><span class="shortcut-label">Accesibilidad</span></a>
+                <a href="intent://de.szalkowski.activitylauncher/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-rocket"></i></div><span class="shortcut-label">Activity Launcher</span></a>
+                <a href="intent://com.sec.android.easyMover/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-exchange-alt"></i></div><span class="shortcut-label">Smart Switch</span></a>
+                <a href="intent://com.coloros.backuprestore/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-cloud-upload-alt"></i></div><span class="shortcut-label">Clone Phone</span></a>
+                <a href="intent://com.vivo.easyshare/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-share-alt"></i></div><span class="shortcut-label">VIVO EasyShare</span></a>
+            </div>
+        </div>
+
+        <!-- Tab Samsung Galaxy Store & apps -->
+        <div class="tab-pane" id="tab-samsung">
+            <div class="shortcut-grid">
+                <a href="intent://com.sec.android.app.samsungapps/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-store"></i></div><span class="shortcut-label">Galaxy Store</span></a>
+                <a href="https://apps.samsung.com/appquery/appDetail.as?appId=com.sec.android.app.sbrowser" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-globe"></i></div><span class="shortcut-label">Samsung Internet</span></a>
+                <a href="https://galaxystore.samsung.com/detail/com.panruyi.tools.hidden.settings.services.allplatform" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-eye-slash"></i></div><span class="shortcut-label">Hidden Settings</span></a>
+                <a href="https://galaxystore.samsung.com/detail/com.samsung.android.authfw" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-fingerprint"></i></div><span class="shortcut-label">Samsung Pass</span></a>
+                <a href="https://galaxystore.samsung.com/detail/com.sec.android.easyMover" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-mobile-alt"></i></div><span class="shortcut-label">Smart Switch</span></a>
+                <a href="https://galaxystore.samsung.com/detail/com.explorer.file.commander.pro" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-folder-open"></i></div><span class="shortcut-label">File Commander</span></a>
+                <a href="https://galaxystore.samsung.com/detail/com.activitymanager" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-tasks"></i></div><span class="shortcut-label">Activity Manager</span></a>
+                <a href="https://galaxystore.samsung.com/detail/com.panruyitools.hiddenapps.activity.launcher.master.samsungpro" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-cube"></i></div><span class="shortcut-label">Activity Launcher+</span></a>
+                <a href="https://galaxystore.samsung.com/detail/com.sec.android.app.popupcalculator" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-calculator"></i></div><span class="shortcut-label">Calculadora</span></a>
+            </div>
+        </div>
+
+        <!-- Tab Xiaomi / GetApps -->
+        <div class="tab-pane" id="tab-xiaomi">
+            <div class="shortcut-grid">
+                <a href="intent://com.xiaomi.mipicks/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-download"></i></div><span class="shortcut-label">GetApps</span></a>
+                <a href="intent://com.xiaomi.midrop/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-wifi"></i></div><span class="shortcut-label">ShareMe</span></a>
+                <a href="https://global.app.mi.com/details?lo=ID&id=de.szalkowski.activitylauncher" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-launch"></i></div><span class="shortcut-label">Activity Launcher</span></a>
+                <a href="intent://com.android.settings/.DevelopmentSettings#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-code-branch"></i></div><span class="shortcut-label">Opc. desarrollador</span></a>
+                <a href="intent://com.miui.securitycenter/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-shield-virus"></i></div><span class="shortcut-label">Seguridad MIUI</span></a>
+                <a href="intent://com.miui.gallery/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-images"></i></div><span class="shortcut-label">Galería</span></a>
+            </div>
+        </div>
+
+        <!-- Tab Realme / OPPO (NUEVO con más opciones específicas) -->
+        <div class="tab-pane" id="tab-realme">
+            <div class="shortcut-grid">
+                <a href="intent://com.coloros.backuprestore/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-cloud-upload-alt"></i></div><span class="shortcut-label">Clone Phone</span></a>
+                <a href="intent://com.coloros.safecenter/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-shield-alt"></i></div><span class="shortcut-label">Phone Manager</span></a>
+                <a href="intent://com.oppo.logkit/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-bug"></i></div><span class="shortcut-label">LogKit (Realme)</span></a>
+                <a href="intent://com.coloros.gamespace/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-gamepad"></i></div><span class="shortcut-label">Game Space</span></a>
+                <a href="intent://com.realme.music/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-music"></i></div><span class="shortcut-label">Realme Música</span></a>
+                <a href="intent://com.oppo.quicksearchbox/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-search"></i></div><span class="shortcut-label">Búsqueda rápida</span></a>
+                <a href="intent://com.coloros.assistantscreen/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-user-friends"></i></div><span class="shortcut-label">Asistente inteligente</span></a>
+                <a href="intent://com.realme.filemanager/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-folder"></i></div><span class="shortcut-label">Administrador archivos</span></a>
+                <a href="intent://com.android.settings/.DevelopmentSettings#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-microchip"></i></div><span class="shortcut-label">Opc. desarrollador</span></a>
+                <a href="https://play.google.com/store/apps/details?id=de.szalkowski.activitylauncher" class="shortcut-item"><div class="shortcut-icon"><i class="fab fa-google-play"></i></div><span class="shortcut-label">Activity Launcher</span></a>
+            </div>
+            <div class="mt-3 alert alert-dark bg-dark border-secondary text-white small">
+                <i class="fas fa-info-circle text-primary me-2"></i> Para Realme UI: usa "Clone Phone" para abrir navegador, o "LogKit" para acceder a menús ocultos. También prueba con "Phone Manager" → ajustes avanzados.
+            </div>
+        </div>
+
+        <!-- Tab otras marcas (Motorola, Vivo, etc) -->
+        <div class="tab-pane" id="tab-brands">
+            <div class="shortcut-grid">
+                <a href="intent://com.motorola.moto/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-motorcycle"></i></div><span class="shortcut-label">Moto App</span></a>
+                <a href="intent://com.motorola.securityhub/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-shield-alt"></i></div><span class="shortcut-label">Moto Secure</span></a>
+                <a href="intent://com.motorola.ccc.notification/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-comment-dots"></i></div><span class="shortcut-label">Hello You</span></a>
+                <a href="intent://com.oneplus.gamespace/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-gamepad"></i></div><span class="shortcut-label">OnePlus Game Space</span></a>
+                <a href="intent://com.android.emergency/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-ambulance"></i></div><span class="shortcut-label">Emergencia</span></a>
+                <a href="intent://com.vivo.agent/#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-robot"></i></div><span class="shortcut-label">Vivo Agent</span></a>
+                <a href="intent://com.google.android.setupwizard/.SetupWizardTestActivity#Intent;scheme=android-app;end" class="shortcut-item"><div class="shortcut-icon"><i class="fas fa-wizard"></i></div><span class="shortcut-label">Setup Wizard</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Utilidad inteligente FRP con análisis por IMEI y consejos para Realme -->
+    <div class="utility-card mb-5" id="unique-utility">
+        <div class="row g-4 align-items-center">
+            <div class="col-md-6">
+                <span class="badge bg-success mb-2"><i class="fas fa-microchip"></i> ASISTENTE FRP + REALME</span>
+                <h2 class="fw-bold">Analizador inteligente <i class="fas fa-brain text-primary"></i></h2>
+                <p>Ingresa IMEI (opcional) o selecciona tu marca. Obtén el método específico para bypass FRP, incluyendo trucos para Realme UI y otras capas.</p>
+                <div class="mb-3">
+                    <label class="form-label">📱 IMEI (opcional, 15 dígitos):</label>
+                    <input type="text" id="imeiInput" class="form-control bg-dark text-white" placeholder="Ej: 354123456789012" maxlength="15">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">🔧 Marca / capa:</label>
+                    <select id="brandSelect" class="form-select bg-dark text-white">
+                        <option value="auto">🔍 Detectar por IMEI (automático)</option>
+                        <option value="samsung">Samsung (One UI)</option>
+                        <option value="xiaomi">Xiaomi / HyperOS</option>
+                        <option value="realme">Realme UI / OPPO ColorOS</option>
+                        <option value="motorola">Motorola</option>
+                        <option value="vivo">Vivo / Funtouch</option>
+                        <option value="google">Google Pixel</option>
+                        <option value="oneplus">OnePlus</option>
+                        <option value="generic">Otros / Genérico</option>
+                    </select>
+                </div>
+                <button class="btn btn-glow w-100" id="analyzeBtn"><i class="fas fa-chart-line me-2"></i>Analizar y recomendar método</button>
+                <div id="utilityResult" class="result-box mt-3" style="display: none;"></div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="glass-card p-4">
+                    <i class="fas fa-android fa-4x text-primary opacity-75 mb-2"></i>
+                    <h5>⚡ Atajos avanzados</h5>
+                    <button class="btn btn-outline-light mt-2" onclick="window.location.href='intent://com.android.settings/.DevelopmentSettings#Intent;scheme=android-app;end'"><i class="fas fa-terminal"></i> Opciones desarrollador</button>
+                    <button class="btn btn-outline-light mt-2 ms-2" onclick="window.location.href='intent://com.google.android.gsf/.update.SystemUpdateActivity#Intent;scheme=android-app;end'"><i class="fas fa-sync-alt"></i> System Update</button>
+                    <hr class="bg-secondary my-3">
+                    <p class="small mb-0"><i class="fas fa-lightbulb text-warning"></i> Realme: busca "LogKit" y activa "Hacker mode" o abre "com.oppo.logkit.engine.TestActivity".</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards de métodos útiles -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="glass-card p-4 text-center h-100">
+                <i class="fas fa-chalkboard-user fa-2x text-info mb-3"></i>
+                <h5>Método TalkBack</h5>
+                <p class="small">Activa TalkBack desde accesibilidad, luego gesto de dos dedos para abrir menú y acceder a ajustes.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-4 text-center h-100">
+                <i class="fas fa-qrcode fa-2x text-warning mb-3"></i>
+                <h5>WiFi QR & Google Lens</h5>
+                <p class="small">Desde Maps o Google Lens, abre navegador y descarga Activity Launcher APK.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-4 text-center h-100">
+                <i class="fas fa-database fa-2x text-success mb-3"></i>
+                <h5>Clone Phone (Realme/OPPO)</h5>
+                <p class="small">Abre Clone Phone, selecciona "Este es el nuevo dispositivo" y accede al navegador web.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="py-4 mt-3">
+    <div class="container text-center">
+        <p class="text-secondary small mb-0">Herramienta profesional para bypass FRP · Atajos actualizados 2025<br>Todos los métodos son proporcionados con fines educativos y técnicos.</p>
+    </div>
+</footer>
+
+<div class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // TABS
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panes = document.querySelectorAll('.tab-pane');
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.tab;
+            tabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            panes.forEach(pane => pane.classList.remove('active'));
+            document.getElementById(`tab-${target}`).classList.add('active');
+        });
+    });
+
+    // IMEI helper y análisis
+    function luhnCheck(imei) {
+        if (!/^\d{15}$/.test(imei)) return false;
+        let sum = 0;
+        for (let i = 0; i < 15; i++) {
+            let digit = parseInt(imei.charAt(i));
+            if (i % 2 === 1) { digit *= 2; if (digit > 9) digit = digit - 9; }
+            sum += digit;
+        }
+        return (sum % 10) === 0;
+    }
+
+    function getBrandFromImei(imei) {
+        if (!imei || imei.length < 6) return null;
+        const prefix = imei.substring(0,6);
+        if (prefix.startsWith('35') && (prefix[2] === '4' || prefix[2] === '5')) return 'samsung';
+        if (prefix.startsWith('86') || prefix.startsWith('868')) return 'xiaomi';
+        if (prefix.startsWith('53') || prefix.startsWith('54') || prefix.startsWith('55')) return 'realme';
+        if (prefix.startsWith('35') && (prefix[2] === '7' || prefix[2] === '8')) return 'motorola';
+        if (prefix.startsWith('35') && prefix[2] === '0') return 'google';
+        if (prefix.startsWith('35') && prefix[2] === '6') return 'vivo';
+        return null;
+    }
+
+    document.getElementById('analyzeBtn').addEventListener('click', () => {
+        let imei = document.getElementById('imeiInput').value.trim();
+        let brandSelect = document.getElementById('brandSelect').value;
+        let brand = brandSelect;
+        let advice = "";
+        let imeiValid = false;
+        if (imei !== "") {
+            imeiValid = luhnCheck(imei);
+            if (!imeiValid) advice = "⚠️ IMEI no válido (checksum incorrecto). Usando modo manual.<br>";
+            else {
+                const detected = getBrandFromImei(imei);
+                if (detected && brand === 'auto') brand = detected;
+                else if (brand === 'auto' && !detected) brand = 'generic';
+                advice = `✅ IMEI válido · ${detected ? `Marca sugerida: ${detected.toUpperCase()}` : 'Marca no detectada, selecciona manualmente.'}<br>`;
+            }
+        } else {
+            advice = "🔍 Modo manual: selecciona la marca de tu dispositivo.<br>";
+            if (brand === 'auto') brand = 'generic';
+        }
+
+        let method = "";
+        switch(brand) {
+            case 'samsung':
+                method = "📱 SAMSUNG: Abre Galaxy Store e instala 'Activity Launcher'. Busca 'Setup Wizard' o 'com.google.android.gsf.login'. También prueba con 'Hidden Settings' desde Galaxy Store.";
+                break;
+            case 'xiaomi':
+                method = "📲 XIAOMI: Desde GetApps instala Activity Launcher. Luego abre 'Settings', busca 'Google Account Manager' o 'SetupWizardTestActivity'. Alternativa: usa ShareMe para transferir archivos APK.";
+                break;
+            case 'realme':
+                method = "🎯 REALME / OPPO: 1) Abre 'Clone Phone' y selecciona 'Este es el nuevo dispositivo' → se abrirá navegador. Descarga Activity Launcher. 2) Desde 'LogKit' (intento directo) activa 'Hacker mode' y abre actividades ocultas. 3) Usa 'Phone Manager' > ajustes avanzados para acceder a configuración.";
+                break;
+            case 'motorola':
+                method = "🏍️ MOTOROLA: Abre 'Moto Secure' y desde allí accede a ajustes ocultos. Usa 'Hello You' para abrir navegador y descargar Activity Launcher.";
+                break;
+            case 'vivo':
+                method = "📱 VIVO: Utiliza 'EasyShare' para compartir un enlace con Activity Launcher. Después abre la app y busca 'GoogleAccount' o 'FRP' related activities.";
+                break;
+            default:
+                method = "✨ MÉTODO GENÉRICO: Abre 'Activity Launcher' (desde los accesos directos de esta web) y busca 'Settings$DevelopmentSettingsActivity' para activar depuración USB. También prueba con 'Smart Switch' o 'Clone Phone' para abrir navegador.";
+        }
+        
+        const resultDiv = document.getElementById('utilityResult');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<i class="fas fa-robot me-2 text-primary"></i> <strong>Recomendación FRP:</strong><br>${advice}<div class="mt-2 p-2 bg-dark rounded-3">${method}</div><div class="mt-2 small text-info"><i class="fas fa-lightbulb"></i> Consejo extra: Si logras abrir navegador, busca 'Test DPC' o 'Apex Auto Clicker' para completar bypass sin cuenta Google.</div>`;
+    });
+
+    // Back to top
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) backBtn.classList.add('show');
+        else backBtn.classList.remove('show');
+    });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+</body>
+</html>
