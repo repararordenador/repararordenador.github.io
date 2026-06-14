@@ -1,0 +1,85 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, sans-serif">
+  <!-- Fondo -->
+  <rect width="1200" height="630" fill="#0B0F19"/>
+
+  <!-- Grid lines -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#1e3a5f" stroke-width="0.6" opacity="0.4"/>
+    </pattern>
+    <radialGradient id="glow1" cx="35%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0B0F19" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="75%" cy="65%" r="40%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0B0F19" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Borde interior decorativo -->
+  <rect x="24" y="24" width="1152" height="582" rx="16" fill="none" stroke="#1e3a5f" stroke-width="1.5"/>
+
+  <!-- Badge superior -->
+  <rect x="72" y="64" width="240" height="34" rx="17" fill="rgba(59,130,246,0.12)" stroke="#3B82F6" stroke-width="1"/>
+  <text x="192" y="86" text-anchor="middle" fill="#3B82F6" font-size="13" font-weight="700" letter-spacing="2">⚡ GUÍA TÉCNICA · 2026</text>
+
+  <!-- Título principal -->
+  <text x="72" y="175" fill="#F8FAFC" font-size="72" font-weight="800" letter-spacing="-1">Secure Boot</text>
+  <text x="72" y="255" fill="#3B82F6" font-size="72" font-weight="800" letter-spacing="-1">La Guía Definitiva</text>
+
+  <!-- Subtítulo -->
+  <text x="72" y="318" fill="#94A3B8" font-size="26">Arquitectura UEFI · PK · KEK · db · dbx · Windows 11 · Linux MOK</text>
+
+  <!-- Separador -->
+  <rect x="72" y="350" width="120" height="3" rx="2" fill="#3B82F6"/>
+
+  <!-- Pills de características -->
+  <rect x="72" y="380" width="160" height="36" rx="8" fill="rgba(59,130,246,0.1)" stroke="#3B82F6" stroke-width="1"/>
+  <text x="152" y="403" text-anchor="middle" fill="#3B82F6" font-size="14" font-weight="600">🔑 Claves UEFI</text>
+
+  <rect x="248" y="380" width="175" height="36" rx="8" fill="rgba(16,185,129,0.1)" stroke="#10B981" stroke-width="1"/>
+  <text x="335" y="403" text-anchor="middle" fill="#10B981" font-size="14" font-weight="600">🛡️ Chain of Trust</text>
+
+  <rect x="439" y="380" width="160" height="36" rx="8" fill="rgba(245,158,11,0.1)" stroke="#F59E0B" stroke-width="1"/>
+  <text x="519" y="403" text-anchor="middle" fill="#F59E0B" font-size="14" font-weight="600">🪟 Windows 11</text>
+
+  <rect x="615" y="380" width="145" height="36" rx="8" fill="rgba(139,92,246,0.1)" stroke="#A78BFA" stroke-width="1"/>
+  <text x="687" y="403" text-anchor="middle" fill="#A78BFA" font-size="14" font-weight="600">🐧 Linux Shim</text>
+
+  <!-- URL -->
+  <text x="72" y="480" fill="#64748B" font-size="20" font-family="'Cascadia Code', 'Consolas', monospace">secureboot.github.io</text>
+
+  <!-- YouTube CTA -->
+  <rect x="72" y="510" width="350" height="44" rx="8" fill="rgba(255,0,0,0.12)" stroke="#FF0000" stroke-width="1"/>
+  <text x="247" y="538" text-anchor="middle" fill="#FF4444" font-size="15" font-weight="700">▶ youtube.com/@repararordenador</text>
+
+  <!-- Escudo derecho -->
+  <g transform="translate(820, 100)">
+    <!-- Anillos externos -->
+    <ellipse cx="190" cy="220" rx="175" ry="175" fill="none" stroke="#3B82F6" stroke-width="0.8" opacity="0.15"/>
+    <ellipse cx="190" cy="220" rx="145" ry="145" fill="none" stroke="#3B82F6" stroke-width="0.8" opacity="0.2"/>
+
+    <!-- Escudo principal -->
+    <path d="M190 30 L340 95 L340 215 C340 295 275 360 190 380 C105 360 40 295 40 215 L40 95 Z"
+          fill="rgba(59,130,246,0.08)" stroke="#3B82F6" stroke-width="2.5"/>
+
+    <!-- Escudo interior -->
+    <path d="M190 60 L315 115 L315 215 C315 283 260 338 190 355 C120 338 65 283 65 215 L65 115 Z"
+          fill="rgba(59,130,246,0.05)" stroke="#3B82F6" stroke-width="1.5" opacity="0.7"/>
+
+    <!-- Checkmark -->
+    <text x="190" y="255" text-anchor="middle" font-size="100" fill="#10B981" opacity="0.95">✓</text>
+
+    <!-- Texto SECURE dentro del escudo -->
+    <text x="190" y="200" text-anchor="middle" fill="#3B82F6" font-size="22" font-weight="800" letter-spacing="4" font-family="'Cascadia Code', monospace">SECURE</text>
+    <text x="190" y="228" text-anchor="middle" fill="#3B82F6" font-size="22" font-weight="800" letter-spacing="5" font-family="'Cascadia Code', monospace">BOOT</text>
+  </g>
+
+  <!-- Scanlines sutil -->
+  <rect width="1200" height="630" fill="url(#scanlines)" opacity="0.03"/>
+</svg>
