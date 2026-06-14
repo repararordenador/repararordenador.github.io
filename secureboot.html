@@ -1,0 +1,1479 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Guía definitiva sobre Secure Boot: arquitectura de claves (PK, KEK, db, dbx), proceso de arranque UEFI, Windows 11, Linux Shim y MOK. Todo lo que necesitas saber.">
+<meta property="og:title" content="Secure Boot: La Guía Técnica Definitiva | secureboot.github.io">
+<meta property="og:description" content="Entiende Secure Boot desde la raíz: arquitectura UEFI, cadena de confianza, claves criptográficas y soporte en Windows y Linux.">
+<meta property="og:url" content="https://secureboot.github.io">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://secureboot.github.io/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/svg+xml">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Secure Boot: La Guía Técnica Definitiva">
+<meta name="twitter:description" content="Arquitectura de claves, cadena de confianza, Windows 11, Linux MOK y mucho más.">
+<link rel="canonical" href="https://secureboot.github.io">
+<title>Secure Boot: La Guía Técnica Definitiva | secureboot.github.io</title>
+<style>
+:root {
+  --bg: #0B0F19;
+  --bg2: #111827;
+  --bg3: #1a2235;
+  --card: #151d2e;
+  --border: #1e3a5f;
+  --blue: #3B82F6;
+  --blue-glow: rgba(59,130,246,0.15);
+  --green: #10B981;
+  --green-glow: rgba(16,185,129,0.12);
+  --yellow: #F59E0B;
+  --red: #EF4444;
+  --text: #E2E8F0;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+  --white: #F8FAFC;
+  --radius: 12px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  --progress-w: 0%;
+}
+[data-theme="light"] {
+  --bg: #F1F5F9;
+  --bg2: #E2E8F0;
+  --bg3: #CBD5E1;
+  --card: #FFFFFF;
+  --border: #CBD5E1;
+  --text: #1E293B;
+  --text-muted: #475569;
+  --text-dim: #94A3B8;
+  --blue-glow: rgba(59,130,246,0.08);
+  --green-glow: rgba(16,185,129,0.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 16px;
+  transition: background 0.3s, color 0.3s;
+}
+/* PROGRESS BAR */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: var(--progress-w);
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  z-index: 9999;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--blue);
+}
+/* NAV */
+header {
+  position: sticky; top: 3px;
+  z-index: 100;
+  background: rgba(11,15,25,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="light"] header { background: rgba(241,245,249,0.92); }
+nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 60px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-weight: 700; font-size: 1.1rem; color: var(--white);
+  text-decoration: none; flex-shrink: 0;
+}
+.nav-logo .shield { font-size: 1.4rem; }
+.nav-links {
+  display: flex; gap: 0.25rem;
+  list-style: none; flex: 1;
+  overflow-x: auto; scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-links a:hover { color: var(--blue); background: var(--blue-glow); }
+.nav-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+#search-input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
+  width: 160px;
+  outline: none;
+  transition: border-color 0.2s, width 0.3s;
+}
+#search-input:focus { border-color: var(--blue); width: 200px; }
+#theme-toggle {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+#theme-toggle:hover { background: var(--blue-glow); border-color: var(--blue); }
+/* HERO */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(59,130,246,0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 40% at 80% 70%, rgba(16,185,129,0.08) 0%, transparent 60%);
+}
+.scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(59,130,246,0.015) 3px, rgba(59,130,246,0.015) 4px);
+  pointer-events: none;
+}
+.grid-lines {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.15;
+}
+.hero-content { position: relative; max-width: 800px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--blue-glow);
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.9rem;
+  border-radius: 99px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  animation: fadeDown 0.6s ease both;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+.hero h1 span { color: var(--blue); }
+.hero p {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  animation: fadeUp 0.7s ease 0.2s both;
+}
+.hero-ctas {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.7s ease 0.3s both;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(59,130,246,0.35);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(59,130,246,0.5); }
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
+.btn-yt {
+  background: #FF0000;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255,0,0,0.3);
+}
+.btn-yt:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(255,0,0,0.5); }
+/* SHIELD ANIMATION */
+.shield-anim {
+  margin: 2.5rem auto 0;
+  width: 140px; height: 160px;
+  position: relative;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+.shield-anim svg { width: 100%; height: 100%; }
+.shield-pulse {
+  animation: pulse 3s ease-in-out infinite;
+  transform-origin: center;
+}
+.shield-ring {
+  animation: ringPulse 3s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.85;transform:scale(0.97)} }
+@keyframes ringPulse { 0%,100%{opacity:0.2}50%{opacity:0.6} }
+/* MAIN LAYOUT */
+main { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+/* SECTION STYLES */
+section { margin-bottom: 4rem; scroll-margin-top: 70px; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: 0.6rem;
+}
+h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 2rem 0 0.75rem;
+  color: var(--blue);
+}
+p { color: var(--text-muted); margin-bottom: 1rem; }
+strong { color: var(--text); }
+ul, ol { color: var(--text-muted); padding-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.4rem; }
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: border-color 0.3s;
+}
+.card:hover { border-color: var(--blue); }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+/* KEY CARDS */
+.key-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.key-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+.key-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.key-pk::before { background: var(--yellow); }
+.key-kek::before { background: var(--blue); }
+.key-db::before { background: var(--green); }
+.key-dbx::before { background: var(--red); }
+.key-badge {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 0.2rem 0.6rem;
+  border-radius: 4px; display: inline-block; margin-bottom: 0.75rem;
+}
+.badge-pk { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.badge-kek { background: var(--blue-glow); color: var(--blue); }
+.badge-db { background: var(--green-glow); color: var(--green); }
+.badge-dbx { background: rgba(239,68,68,0.12); color: var(--red); }
+.key-card h3 { margin-top: 0; font-size: 1.05rem; }
+.key-card p { font-size: 0.9rem; margin-bottom: 0; }
+/* CHAIN OF TRUST */
+.chain {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 2rem 0;
+}
+.chain-item {
+  flex: 1; min-width: 140px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 1.25rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  position: relative;
+  transition: background 0.3s;
+}
+.chain-item:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.chain-item:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.chain-item:hover { background: var(--bg3); }
+.chain-item::after {
+  content: '→';
+  position: absolute; right: -14px;
+  color: var(--blue); font-size: 1.2rem; z-index: 2;
+  font-weight: 700;
+}
+.chain-item:last-child::after { display: none; }
+.chain-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.chain-label { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+.chain-sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem; }
+.chain-badge {
+  margin-top: 0.5rem;
+  font-size: 0.65rem; font-weight: 700;
+  padding: 0.15rem 0.5rem; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+/* STEPS */
+.steps { counter-reset: step; display: flex; flex-direction: column; gap: 1rem; }
+.step {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+.step-num {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--blue-glow);
+  border: 1px solid var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; color: var(--blue); font-size: 1rem;
+  flex-shrink: 0;
+}
+.step-content h4 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+.step-content p { font-size: 0.9rem; margin: 0; }
+/* CODE BLOCKS */
+.code-block {
+  position: relative;
+  background: #060a13;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+}
+.code-lang {
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.copy-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font);
+}
+.copy-btn:hover { border-color: var(--blue); color: var(--blue); }
+.copy-btn.copied { border-color: var(--green); color: var(--green); }
+pre {
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #A8D8FF;
+}
+pre .kw { color: #C678DD; }
+pre .str { color: #98C379; }
+pre .cm { color: #5C6370; font-style: italic; }
+pre .fn { color: #61AFEF; }
+pre .num { color: #D19A66; }
+/* TABLE */
+.table-wrapper { overflow-x: auto; margin: 1.5rem 0; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th {
+  background: var(--bg3);
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 0.8rem 1rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(30,58,95,0.4);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--blue-glow); }
+.td-yes { color: var(--green); font-weight: 700; }
+.td-no { color: var(--red); font-weight: 700; }
+/* MYTH CARDS */
+.myth-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+@media(max-width:600px) { .myth-card { grid-template-columns: 1fr; } }
+.myth-side, .fact-side { padding: 1rem; border-radius: 8px; }
+.myth-side { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); }
+.fact-side { background: var(--green-glow); border: 1px solid rgba(16,185,129,0.2); }
+.myth-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.myth-label.m { color: var(--red); }
+.myth-label.f { color: var(--green); }
+.myth-side p, .fact-side p { font-size: 0.9rem; margin: 0; }
+/* FAQ */
+.faq-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+.faq-question {
+  width: 100%; text-align: left;
+  background: none; border: none;
+  color: var(--text);
+  font-size: 0.98rem; font-weight: 600;
+  padding: 1.1rem 1.25rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  font-family: var(--font);
+  transition: background 0.2s;
+}
+.faq-question:hover { background: var(--blue-glow); }
+.faq-chevron { flex-shrink: 0; transition: transform 0.3s; color: var(--blue); font-size: 1.1rem; }
+.faq-answer {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+  padding: 0 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+.faq-item.open .faq-answer { max-height: 400px; padding: 0 1.25rem 1.1rem; }
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+/* CALLOUT */
+.callout {
+  display: flex; gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+  border-left: 3px solid;
+}
+.callout-info { background: var(--blue-glow); border-color: var(--blue); }
+.callout-warn { background: rgba(245,158,11,0.08); border-color: var(--yellow); }
+.callout-danger { background: rgba(239,68,68,0.07); border-color: var(--red); }
+.callout-success { background: var(--green-glow); border-color: var(--green); }
+.callout-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 0.1rem; }
+.callout-body p { margin: 0; font-size: 0.9rem; }
+.callout-body strong { display: block; margin-bottom: 0.2rem; color: var(--text); }
+/* PLATFORM TABS */
+.tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.tab-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem; font-weight: 600;
+  font-family: var(--font);
+  transition: all 0.2s;
+}
+.tab-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+/* STATUS BADGE */
+.status {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.8rem; font-weight: 700;
+  padding: 0.25rem 0.7rem; border-radius: 99px;
+}
+.status-on { background: var(--green-glow); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+.status-off { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.status::before { content: '●'; font-size: 0.6rem; }
+/* SEARCH OVERLAY */
+#search-results {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+}
+#search-results.show { display: flex; }
+.search-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%; max-width: 600px;
+  max-height: 70vh; overflow-y: auto;
+  margin: 0 1rem;
+}
+.search-result-item {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.search-result-item:hover { background: var(--blue-glow); }
+.search-result-item:last-child { border-bottom: none; }
+.search-result-title { font-weight: 700; color: var(--blue); margin-bottom: 0.2rem; }
+.search-result-snippet { font-size: 0.85rem; color: var(--text-muted); }
+.search-no-results { padding: 2rem; text-align: center; color: var(--text-dim); }
+/* FOOTER */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+footer a { color: var(--blue); text-decoration: none; }
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+/* HIDDEN (search filter) */
+section.hidden { display: none; }
+/* MISC */
+.divider { height: 1px; background: var(--border); margin: 3rem 0; }
+.text-blue { color: var(--blue); }
+.text-green { color: var(--green); }
+.text-yellow { color: var(--yellow); }
+.text-red { color: var(--red); }
+.mono { font-family: var(--mono); font-size: 0.88em; background: var(--bg3); padding: 0.1rem 0.4rem; border-radius: 4px; color: var(--blue); }
+@media(max-width:768px) {
+  .chain { flex-direction: column; }
+  .chain-item { border-radius: 0; }
+  .chain-item:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+  .chain-item:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+  .chain-item::after { content: '↓'; right: 50%; transform: translateX(50%); bottom: -14px; top: auto; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<header>
+  <nav>
+    <a href="#" class="nav-logo"><span class="shield">🛡️</span> SecureBoot</a>
+    <ul class="nav-links">
+      <li><a href="#intro">Qué es</a></li>
+      <li><a href="#arquitectura">Arquitectura</a></li>
+      <li><a href="#claves">Claves</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#guia">Guía práctica</a></li>
+      <li><a href="#plataformas">Plataformas</a></li>
+      <li><a href="#mitos">Mitos</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" id="search-input" placeholder="🔍 Buscar..." autocomplete="off">
+      <button id="theme-toggle" title="Cambiar tema">🌙</button>
+    </div>
+  </nav>
+</header>
+
+<div id="search-results">
+  <div class="search-box" id="search-box"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero-section">
+  <div class="hero-bg"></div>
+  <div class="scanlines"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">⚡ Guía Técnica Definitiva · 2026</div>
+    <h1><span>Secure Boot</span>: La Raíz de Confianza que Protege tu Sistema</h1>
+    <p>Desde la arquitectura de claves UEFI hasta la implementación en Windows 11 y Linux. Todo lo que necesitas saber sobre el mecanismo de seguridad más importante del firmware moderno.</p>
+    <div class="hero-ctas">
+      <a href="#intro" class="btn btn-primary">▶ Empezar a leer</a>
+      <a href="#claves" class="btn btn-secondary">🔑 Ver arquitectura de claves</a>
+      <a href="https://www.youtube.com/@repararordenador" target="_blank" rel="noopener" class="btn btn-yt">▶ Ver tutoriales en YouTube</a>
+    </div>
+    <div class="shield-anim">
+      <svg viewBox="0 0 140 160" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="70" cy="90" rx="65" ry="65" fill="none" stroke="#3B82F6" stroke-width="0.5" opacity="0.2" class="shield-ring"/>
+        <ellipse cx="70" cy="90" rx="50" ry="50" fill="none" stroke="#3B82F6" stroke-width="0.5" opacity="0.25" class="shield-ring"/>
+        <path d="M70 8 L128 35 L128 90 C128 122 102 148 70 155 C38 148 12 122 12 90 L12 35 Z" fill="none" stroke="#3B82F6" stroke-width="2" class="shield-pulse"/>
+        <path d="M70 22 L116 44 L116 90 C116 116 96 138 70 144 C44 138 24 116 24 90 L24 44 Z" fill="rgba(59,130,246,0.08)" stroke="#3B82F6" stroke-width="1.5" class="shield-pulse"/>
+        <text x="70" y="100" text-anchor="middle" font-size="36" fill="#10B981" class="shield-pulse">✓</text>
+        <text x="70" y="75" text-anchor="middle" font-size="11" fill="#3B82F6" font-family="monospace" font-weight="700" class="shield-pulse">SECURE</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<main>
+
+<!-- INTRO -->
+<section id="intro" class="reveal">
+  <div class="section-label">📖 Fundamentos</div>
+  <h2>¿Qué es Secure Boot y por qué importa?</h2>
+  <p>Secure Boot es un estándar de seguridad definido en la especificación <strong>UEFI (Unified Extensible Firmware Interface)</strong>, desarrollado por el consorcio UEFI Forum con contribuciones de Intel, AMD, Microsoft y fabricantes OEM. No se trata de una restricción de software ni de una política comercial: es una <strong>raíz de confianza criptográfica (Root of Trust)</strong> anclada en el firmware de la placa base que garantiza que únicamente software firmado digitalmente y autorizado puede ejecutarse durante el proceso de arranque.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">ℹ️</span>
+    <div class="callout-body">
+      <strong>Definición técnica precisa</strong>
+      <p>Secure Boot implementa un mecanismo de verificación de firma digital (PKI basado en RSA-2048/SHA-256 o superior) que actúa <em>antes</em> de que el sistema operativo tenga control del hardware. Su objetivo es prevenir los ataques de tipo <em>bootkit</em>, <em>rootkit de pre-OS</em> y <em>firmware implant</em>.</p>
+    </div>
+  </div>
+
+  <h3>El problema que Secure Boot resuelve</h3>
+  <p>Antes de su adopción masiva, existía una ventana de vulnerabilidad crítica: el intervalo entre que el firmware inicializaba el hardware y que el sistema operativo cargaba sus defensas. En este periodo, malware como <strong>TDL4, MBR Locker o Mebromi</strong> podía comprometer el sistema de forma invisible, cargándose antes que cualquier antivirus y persistiendo incluso tras reinstalaciones del SO.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--red)">⚠️ Sin Secure Boot</h3>
+      <ul>
+        <li>El firmware ejecuta cualquier código encontrado en el MBR/EFI</li>
+        <li>Un bootkit puede instalarse antes del OS y ser invisible</li>
+        <li>Persistencia incluso después de formatear el disco</li>
+        <li>No hay verificación de integridad del gestor de arranque</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--green)">✅ Con Secure Boot</h3>
+      <ul>
+        <li>Cada componente de arranque es verificado criptográficamente</li>
+        <li>Las firmas son comprobadas contra una base de datos en firmware</li>
+        <li>Un bootloader no firmado es rechazado antes de ejecutarse</li>
+        <li>La cadena de confianza se extiende hasta el kernel del OS</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Origen e historia</h3>
+  <p>La especificación UEFI 2.3.1 Errata C (2012) formalizó Secure Boot, aunque las primeras implementaciones llegaron con Windows 8 (2012) y los sistemas basados en la arquitectura ARM de 64 bits. Desde entonces, se ha convertido en requisito obligatorio para la certificación <em>Windows Hardware Compatibility</em> y, con la llegada de <strong>Windows 11 en 2021</strong>, en un prerrequisito no negociable del sistema operativo.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ARQUITECTURA -->
+<section id="arquitectura" class="reveal">
+  <div class="section-label">🏗️ Arquitectura</div>
+  <h2>La Cadena de Confianza: De Hardware a Kernel</h2>
+  <p>Secure Boot implementa lo que se denomina una <strong>Cadena de Confianza (Chain of Trust)</strong>: cada eslabón verifica la integridad del siguiente antes de cederle el control. Si cualquier verificación falla, el proceso se detiene y el sistema entra en modo de recuperación.</p>
+
+  <div class="chain">
+    <div class="chain-item">
+      <div class="chain-icon">🖥️</div>
+      <div class="chain-label">Hardware / CPU</div>
+      <div class="chain-sub">ROM de firmware</div>
+      <span class="chain-badge" style="background:rgba(245,158,11,0.15);color:var(--yellow)">Root of Trust</span>
+    </div>
+    <div class="chain-item">
+      <div class="chain-icon">⚙️</div>
+      <div class="chain-label">UEFI Firmware</div>
+      <div class="chain-sub">BIOS moderno</div>
+      <span class="chain-badge" style="background:var(--blue-glow);color:var(--blue)">Verifica PK/KEK</span>
+    </div>
+    <div class="chain-item">
+      <div class="chain-icon">🔄</div>
+      <div class="chain-label">Bootloader</div>
+      <div class="chain-sub">GRUB / bootmgfw.efi</div>
+      <span class="chain-badge" style="background:var(--green-glow);color:var(--green)">Firmado con db</span>
+    </div>
+    <div class="chain-item">
+      <div class="chain-icon">🐧</div>
+      <div class="chain-label">OS Kernel</div>
+      <div class="chain-sub">Windows / Linux</div>
+      <span class="chain-badge" style="background:rgba(139,92,246,0.15);color:#A78BFA">Control total</span>
+    </div>
+  </div>
+
+  <div class="callout callout-success">
+    <span class="callout-icon">🔗</span>
+    <div class="callout-body">
+      <strong>Principio fundamental</strong>
+      <p>Si cualquier eslabón de la cadena no puede verificar criptográficamente al siguiente, el arranque se detiene. No hay excepciones ni formas de "saltar" un eslabón sin deshabilitar explícitamente Secure Boot desde la UEFI.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CLAVES -->
+<section id="claves" class="reveal">
+  <div class="section-label">🔑 Arquitectura de Claves</div>
+  <h2>Jerarquía de Claves Criptográficas: PK, KEK, db y dbx</h2>
+  <p>El corazón de Secure Boot es una <strong>infraestructura de clave pública (PKI)</strong> jerárquica almacenada en variables NVRAM del firmware UEFI, protegidas contra escritura una vez en modo "deployed". Cada variable tiene un propósito preciso y un nivel de acceso diferente.</p>
+
+  <div class="grid-2">
+    <div class="key-card key-pk">
+      <span class="key-badge badge-pk">Platform Key · PK</span>
+      <h3>Platform Key (PK)</h3>
+      <p>La <strong>raíz absoluta de la jerarquía</strong>. Es la clave del propietario de la plataforma (normalmente el fabricante OEM). Existe una única PK por sistema. Su clave pública se almacena en firmware; la privada la custodia el fabricante bajo HSMs de nivel FIPS 140-2.</p>
+      <p style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-dim)"><strong>Función:</strong> Autoriza la modificación de las KEK. Sin PK válida, nadie puede alterar las claves de arranque desde el SO. Solo se puede cambiar desde la interfaz UEFI físicamente.</p>
+    </div>
+    <div class="key-card key-kek">
+      <span class="key-badge badge-kek">Key Exchange Key · KEK</span>
+      <h3>Key Exchange Key (KEK)</h3>
+      <p>Intermediaria entre la PK y las bases de datos operacionales. Generalmente existen <strong>dos KEK</strong> por defecto: una de Microsoft Corporation y otra del fabricante OEM. La KEK autoriza a sus titulares a modificar las bases de datos <span class="mono">db</span> y <span class="mono">dbx</span>.</p>
+      <p style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-dim)"><strong>Ejemplo real:</strong> Microsoft usa su KEK para actualizar la <span class="mono">dbx</span> cuando revoca bootloaders comprometidos, sin necesidad de que el OEM intervenga.</p>
+    </div>
+    <div class="key-card key-db">
+      <span class="key-badge badge-db">Signature Database · db</span>
+      <h3>Allowed Signatures (db)</h3>
+      <p>La <strong>lista blanca</strong> de Secure Boot. Contiene certificados X.509 o hashes SHA-256 de binarios EFI que están autorizados a ejecutarse. Si el bootloader presenta una firma válida contra cualquier certificado de la <span class="mono">db</span>, el firmware lo ejecuta.</p>
+      <p style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-dim)"><strong>Contenido típico:</strong> Certificado de Microsoft UEFI CA 2011 (para Windows y Shim), certificado del OEM, posiblemente certificados de distribuciones Linux específicas.</p>
+    </div>
+    <div class="key-card key-dbx">
+      <span class="key-badge badge-dbx">Forbidden Signatures · dbx</span>
+      <h3>Forbidden Signatures (dbx)</h3>
+      <p>La <strong>lista negra</strong> de revocaciones. Contiene hashes de binarios conocidos como comprometidos o vulnerables. La verificación contra <span class="mono">dbx</span> tiene <em>prioridad sobre</em> la <span class="mono">db</span>: aunque un binario esté firmado con un certificado válido, si su hash aparece en <span class="mono">dbx</span>, es rechazado.</p>
+      <p style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-dim)"><strong>Caso real:</strong> La vulnerabilidad BootHole (CVE-2020-10713) afectó a GRUB2. Microsoft distribuyó actualizaciones de la <span class="mono">dbx</span> para bloquear las versiones vulnerables.</p>
+    </div>
+  </div>
+
+  <h3>Variables UEFI adicionales</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Nombre completo</th>
+          <th>Contenido</th>
+          <th>Quién puede modificarla</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono">PK</td>
+          <td>Platform Key</td>
+          <td>Un único certificado X.509 RSA-2048+</td>
+          <td>Solo desde la UI UEFI (físicamente)</td>
+        </tr>
+        <tr>
+          <td class="mono">KEK</td>
+          <td>Key Exchange Key</td>
+          <td>Uno o más certificados X.509</td>
+          <td>Firmado con clave privada de PK</td>
+        </tr>
+        <tr>
+          <td class="mono">db</td>
+          <td>Allowed Signatures DB</td>
+          <td>Certs X.509 y/o hashes EFI</td>
+          <td>Firmado con clave privada de KEK</td>
+        </tr>
+        <tr>
+          <td class="mono">dbx</td>
+          <td>Forbidden Signatures DB</td>
+          <td>Hashes de binarios revocados</td>
+          <td>Firmado con clave privada de KEK</td>
+        </tr>
+        <tr>
+          <td class="mono">dbt</td>
+          <td>Authorized Timestamps DB</td>
+          <td>Timestamps de autorización</td>
+          <td>Firmado con clave privada de KEK</td>
+        </tr>
+        <tr>
+          <td class="mono">dbr</td>
+          <td>Recovery Signatures DB</td>
+          <td>Binarios de recuperación</td>
+          <td>Firmado con clave privada de KEK</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">Bash · Linux — Consultar variables UEFI desde el SO</span>
+      <button class="copy-btn" data-code="code1">Copiar</button>
+    </div>
+    <pre id="code1"><span class="cm"># Ver todas las variables Secure Boot disponibles</span>
+efi-readvar
+
+<span class="cm"># Exportar la PK actual en formato PEM</span>
+efi-readvar -v PK -o PK.esl
+
+<span class="cm"># Ver el estado de Secure Boot con mokutil</span>
+mokutil --sb-state
+
+<span class="cm"># Listar hashes en la lista negra (dbx)</span>
+efi-readvar -v dbx
+
+<span class="cm"># Alternativa: leer directamente desde sysfs</span>
+od -An -tx1 /sys/firmware/efi/efivars/SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c</pre>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROCESO DE BOOT -->
+<section id="proceso" class="reveal">
+  <div class="section-label">⚡ Proceso de arranque</div>
+  <h2>Proceso de Boot Paso a Paso: Del Botón de Encendido al Kernel</h2>
+  <p>El proceso de arranque con Secure Boot activo sigue una secuencia criptográficamente verificada. Veamos exactamente qué ocurre en cada microsegundo:</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>POST y carga del firmware UEFI</h4>
+        <p>Al pulsar el botón de encendido, la CPU ejecuta el código almacenado en la ROM de firmware desde una dirección fija (0xFFFFFFF0 en x86). El UEFI realiza el Power-On Self-Test (POST): verifica RAM, inicializa controladores PCIe, almacenamiento NVMe/SATA y puertos USB. En esta fase, Secure Boot no ha intervenido aún — el código de firmware está en ROM inmutable.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Inicialización de Secure Boot y carga de variables</h4>
+        <p>El firmware UEFI carga las variables criptográficas (PK, KEK, db, dbx) desde la NVRAM. Determina si Secure Boot está en modo <em>Setup</em>, <em>User</em> o si está desactivado. En modo User (el normal), las comprobaciones criptográficas son obligatorias.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Localización del EFI System Partition (ESP)</h4>
+        <p>El firmware lee la tabla de particiones GPT del dispositivo de arranque (disco NVMe, SSD SATA, USB). Localiza la partición ESP (tipo GUID <span class="mono">C12A7328-F81F-11D2-BA4B-00A0C93EC93B</span>), formateada en FAT32. Dentro del ESP busca el archivo EFI loader, típicamente en <span class="mono">\EFI\BOOT\BOOTX64.EFI</span> o en una ruta almacenada en las variables de boot UEFI (<span class="mono">BootXXXX</span>).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Verificación criptográfica del bootloader (¡El núcleo de Secure Boot!)</h4>
+        <p>Antes de ejecutar el archivo EFI, el firmware extrae su firma digital (almacenada en la tabla de Authenticode del PE/COFF). Calcula el hash SHA-256 del binario y comprueba <strong>primero</strong> si ese hash aparece en la <span class="mono">dbx</span> (revocado → RECHAZADO). Si no está revocado, verifica si la firma es válida contra algún certificado de la <span class="mono">db</span>. Si pasa ambas pruebas → ejecuta el bootloader.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Ejecución del bootloader y verificación del kernel</h4>
+        <p>El bootloader (Windows Boot Manager, GRUB con Shim, systemd-boot...) se ejecuta. Con Secure Boot activo, el bootloader también está obligado a verificar criptográficamente cada componente adicional que carga: en Windows, verifica <span class="mono">winload.efi</span>, el kernel <span class="mono">ntoskrnl.exe</span> y todos los drivers de arranque. En Linux con Shim, GRUB verifica el kernel antes de ejecutarlo.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Transferencia de control al sistema operativo</h4>
+        <p>Una vez verificada toda la cadena, el kernel toma el control exclusivo del hardware. En Windows, esto activa las protecciones adicionales como Early Launch Anti-Malware (ELAM), Virtualization-Based Security (VBS) y Hypervisor-Protected Code Integrity (HVCI), que dependen de la garantía que ofrece Secure Boot para funcionar correctamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>Tiempo de verificación</strong>
+      <p>El proceso de verificación criptográfica añade típicamente entre 50ms y 200ms al tiempo de arranque, una penalización mínima e imperceptible comparada con el beneficio de seguridad que proporciona.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">PowerShell · Windows — Verificar integridad de arranque</span>
+      <button class="copy-btn" data-code="code2">Copiar</button>
+    </div>
+    <pre id="code2"><span class="cm"># Verificar estado de Secure Boot en Windows</span>
+Confirm-SecureBootUEFI
+
+<span class="cm"># Ver detalle del estado de arranque seguro</span>
+Get-SecureBootUEFI -Name <span class="str">"SecureBoot"</span>
+
+<span class="cm"># Ver la base de datos de firmas autorizadas (db)</span>
+Get-SecureBootUEFI -Name <span class="str">"db"</span>
+
+<span class="cm"># Ver la política de Secure Boot actual</span>
+Get-SecureBootPolicy
+
+<span class="cm"># Estado de TPM (relacionado con arranque seguro)</span>
+Get-Tpm</pre>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GUIA PRACTICA -->
+<section id="guia" class="reveal">
+  <div class="section-label">🛠️ Guía Práctica</div>
+  <h2>Guía Práctica: Gestión de Secure Boot en la UEFI</h2>
+  <p>Acceder y gestionar Secure Boot requiere entrar a la interfaz UEFI del sistema. Los pasos varían ligeramente según el fabricante, pero la lógica es universal.</p>
+
+  <h3>Cómo acceder a la UEFI</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr><th>Fabricante</th><th>Tecla de acceso</th><th>Ubicación de Secure Boot</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ASUS</td><td><span class="mono">F2</span> o <span class="mono">DEL</span></td><td>Boot → Secure Boot</td></tr>
+        <tr><td>MSI</td><td><span class="mono">DEL</span></td><td>Settings → Security → Secure Boot</td></tr>
+        <tr><td>Gigabyte</td><td><span class="mono">DEL</span></td><td>BIOS Features → Secure Boot</td></tr>
+        <tr><td>ASRock</td><td><span class="mono">F2</span></td><td>Security → Secure Boot</td></tr>
+        <tr><td>HP</td><td><span class="mono">F10</span> o <span class="mono">ESC</span></td><td>System Configuration → Boot Options</td></tr>
+        <tr><td>Dell</td><td><span class="mono">F2</span></td><td>Secure Boot → Secure Boot Enable</td></tr>
+        <tr><td>Lenovo</td><td><span class="mono">F1</span> o <span class="mono">F2</span></td><td>Security → Secure Boot</td></tr>
+        <tr><td>Acer</td><td><span class="mono">F2</span></td><td>Boot → Secure Boot</td></tr>
+        <tr><td>Surface</td><td>Volumen ↓ + Power</td><td>Security</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <strong>Acceso desde Windows 11</strong>
+      <p>En Windows 11: <em>Configuración → Sistema → Recuperación → Inicio avanzado → Reiniciar ahora → Solucionar problemas → Opciones avanzadas → Configuración de firmware UEFI → Reiniciar</em>. Esto reinicia directamente en la UEFI sin necesidad de saber la tecla exacta.</p>
+    </div>
+  </div>
+
+  <h3>Modos de Secure Boot</h3>
+  <div class="grid-3">
+    <div class="card">
+      <div class="status status-off" style="margin-bottom:0.75rem">Desactivado</div>
+      <h3 style="margin-top:0.5rem;font-size:1rem">Setup Mode / Disabled</h3>
+      <p style="font-size:0.88rem">Sin verificaciones criptográficas. Cualquier bootloader puede ejecutarse. Necesario para instalar algunos sistemas operativos legacy o usar discos de rescate antiguos.</p>
+    </div>
+    <div class="card">
+      <div class="status status-on" style="margin-bottom:0.75rem">Standard Mode</div>
+      <h3 style="margin-top:0.5rem;font-size:1rem">User Mode (Standard)</h3>
+      <p style="font-size:0.88rem">Configuración por defecto. Usa las claves precargadas por el OEM y Microsoft. Ideal para Windows y distribuciones Linux mainstream (Ubuntu, Fedora, openSUSE).</p>
+    </div>
+    <div class="card">
+      <div class="status" style="background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.3);margin-bottom:0.75rem">● Custom Mode</div>
+      <h3 style="margin-top:0.5rem;font-size:1rem">Custom / Advanced Mode</h3>
+      <p style="font-size:0.88rem">Permite al usuario gestionar sus propias claves PK, KEK, db y dbx. Necesario para firmar bootloaders personalizados, usar Arch Linux sin Shim, o implementar claves corporativas propias.</p>
+    </div>
+  </div>
+
+  <h3>Pasar a Custom Mode y gestionar claves propias</h3>
+  <div class="callout callout-danger">
+    <span class="callout-icon">🚨</span>
+    <div class="callout-body">
+      <strong>Advertencia</strong>
+      <p>Modificar o eliminar las claves de Secure Boot sin una copia de seguridad puede dejar el sistema sin arranque. Exporta siempre las claves actuales antes de proceder. Necesitarás un sistema de recuperación.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">Bash · Linux — Gestión de claves propias con efitools</span>
+      <button class="copy-btn" data-code="code3">Copiar</button>
+    </div>
+    <pre id="code3"><span class="cm"># Instalar herramientas necesarias (Debian/Ubuntu)</span>
+sudo apt install efitools openssl sbsigntool
+
+<span class="cm"># 1. Generar una PK propia (Platform Key)</span>
+openssl req -newkey rsa:4096 -nodes -keyout PK.key \
+  -new -x509 -sha256 -days 3650 -out PK.crt \
+  -subj <span class="str">"/CN=My Platform Key/"</span>
+
+<span class="cm"># 2. Generar KEK propia</span>
+openssl req -newkey rsa:4096 -nodes -keyout KEK.key \
+  -new -x509 -sha256 -days 3650 -out KEK.crt \
+  -subj <span class="str">"/CN=My Key Exchange Key/"</span>
+
+<span class="cm"># 3. Generar clave de firma de base de datos</span>
+openssl req -newkey rsa:4096 -nodes -keyout db.key \
+  -new -x509 -sha256 -days 3650 -out db.crt \
+  -subj <span class="str">"/CN=My Signature Database Key/"</span>
+
+<span class="cm"># 4. Convertir a formato EFI Signature List</span>
+cert-to-efi-sig-list -g <span class="str">"$(uuidgen)"</span> PK.crt PK.esl
+cert-to-efi-sig-list -g <span class="str">"$(uuidgen)"</span> KEK.crt KEK.esl
+cert-to-efi-sig-list -g <span class="str">"$(uuidgen)"</span> db.crt db.esl
+
+<span class="cm"># 5. Firmar las listas de firmas</span>
+sign-efi-sig-list -k PK.key -c PK.crt PK PK.esl PK.auth
+sign-efi-sig-list -k PK.key -c PK.crt KEK KEK.esl KEK.auth
+sign-efi-sig-list -k KEK.key -c KEK.crt db db.esl db.auth
+
+<span class="cm"># 6. Firmar un bootloader personalizado</span>
+sbsign --key db.key --cert db.crt \
+  --output bootloader-signed.efi bootloader.efi</pre>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PLATAFORMAS -->
+<section id="plataformas" class="reveal">
+  <div class="section-label">💻 Plataformas</div>
+  <h2>Soporte Multiplataforma: Windows y Linux</h2>
+  <p>Secure Boot funciona de forma diferente según el sistema operativo. Entender estas diferencias es fundamental para administradores de sistemas y usuarios avanzados.</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="windows">🪟 Windows 11</button>
+    <button class="tab-btn" data-tab="linux">🐧 Linux & Shim</button>
+    <button class="tab-btn" data-tab="mok">🔐 MOK Manager</button>
+  </div>
+
+  <div id="tab-windows" class="tab-panel active">
+    <h3>Windows 11 y los requisitos de arranque seguro</h3>
+    <p>Windows 11 convirtió Secure Boot en un <strong>requisito de instalación obligatorio</strong>, junto con TPM 2.0. Esta decisión de Microsoft en 2021 generó controversia pero está justificada por la arquitectura de seguridad holística del sistema.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin-top:0;font-size:1rem">🔒 TPM 2.0 + Secure Boot</h3>
+        <p style="font-size:0.88rem">El TPM (Trusted Platform Module) y Secure Boot trabajan en sinergia. El TPM almacena mediciones de integridad del arranque (PCR — Platform Configuration Registers) que Secure Boot ayuda a garantizar. Juntos habilitan BitLocker sin PIN, Windows Hello y Credential Guard.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;font-size:1rem">🛡️ VBS y HVCI</h3>
+        <p style="font-size:0.88rem">Virtualization-Based Security y Hypervisor-Protected Code Integrity requieren que Secure Boot esté activo para garantizar que el hipervisor Hyper-V se cargó en un entorno limpio. Sin esta garantía, VBS no puede confiar en su propio entorno de ejecución.</p>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">PowerShell — Diagnóstico completo de seguridad de arranque</span>
+        <button class="copy-btn" data-code="code4">Copiar</button>
+      </div>
+      <pre id="code4"><span class="cm"># Verificar todos los requisitos de Windows 11</span>
+$sb = Confirm-SecureBootUEFI
+$tpm = Get-Tpm
+$cpu = Get-WmiObject Win32_Processor
+
+Write-Host <span class="str">"Secure Boot: $sb"</span>
+Write-Host <span class="str">"TPM Presente: $($tpm.TpmPresent)"</span>
+Write-Host <span class="str">"TPM Activado: $($tpm.TpmActivated)"</span>
+Write-Host <span class="str">"TPM Versión: $($tpm.ManufacturerVersionFull)"</span>
+Write-Host <span class="str">"CPU: $($cpu.Name)"</span>
+
+<span class="cm"># Verificar si BitLocker usa TPM con Secure Boot</span>
+manage-bde -status C:
+
+<span class="cm"># Ver mediciones TPM del proceso de arranque</span>
+Get-TpmEndorsementKeyInfo</pre>
+    </div>
+  </div>
+
+  <div id="tab-linux" class="tab-panel">
+    <h3>Linux y el Shim Bootloader</h3>
+    <p>El ecosistema Linux resolvió el problema de Secure Boot de forma elegante con el concepto del <strong>Shim bootloader</strong>: un pequeño cargador EFI firmado directamente por Microsoft que actúa de puente entre el firmware UEFI (que confía en Microsoft) y GRUB (que confía en la distribución Linux).</p>
+
+    <div class="callout callout-info">
+      <span class="callout-icon">🔗</span>
+      <div class="callout-body">
+        <strong>La arquitectura de triple firma</strong>
+        <p><strong>Firmware UEFI</strong> verifica <strong>Shim</strong> (firmado por Microsoft) → <strong>Shim</strong> verifica <strong>GRUB</strong> (firmado por la distribución) → <strong>GRUB</strong> verifica el <strong>Kernel</strong> (firmado por la distribución). Tres capas de verificación, todas transparentes al usuario.</p>
+      </div>
+    </div>
+
+    <h3>¿Por qué Microsoft firma el Shim?</h3>
+    <p>Microsoft gestiona el programa <strong>Windows Hardware Quality Lab (WHQL)</strong>, que incluye el proceso de firma de Shim para distribuciones Linux. Canonical (Ubuntu), Red Hat (Fedora/RHEL), SUSE (openSUSE) y Debian tienen sus Shims firmados por Microsoft. Esto permite que estas distribuciones funcionen con Secure Boot sin que el usuario tenga que importar claves manualmente.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Bash — Verificar firma de Shim y GRUB</span>
+        <button class="copy-btn" data-code="code5">Copiar</button>
+      </div>
+      <pre id="code5"><span class="cm"># Ver el estado de Secure Boot en Linux</span>
+mokutil --sb-state
+
+<span class="cm"># Verificar que el Shim está firmado por Microsoft</span>
+sbverify --list /boot/efi/EFI/ubuntu/shimx64.efi
+
+<span class="cm"># Verificar firma del GRUB</span>
+sbverify --list /boot/efi/EFI/ubuntu/grubx64.efi
+
+<span class="cm"># Verificar firma del kernel</span>
+sbverify --list /boot/vmlinuz-<span class="str">$(uname -r)</span>
+
+<span class="cm"># Ver los certificados MokList (Machine Owner Key)</span>
+mokutil --list-enrolled
+
+<span class="cm"># Ver el certificado de firma de Ubuntu</span>
+openssl x509 -inform DER -in /boot/efi/EFI/ubuntu/shimx64.efi \
+  -noout -text 2>/dev/null | head -30</pre>
+    </div>
+  </div>
+
+  <div id="tab-mok" class="tab-panel">
+    <h3>MOK Manager: Machine Owner Key</h3>
+    <p>El <strong>MOK (Machine Owner Key)</strong> es el mecanismo que permite a usuarios de Linux importar claves de firma adicionales al proceso de verificación de Shim, sin necesidad de modificar las variables UEFI directamente. Es fundamental para kernels con módulos de terceros (como drivers de NVIDIA o VirtualBox).</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Generar un par de claves MOK</h4>
+          <p>Crea un certificado X.509 con OpenSSL que usarás para firmar módulos del kernel o drivers personalizados.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Importar la clave con mokutil</h4>
+          <p>Usa <span class="mono">mokutil --import tu-clave.der</span> para encolar la importación. Requiere establecer una contraseña temporal de un solo uso.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Confirmar en MokManager</h4>
+          <p>En el siguiente reinicio, Shim lanza MokManager (una UI de firmware) donde debes confirmar la importación introduciendo la contraseña. Esta confirmación física previene ataques remotos.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Firmar módulos con la clave MOK</h4>
+          <p>Usa <span class="mono">kmodsign sha512 tu-clave.key tu-clave.der modulo.ko</span> para firmar módulos del kernel. El kernel los cargará sin errores de firma.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Bash — Flujo completo de gestión MOK para módulos DKMS</span>
+        <button class="copy-btn" data-code="code6">Copiar</button>
+      </div>
+      <pre id="code6"><span class="cm"># 1. Generar par de claves MOK</span>
+openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv \
+  -outform DER -out MOK.der -days 36500 -subj <span class="str">"/CN=My MOK/"</span> \
+  -nodes
+
+<span class="cm"># 2. Encolar importación de la clave pública</span>
+sudo mokutil --import MOK.der
+
+<span class="cm"># 3. Reiniciar — MokManager aparecerá automáticamente</span>
+sudo reboot
+
+<span class="cm"># 4. (Tras reiniciar) Verificar que la clave se importó</span>
+mokutil --list-enrolled | grep -A 5 <span class="str">"My MOK"</span>
+
+<span class="cm"># 5. Firmar un módulo del kernel manualmente</span>
+sudo /usr/src/linux-headers-<span class="str">$(uname -r)</span>/scripts/sign-file \
+  sha512 MOK.priv MOK.der /lib/modules/<span class="str">$(uname -r)</span>/updates/dkms/nvidia.ko
+
+<span class="cm"># 6. Verificar la firma del módulo</span>
+modinfo nvidia | grep -E <span class="str">"signer|sig_key"</span></pre>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MITOS -->
+<section id="mitos" class="reveal">
+  <div class="section-label">💡 Mitos vs Realidad</div>
+  <h2>Mitos sobre Secure Boot: Desmontando Falsas Creencias</h2>
+  <p>Secure Boot es uno de los temas con más desinformación en el ámbito tecnológico. Aquí desmontamos los mitos más extendidos con argumentos técnicos sólidos.</p>
+
+  <div class="myth-card">
+    <div class="myth-side">
+      <div class="myth-label m">❌ Mito</div>
+      <p><strong>Secure Boot impide instalar Linux</strong> — "Si activo Secure Boot, no puedo usar Linux ni instalar otros sistemas operativos."</p>
+    </div>
+    <div class="fact-side">
+      <div class="myth-label f">✅ Realidad</div>
+      <p>Las principales distribuciones Linux (Ubuntu, Fedora, Debian, openSUSE, RHEL) tienen sus Shim firmados por Microsoft y funcionan <strong>perfectamente con Secure Boot activo</strong>. El mito proviene de distros de nicho sin Shim firmado.</p>
+    </div>
+  </div>
+
+  <div class="myth-card">
+    <div class="myth-side">
+      <div class="myth-label m">❌ Mito</div>
+      <p><strong>Secure Boot ralentiza el PC</strong> — "Las verificaciones criptográficas añaden segundos al tiempo de arranque."</p>
+    </div>
+    <div class="fact-side">
+      <div class="myth-label f">✅ Realidad</div>
+      <p>La penalización real medida es de <strong>50-200ms</strong>, absolutamente imperceptible. Las operaciones RSA modernas sobre firmware dedicado son extremadamente rápidas. El tiempo de arranque está dominado por la inicialización de hardware, no por Secure Boot.</p>
+    </div>
+  </div>
+
+  <div class="myth-card">
+    <div class="myth-side">
+      <div class="myth-label m">❌ Mito</div>
+      <p><strong>Es un sistema de control de Microsoft</strong> — "Secure Boot es un malware de Microsoft para que solo puedas usar Windows."</p>
+    </div>
+    <div class="fact-side">
+      <div class="myth-label f">✅ Realidad</div>
+      <p>Secure Boot es un estándar abierto del <strong>UEFI Forum</strong> con contribuciones de AMD, Intel, ARM y docenas de fabricantes. Microsoft es uno de los firmantes de confianza, pero cualquier usuario puede gestionar sus propias claves en Custom Mode.</p>
+    </div>
+  </div>
+
+  <div class="myth-card">
+    <div class="myth-side">
+      <div class="myth-label m">❌ Mito</div>
+      <p><strong>Secure Boot protege contra todos los malware</strong> — "Con Secure Boot activo mi sistema es invulnerable."</p>
+    </div>
+    <div class="fact-side">
+      <div class="myth-label f">✅ Realidad</div>
+      <p>Secure Boot protege <strong>solo el proceso de arranque</strong>. No protege contra malware que se ejecuta dentro del OS (una vez que el kernel tiene el control), no es un antivirus ni reemplaza otras capas de seguridad.</p>
+    </div>
+  </div>
+
+  <div class="myth-card">
+    <div class="myth-side">
+      <div class="myth-label m">❌ Mito</div>
+      <p><strong>Desactivar Secure Boot es necesario para overclocking o modding</strong> — "Para tweaks de BIOS avanzados hay que desactivarlo."</p>
+    </div>
+    <div class="fact-side">
+      <div class="myth-label f">✅ Realidad</div>
+      <p>El overclocking, XMP/EXPO para RAM, ajuste de voltajes y curvas de ventiladores son completamente <strong>independientes de Secure Boot</strong>. No existe ninguna relación técnica entre estos conceptos.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq" class="reveal">
+  <div class="section-label">❓ FAQ Avanzado</div>
+  <h2>Preguntas Frecuentes Avanzadas sobre Secure Boot</h2>
+  <p>Respuestas detalladas a las preguntas más complejas y frecuentes sobre Secure Boot.</p>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question">¿Qué ocurre exactamente si falla una verificación de firma durante el arranque?<span class="faq-chevron">▾</span></button>
+      <div class="faq-answer">
+        <p>Cuando Secure Boot detecta un binario EFI que no supera la verificación criptográfica, el firmware UEFI detiene el proceso de arranque de inmediato y generalmente muestra un mensaje de error como "Security Violation" o "Secure Boot Violation". El sistema <strong>no continúa bajo ninguna circunstancia</strong>. El usuario verá normalmente las opciones de: (1) acceder a la UEFI para desactivar Secure Boot, (2) entrar en un modo de recuperación, o (3) arrancar desde un dispositivo alternativo verificado. En sistemas con protección adicional (como ASUS SecureROM o las implementaciones con TPM lockout), múltiples fallos pueden activar un contador de errores que bloquea temporalmente la configuración UEFI.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Cómo recupero un sistema bloqueado por Secure Boot?<span class="faq-chevron">▾</span></button>
+      <div class="faq-answer">
+        <p>La recuperación depende del escenario: <strong>(1) Bootloader corrompido:</strong> Arranca desde un USB de instalación del OS (que tiene su propio Shim/bootloader firmado), ejecuta herramientas de reparación de arranque como <span class="mono">bootrec /rebuildbcd</span> en Windows o <span class="mono">grub-install</span> en Linux. <strong>(2) PK/KEK corrompidas:</strong> Accede a la UEFI físicamente y usa la opción "Restore to Factory Defaults" o "Reset Secure Boot Keys", que restaura las claves OEM originales desde una memoria protegida. <strong>(3) dbx demasiado restrictiva:</strong> Entra a la UEFI, deshabilita temporalmente Secure Boot, arranca el OS y elimina la entrada problemática de dbx con <span class="mono">efi-updatevar</span>. <strong>Nunca</strong> extraigas la batería de la placa base como solución, ya que las claves UEFI en sistemas modernos persisten en NVRAM independiente.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Qué diferencia hay entre Secure Boot y el arranque medido (Measured Boot)?<span class="faq-chevron">▾</span></button>
+      <div class="faq-answer">
+        <p><strong>Secure Boot es preventivo</strong>: verifica y bloquea activamente la ejecución de código no autorizado. <strong>Measured Boot es descriptivo</strong>: registra criptográficamente (mediante hashes SHA-256 almacenados en los PCR del TPM) cada componente que se carga durante el arranque, sin bloquear nada. Measured Boot crea un log de integridad que puede ser enviado a un servidor remoto (Remote Attestation) para que un tercero verifique si el sistema arrancó en un estado confiable. Windows 11 usa ambos simultáneamente: Secure Boot previene la carga de código malicioso, y Measured Boot registra todo lo que ocurrió para auditoría posterior. La combinación es lo que permite funcionalidades como la atestación de dispositivos en Microsoft Entra ID.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Por qué existe la vulnerabilidad "BlackLotus" si Secure Boot está activo?<span class="faq-chevron">▾</span></button>
+      <div class="faq-answer">
+        <p>BlackLotus (CVE-2022-21894, aka "baton drop") fue un bootkit UEFI que explotaba una vulnerabilidad de diseño en el manejo de políticas de Secure Boot en Windows: permitía a un atacante con privilegios de administrador instalar un bootloader antiguo y vulnerable que <strong>todavía no había sido añadido a la dbx</strong>. El atacante aprovechaba el hecho de que la revocación de bootloaders comprometidos no es instantánea: hay un periodo entre el descubrimiento de la vulnerabilidad y el momento en que Microsoft distribuye actualizaciones de la dbx. Microsoft parcheó esto con actualizaciones de la dbx en 2023, pero el caso demostró que la seguridad del ecosistema Secure Boot depende críticamente de mantener la dbx actualizada. La lección: Secure Boot es tan fuerte como la actualización de su lista de revocaciones.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Puedo usar Secure Boot con dual boot Windows + Linux?<span class="faq-chevron">▾</span></button>
+      <div class="faq-answer">
+        <p>Sí, y es la configuración recomendada. Un setup dual boot Windows 11 + Ubuntu/Fedora con Secure Boot activo funciona perfectamente. El gestor de arranque GRUB de Ubuntu/Fedora está cargado via Shim (firmado por Microsoft), por lo que el firmware UEFI lo verifica correctamente. El flujo es: Firmware verifica GRUB Shim de Ubuntu → GRUB muestra el menú con Windows y Linux → Al elegir Windows, GRUB cede el control a <span class="mono">bootmgfw.efi</span> (también verificado). La configuración más robusta es dejar que el instalador de la distribución Linux gestione GRUB automáticamente y no modificar manualmente la ESP.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Qué es "Secure Boot bypass" y cómo protegerse?<span class="faq-chevron">▾</span></button>
+      <div class="faq-answer">
+        <p>Los bypass de Secure Boot son técnicas que permiten eludir las verificaciones criptográficas. Los principales vectores son: <strong>(1) Drivers o bootloaders firmados pero vulnerables</strong> (como el caso BootHole o BlackLotus): se mitigan manteniendo la dbx actualizada. <strong>(2) Vulnerabilidades en el propio firmware UEFI</strong> (memory corruption en el código de verificación): se mitigan con actualizaciones de firmware del fabricante. <strong>(3) Acceso físico a la UEFI</strong>: se mitiga con contraseña de administrador de UEFI y, en entornos corporativos, con BIOS Management. <strong>(4) Ataques de "rollback"</strong> que instalan versiones antiguas de componentes: se mitigan con Secure Boot combinado con TPM y políticas de anti-rollback. La capa de protección más efectiva contra todos estos es el conjunto Secure Boot + TPM 2.0 + UEFI password + Windows Defender Credential Guard.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Cómo afecta Secure Boot a la virtualización y las VMs?<span class="faq-chevron">▾</span></button>
+      <div class="faq-answer">
+        <p>Las máquinas virtuales modernas pueden emular un entorno UEFI con Secure Boot. VMware Workstation, VirtualBox, Hyper-V y QEMU/KVM soportan Secure Boot virtual: la VM tiene su propio firmware UEFI (generalmente OVMF en Linux) con sus propias claves. Desde la perspectiva del sistema operativo invitado, experimenta Secure Boot de forma idéntica a hardware real. Importante: el Secure Boot de la VM es independiente del Secure Boot del host — la VM puede tener Secure Boot desactivado aunque el host lo tenga activo, y viceversa. Para Windows 11 en VM, Hyper-V incluye un "Security Template" que activa automáticamente Secure Boot + TPM virtual, cumpliendo todos los requisitos del instalador.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JSON-LD SCHEMA FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué ocurre exactamente si falla una verificación de firma durante el arranque?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cuando Secure Boot detecta un binario EFI que no supera la verificación criptográfica, el firmware UEFI detiene el proceso de arranque de inmediato y muestra un mensaje de error. El sistema no continúa bajo ninguna circunstancia."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo recupero un sistema bloqueado por Secure Boot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La recuperación depende del escenario. Para un bootloader corrompido, arranca desde un USB de instalación y usa herramientas de reparación. Para claves corrompidas, accede a la UEFI y restaura las claves de fábrica."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo usar Secure Boot con dual boot Windows y Linux?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Las principales distribuciones Linux como Ubuntu y Fedora usan un Shim bootloader firmado por Microsoft, por lo que funcionan perfectamente con Secure Boot activo en configuraciones dual boot."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Secure Boot: La Guía Técnica Definitiva",
+  "description": "Guía completa sobre Secure Boot: arquitectura de claves UEFI, cadena de confianza, Windows 11, Linux Shim y MOK.",
+  "url": "https://secureboot.github.io",
+  "author": {"@type": "Organization", "name": "SecureBoot Guide"},
+  "publisher": {"@type": "Organization", "name": "secureboot.github.io"}
+}
+</script>
+
+</main>
+
+<footer>
+  <div style="max-width:700px;margin:0 auto 2rem;background:rgba(255,0,0,0.07);border:1px solid rgba(255,0,0,0.25);border-radius:var(--radius);padding:1.5rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;justify-content:center;">
+    <div style="font-size:2.5rem">▶</div>
+    <div style="text-align:left">
+      <div style="font-weight:700;color:var(--text);margin-bottom:0.2rem">¿Prefieres verlo en vídeo?</div>
+      <div style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.75rem">Tutoriales prácticos sobre UEFI, Secure Boot, reparación de arranque y mucho más.</div>
+      <a href="https://www.youtube.com/@repararordenador" target="_blank" rel="noopener" class="btn btn-yt" style="font-size:0.88rem;padding:0.5rem 1.2rem">▶ youtube.com/@repararordenador</a>
+    </div>
+  </div>
+  <p>🛡️ <strong>secureboot.github.io</strong> — La guía técnica definitiva sobre Secure Boot y UEFI</p>
+  <p style="margin-top:0.5rem">Especificación UEFI Forum · <a href="https://uefi.org" target="_blank" rel="noopener">uefi.org</a> · <a href="https://www.youtube.com/@repararordenador" target="_blank" rel="noopener">Canal YouTube</a> · Contenido bajo CC BY 4.0</p>
+  <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--text-dim)">Última actualización: 2026</p>
+</footer>
+
+<script>
+// ── PROGRESS BAR ──
+const progressBar = document.documentElement;
+window.addEventListener('scroll', () => {
+  const s = document.documentElement.scrollTop;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = h > 0 ? (s / h * 100).toFixed(1) + '%' : '0%';
+  document.documentElement.style.setProperty('--progress-w', pct);
+});
+
+// ── COPY BUTTONS ──
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const id = btn.dataset.code;
+    const el = document.getElementById(id);
+    if (!el) return;
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      btn.textContent = '✓ Copiado';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+    });
+  });
+});
+
+// ── THEME TOGGLE ──
+const toggle = document.getElementById('theme-toggle');
+let dark = true;
+toggle.addEventListener('click', () => {
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'light');
+  toggle.textContent = dark ? '🌙' : '☀️';
+});
+
+// ── TABS ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('tab-' + tab);
+    if (panel) panel.classList.add('active');
+  });
+});
+
+// ── FAQ ACCORDION ──
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ── REVEAL ON SCROLL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── SEARCH ──
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+const searchBox = document.getElementById('search-box');
+
+const sections = Array.from(document.querySelectorAll('main section[id]')).map(sec => ({
+  id: sec.id,
+  title: sec.querySelector('h2')?.textContent || sec.id,
+  text: sec.textContent.toLowerCase(),
+  el: sec
+}));
+
+function renderResults(q) {
+  if (!q.trim()) { searchResults.classList.remove('show'); return; }
+  const hits = sections.filter(s => s.text.includes(q.toLowerCase()));
+  searchResults.classList.add('show');
+  if (!hits.length) {
+    searchBox.innerHTML = `<div class="search-no-results">Sin resultados para "<strong>${q}</strong>"</div>`;
+    return;
+  }
+  searchBox.innerHTML = hits.map(h => {
+    const idx = h.text.indexOf(q.toLowerCase());
+    const snippet = h.el.textContent.substring(Math.max(0, idx - 40), idx + 100).trim().replace(/\s+/g, ' ');
+    return `<div class="search-result-item" data-id="${h.id}">
+      <div class="search-result-title">${h.title}</div>
+      <div class="search-result-snippet">...${snippet}...</div>
+    </div>`;
+  }).join('');
+  searchBox.querySelectorAll('.search-result-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const sec = document.getElementById(item.dataset.id);
+      searchResults.classList.remove('show');
+      searchInput.value = '';
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
+let searchTimer;
+searchInput.addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => renderResults(e.target.value), 200);
+});
+searchInput.addEventListener('keydown', e => { if (e.key === 'Escape') { searchResults.classList.remove('show'); searchInput.value = ''; } });
+searchResults.addEventListener('click', e => { if (e.target === searchResults) searchResults.classList.remove('show'); });
+</script>
+</body>
+</html>
