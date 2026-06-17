@@ -1,0 +1,2280 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alternativa a Rufus 2026 · WinToUSB: Instala Windows 11 sin TPM en cualquier PC</title>
+<meta name="description" content="Guía completa de WinToUSB en español: instala Windows 11 en PCs antiguos sin TPM, sin Secure Boot y sin cuenta Microsoft. Tutorial paso a paso, gratuito y actualizado 2026.">
+<meta name="keywords" content="WinToUSB español, instalar Windows 11 sin TPM, Windows 11 PC antiguo, WinToUSB tutorial, windows 11 sin requisitos, wintousb descargar gratis, instalar windows 11 usb, saltar requisitos windows 11">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="Tutorial WinToUSB ES">
+<link rel="canonical" href="https://wintousb-es.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Alternativa a Rufus 2026 · WinToUSB: Windows 11 en CUALQUIER PC sin TPM">
+<meta property="og:description" content="Tutorial completo en español: usa WinToUSB para instalar Windows 11 en PCs antiguos sin TPM, sin Secure Boot y con cuenta local. Gratis y paso a paso.">
+<meta property="og:locale" content="es_ES">
+<meta property="article:published_time" content="2026-06-01T00:00:00Z">
+<meta property="article:modified_time" content="2026-06-17T00:00:00Z">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Alternativa a Rufus 2026 · WinToUSB sin TPM">
+<meta name="twitter:description" content="Tutorial completo: instala Windows 11 en PCs antiguos con WinToUSB. Sin TPM, sin Secure Boot, con cuenta local.">
+
+<!-- Schema.org Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Cómo instalar Windows 11 en cualquier PC con WinToUSB",
+  "description": "Tutorial completo paso a paso para usar WinToUSB y saltarse todos los requisitos de Windows 11",
+  "totalTime": "PT30M",
+  "tool": [{"@type": "HowToTool", "name": "WinToUSB (versión gratuita)"},{"@type": "HowToTool", "name": "Pendrive USB 3.0 de 16 GB o más"},{"@type": "HowToTool", "name": "ISO oficial de Windows 11"}],
+  "step": [
+    {"@type": "HowToStep", "name": "Descargar ISO de Windows 11", "text": "Ve a microsoft.com y descarga la ISO oficial de Windows 11 (64 bits)."},
+    {"@type": "HowToStep", "name": "Descargar WinToUSB", "text": "Descarga la versión gratuita de WinToUSB desde el sitio oficial de Hasleo Software."},
+    {"@type": "HowToStep", "name": "Crear USB booteable", "text": "Abre WinToUSB, selecciona la ISO y el pendrive, elige esquema MBR para BIOS+UEFI."},
+    {"@type": "HowToStep", "name": "Desactivar restricciones", "text": "Marca las casillas: sin TPM, sin Secure Boot, cuenta local automática."},
+    {"@type": "HowToStep", "name": "Instalar Windows 11", "text": "Arranca desde el pendrive e instala Windows 11 sin ningún requisito bloqueante."}
+  ],
+  "mainEntity": [{
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "¿WinToUSB es gratis?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La edición Free de WinToUSB es completamente gratuita para uso personal y no comercial."}},
+      {"@type": "Question", "name": "¿WinToUSB salta el TPM 2.0 de Windows 11?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Las instalaciones portátiles creadas con WinToUSB no aplican los requisitos de TPM 2.0 ni Secure Boot."}},
+      {"@type": "Question", "name": "¿Es mejor WinToUSB o Rufus?", "acceptedAnswer": {"@type": "Answer", "text": "WinToUSB es mejor para crear Windows To Go (Windows portable en USB). Rufus es mejor para crear USB de instalación estándar."}}
+    ]
+  }]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #070B14;
+    --bg2: #0D1323;
+    --bg3: #121929;
+    --card: #141D30;
+    --card2: #1A2540;
+    --cyan: #00D4FF;
+    --cyan-dim: #00A8CC;
+    --violet: #7B2FFF;
+    --violet-dim: #5B1FCC;
+    --green: #00FF88;
+    --orange: #FF6B35;
+    --text: #E0EEFF;
+    --text2: #8BA3CC;
+    --text3: #4A6080;
+    --border: rgba(0,212,255,0.12);
+    --border2: rgba(123,47,255,0.15);
+    --glow-c: rgba(0,212,255,0.15);
+    --glow-v: rgba(123,47,255,0.12);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --radius: 16px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+  
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== CANVAS BACKGROUND ===== */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(7,11,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--cyan);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo .dot {
+    width: 8px; height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--cyan); }
+
+  .nav-cta {
+    background: var(--cyan);
+    color: var(--bg) !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+  }
+
+  .nav-cta:hover { 
+    background: var(--cyan-dim) !important; 
+    color: var(--bg) !important;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 2rem 60px;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--cyan);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+    animation: fade-up 0.6s ease both;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse-dot 1.5s infinite;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #fff;
+    animation: fade-up 0.6s 0.1s ease both;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title .accent-cyan { 
+    color: var(--cyan);
+    position: relative;
+  }
+
+  .hero-title .accent-violet { 
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    color: var(--text2);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    animation: fade-up 0.6s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fade-up 0.6s 0.3s ease both;
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
+    color: #070B14;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 0 30px rgba(0,212,255,0.25), 0 4px 15px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:hover { 
+    box-shadow: 0 0 50px rgba(0,212,255,0.45), 0 4px 20px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+
+  .btn-ghost:hover {
+    border-color: rgba(0,212,255,0.4);
+    color: var(--cyan);
+    background: rgba(0,212,255,0.05);
+    transform: translateY(-2px);
+  }
+
+  .hero-badges {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fade-up 0.6s 0.4s ease both;
+  }
+
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    color: var(--text2);
+    font-family: var(--font-mono);
+  }
+
+  .badge-icon { font-size: 0.9rem; }
+
+  /* ===== TERMINAL ===== */
+  .hero-terminal {
+    background: #0A0D18;
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0,212,255,0.1), 0 40px 80px rgba(0,0,0,0.5);
+    animation: fade-up 0.8s 0.2s ease both;
+    position: relative;
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #111520;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0,212,255,0.1);
+  }
+
+  .t-dot { 
+    width: 12px; height: 12px; 
+    border-radius: 50%; 
+  }
+  .t-dot-r { background: #FF5F57; }
+  .t-dot-y { background: #FEBC2E; }
+  .t-dot-g { background: #28C840; }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text3);
+  }
+
+  .terminal-body {
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 2;
+    min-height: 280px;
+  }
+
+  .t-line { display: flex; align-items: flex-start; gap: 8px; }
+  .t-prompt { color: var(--green); flex-shrink: 0; }
+  .t-cmd { color: var(--cyan); }
+  .t-output { color: #6A8AAA; padding-left: 20px; }
+  .t-success { color: var(--green); padding-left: 20px; }
+  .t-warning { color: #FFD166; padding-left: 20px; }
+  .t-highlight { color: var(--violet); }
+  .t-cursor {
+    display: inline-block;
+    width: 8px; height: 16px;
+    background: var(--cyan);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .terminal-progress {
+    margin: 8px 0 4px 20px;
+    background: #1A2540;
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+  }
+
+  .terminal-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.05s linear;
+  }
+
+  /* ===== TRUST BAR ===== */
+  .trust-bar {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,19,35,0.8);
+    padding: 1.2rem 2rem;
+    overflow: hidden;
+  }
+
+  .trust-track {
+    display: flex;
+    gap: 4rem;
+    width: max-content;
+    animation: scroll-left 25s linear infinite;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    color: var(--text2);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .trust-item strong { color: var(--text); }
+  .trust-icon { font-size: 1.1rem; }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ===== SECTIONS ===== */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-pad { padding: 5rem 0; }
+
+  .section-eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--text2);
+    font-size: 1rem;
+    max-width: 580px;
+    line-height: 1.8;
+  }
+
+  .section-header { margin-bottom: 3.5rem; }
+
+  /* ===== WHAT IS SECTION ===== */
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .what-text p {
+    color: var(--text2);
+    font-size: 1rem;
+    line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+
+  .what-text p strong { color: var(--text); }
+
+  .what-text p a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0,212,255,0.3);
+    transition: border-color 0.2s;
+  }
+
+  .what-text p a:hover { border-color: var(--cyan); }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+
+  .info-card-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cyan);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .compare-table th {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table td {
+    padding: 10px 12px;
+    color: var(--text2);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    vertical-align: middle;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .compare-table td:first-child { 
+    color: var(--text); 
+    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .check { color: var(--green); }
+  .cross { color: #FF5757; }
+  .partial { color: #FFD166; }
+
+  /* ===== FEATURES GRID ===== */
+  .features-bg {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 50%, var(--bg) 100%);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0,212,255,0.3);
+    background: var(--card2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px var(--glow-c);
+  }
+
+  .feature-card:hover::before { transform: scaleX(1); }
+
+  .feature-icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,47,255,0.1));
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .feature-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.6rem;
+  }
+
+  .feature-desc {
+    color: var(--text2);
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--cyan);
+    background: rgba(0,212,255,0.07);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+
+  /* ===== STEPS ===== */
+  .steps-section { background: var(--bg2); }
+
+  .steps-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+
+  .step-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .step-item:last-child { border-bottom: none; }
+
+  .step-item.active .step-number { 
+    background: var(--cyan); 
+    color: var(--bg);
+    box-shadow: 0 0 20px rgba(0,212,255,0.4);
+  }
+
+  .step-item.active .step-title { color: var(--cyan); }
+
+  .step-number {
+    width: 40px; height: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text3);
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .step-content { flex: 1; }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    transition: color 0.3s;
+  }
+
+  .step-desc {
+    color: var(--text2);
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  /* Step panel */
+  .step-panels { position: sticky; top: 100px; }
+
+  .step-panel {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    animation: panel-in 0.3s ease;
+  }
+
+  .step-panel.active { display: block; }
+
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    background: #111520;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+
+  .panel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); animation: pulse-dot 2s infinite; }
+
+  .panel-body {
+    padding: 1.8rem;
+  }
+
+  .panel-cmd {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--green);
+    background: rgba(0,255,136,0.05);
+    border: 1px solid rgba(0,255,136,0.15);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 1rem;
+  }
+
+  .panel-cmd span { color: var(--text2); }
+
+  .panel-detail {
+    color: var(--text2);
+    font-size: 0.875rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .panel-tip {
+    display: flex;
+    gap: 10px;
+    background: rgba(123,47,255,0.08);
+    border: 1px solid rgba(123,47,255,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.825rem;
+    color: var(--text2);
+  }
+
+  .panel-tip strong { color: #A78BFA; }
+
+  /* ===== REQUIREMENTS TABLE ===== */
+  .req-section { background: var(--bg); }
+
+  .req-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .req-table-wrapper {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .req-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .req-table thead tr {
+    background: #111520;
+  }
+
+  .req-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    font-weight: 500;
+  }
+
+  .req-table th:not(:first-child) { text-align: center; }
+  .req-table td:not(:first-child) { text-align: center; }
+
+  .req-table td {
+    padding: 14px 20px;
+    color: var(--text2);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+
+  .req-table tr:last-child td { border-bottom: none; }
+  .req-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+  .req-table td:first-child { 
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .req-min { color: var(--orange); font-family: var(--font-mono); font-size: 0.8rem; }
+  .req-rec { color: var(--green); font-family: var(--font-mono); font-size: 0.8rem; }
+
+  .compat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+  .compat-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,212,255,0.07);
+    border: 1px solid rgba(0,212,255,0.18);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--cyan);
+    transition: all 0.2s;
+  }
+
+  .compat-chip:hover {
+    background: rgba(0,212,255,0.12);
+    transform: translateY(-2px);
+  }
+
+  /* ===== FAQ ===== */
+  .faq-section { background: var(--bg2); }
+
+  .faq-categories {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .faq-cat-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .faq-cat-btn.active {
+    background: rgba(0,212,255,0.1);
+    border-color: rgba(0,212,255,0.35);
+    color: var(--cyan);
+  }
+
+  .faq-cat-btn:hover:not(.active) {
+    border-color: var(--border);
+    color: var(--text);
+    background: var(--card2);
+  }
+
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+
+  .faq-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .faq-item:hover { border-color: rgba(0,212,255,0.25); }
+  .faq-item.open { border-color: rgba(0,212,255,0.3); }
+
+  .faq-q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    transition: color 0.2s;
+  }
+
+  .faq-item.open .faq-q { color: var(--cyan); }
+
+  .faq-arrow {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan);
+    font-size: 0.75rem;
+    transition: transform 0.3s, background 0.2s;
+  }
+
+  .faq-item.open .faq-arrow {
+    transform: rotate(180deg);
+    background: rgba(0,212,255,0.15);
+  }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+    padding: 0 1.5rem;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 600px;
+    padding: 0 1.5rem 1.4rem;
+  }
+
+  .faq-a p {
+    color: var(--text2);
+    font-size: 0.9rem;
+    line-height: 1.85;
+    margin-bottom: 0.8rem;
+  }
+
+  .faq-a p:last-child { margin-bottom: 0; }
+  .faq-a strong { color: var(--text); }
+
+  .faq-a ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0.8rem 0;
+  }
+
+  .faq-a ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--text2);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .faq-a ul li::before {
+    content: '→';
+    color: var(--cyan);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .faq-highlight {
+    background: rgba(0,212,255,0.06);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--cyan);
+  }
+
+  /* ===== PRICING ===== */
+  .pricing-section { background: var(--bg); }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .price-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .price-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .price-card.featured {
+    border-color: rgba(0,212,255,0.4);
+    background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, var(--card) 100%);
+  }
+
+  .price-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .price-tier {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    margin-bottom: 0.8rem;
+  }
+
+  .price-amount {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.2rem;
+  }
+
+  .price-amount sup {
+    font-size: 1rem;
+    vertical-align: top;
+    margin-top: 0.6rem;
+    display: inline-block;
+    color: var(--text2);
+  }
+
+  .price-period {
+    font-size: 0.8rem;
+    color: var(--text3);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .price-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .price-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .price-features li .pf-icon { flex-shrink: 0; margin-top: 1px; }
+  .pf-yes { color: var(--green); }
+  .pf-no { color: var(--text3); }
+
+  .btn-price {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+
+  .btn-price-main {
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
+    color: var(--bg);
+    box-shadow: 0 0 20px rgba(0,212,255,0.2);
+  }
+
+  .btn-price-main:hover {
+    box-shadow: 0 0 30px rgba(0,212,255,0.4);
+    transform: translateY(-2px);
+  }
+
+  .btn-price-outline {
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  .btn-price-outline:hover {
+    border-color: rgba(0,212,255,0.3);
+    color: var(--cyan);
+    background: rgba(0,212,255,0.05);
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-section {
+    background: var(--bg2);
+    padding: 6rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-desc {
+    color: var(--text2);
+    font-size: 1.05rem;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    position: relative;
+    z-index: 1;
+    line-height: 1.8;
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-stat {
+    text-align: center;
+  }
+
+  .cta-stat-val {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cyan);
+    display: block;
+  }
+
+  .cta-stat-label {
+    font-size: 0.8rem;
+    color: var(--text3);
+    font-family: var(--font-mono);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text3);
+    font-family: var(--font-mono);
+  }
+
+  footer a { color: var(--text2); text-decoration: none; }
+  footer a:hover { color: var(--cyan); }
+
+  /* ===== SCROLL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== FLOATING PARTICLES ===== */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 50%;
+    animation: float-particle linear infinite;
+  }
+
+  @keyframes float-particle {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+  }
+
+  /* ===== SCROLL PROGRESS ===== */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    z-index: 2000;
+    width: 0%;
+    transition: width 0.1s;
+    box-shadow: 0 0 10px var(--cyan);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+  }
+
+  @media (max-width: 768px) {
+    .hero-grid, .what-grid, .steps-wrapper, .req-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .features-grid { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+    .hero { padding: 90px 1rem 40px; }
+    .container { padding: 0 1rem; }
+    .trust-track { gap: 2rem; }
+    .cta-stats { gap: 2rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="dot"></div>
+    WinToUSB <span style="color:var(--text3);font-weight:400;">· Alternativa a Rufus 2026</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#que-es">¿Qué es?</a></li>
+    <li><a href="#funciones">Funciones</a></li>
+    <li><a href="#pasos">Tutorial</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#descargar" class="nav-cta">Descargar gratis</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-eyebrow">v10.8 · Actualizado 2026</div>
+      <h1 class="hero-title">
+        Instala <span class="accent-cyan">Windows 11</span> en cualquier PC
+        <span class="accent-violet"> sin TPM ni límites</span>
+      </h1>
+      <p class="hero-desc">
+        WinToUSB es la herramienta gratuita que te permite crear un Windows 11 completamente funcional en un pendrive, saltando todos los requisitos de hardware. Sin TPM 2.0. Sin Secure Boot. Sin cuenta Microsoft obligatoria. Compatible con PCs desde 2010.
+      </p>
+      <div class="hero-actions">
+        <a href="https://www.easyuefi.com/wintousb/downloads/WinToUSB_Free.exe" class="btn-primary" id="descargar">
+          ⬇ Descargar Gratis — 29 MB
+        </a>
+        <a href="#pasos" class="btn-ghost">
+          Ver tutorial →
+        </a>
+        <a href="https://www.youtube.com/@repararordenador" target="_blank" class="btn-ghost" style="border-color: rgba(255,0,0,0.3); color: #FF4444;">
+          🎬 Ver en YouTube
+        </a>
+      </div>
+      <div class="hero-badges">
+        <span class="badge"><span class="badge-icon">🛡</span> Sin malware</span>
+        <span class="badge"><span class="badge-icon">🆓</span> 100% gratuito</span>
+        <span class="badge"><span class="badge-icon">⚡</span> USB 3.0 / UEFI</span>
+        <span class="badge"><span class="badge-icon">🔒</span> Sin registro</span>
+      </div>
+    </div>
+    <div class="hero-terminal" aria-label="Demostración de consola de WinToUSB">
+      <div class="terminal-bar">
+        <div class="t-dot t-dot-r"></div>
+        <div class="t-dot t-dot-y"></div>
+        <div class="t-dot t-dot-g"></div>
+        <div class="terminal-title">WinToUSB — Consola de instalación</div>
+      </div>
+      <div class="terminal-body" id="terminal-output">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar" aria-label="Características destacadas">
+  <div class="trust-track" id="trust-track">
+    <div class="trust-item"><span class="trust-icon">✅</span> <strong>+10 millones</strong> de descargas globales</div>
+    <div class="trust-item"><span class="trust-icon">🔵</span> Desarrollado por <strong>Hasleo Software</strong></div>
+    <div class="trust-item"><span class="trust-icon">🛡</span> <strong>0 detecciones</strong> en VirusTotal (70+ antivirus)</div>
+    <div class="trust-item"><span class="trust-icon">🚫</span> Sin TPM 2.0 ni <strong>Secure Boot</strong></div>
+    <div class="trust-item"><span class="trust-icon">💻</span> Compatible con <strong>Windows 7 – 11</strong></div>
+    <div class="trust-item"><span class="trust-icon">⚡</span> Solo <strong>29 MB</strong> · Sin publicidad</div>
+    <div class="trust-item"><span class="trust-icon">🔑</span> <strong>Cuenta local</strong> automática, sin Microsoft</div>
+    <div class="trust-item"><span class="trust-icon">🆕</span> Versión <strong>10.8</strong> · Enero 2026</div>
+    <!-- Repeat for infinite scroll -->
+    <div class="trust-item"><span class="trust-icon">✅</span> <strong>+10 millones</strong> de descargas globales</div>
+    <div class="trust-item"><span class="trust-icon">🔵</span> Desarrollado por <strong>Hasleo Software</strong></div>
+    <div class="trust-item"><span class="trust-icon">🛡</span> <strong>0 detecciones</strong> en VirusTotal (70+ antivirus)</div>
+    <div class="trust-item"><span class="trust-icon">🚫</span> Sin TPM 2.0 ni <strong>Secure Boot</strong></div>
+    <div class="trust-item"><span class="trust-icon">💻</span> Compatible con <strong>Windows 7 – 11</strong></div>
+    <div class="trust-item"><span class="trust-icon">⚡</span> Solo <strong>29 MB</strong> · Sin publicidad</div>
+    <div class="trust-item"><span class="trust-icon">🔑</span> <strong>Cuenta local</strong> automática, sin Microsoft</div>
+    <div class="trust-item"><span class="trust-icon">🆕</span> Versión <strong>10.8</strong> · Enero 2026</div>
+  </div>
+</div>
+
+<!-- QUÉ ES -->
+<section id="que-es" class="section-pad">
+  <div class="container">
+    <div class="what-grid">
+      <div class="what-text reveal">
+        <span class="section-eyebrow">// Qué es WinToUSB</span>
+        <h2 class="section-title">La alternativa definitiva a Rufus para PCs sin requisitos</h2>
+        <p>
+          <strong>WinToUSB</strong> es una utilidad desarrollada por Hasleo Software (antes conocida como EasyUEFI Development Team) que permite instalar un Windows completamente funcional en cualquier unidad USB externa. No hablamos de un entorno limitado: el sistema arranca, ejecuta tus aplicaciones, guarda tus archivos y se actualiza como cualquier Windows instalado en disco interno.
+        </p>
+        <p>
+          Lo que lo diferencia de Rufus o Ventoy es el alcance. Mientras esas herramientas crean USB de instalación, WinToUSB crea un <strong>Windows To Go</strong> completo: un sistema operativo que vive en el pendrive y arranca en cualquier ordenador compatible. Además, su versión 10.8 incluye soporte para el certificado UEFI CA 2023, lo que elimina los errores de arranque en las placas base más modernas.
+        </p>
+        <p>
+          Para los usuarios en español, es especialmente útil porque permite <strong>instalar Windows 11 en PCs con procesadores de 6ª y 7ª generación de Intel</strong> (o Ryzen 1000), que Microsoft excluye oficialmente. La instalación portable no aplica las restricciones de TPM 2.0 ni Secure Boot, lo que te da libertad total para seguir usando tu equipo con el sistema más moderno.
+        </p>
+        <div class="info-card">
+          <div class="info-card-title">⚖ WinToUSB vs Rufus — Comparativa rápida</div>
+          <table class="compare-table" aria-label="Comparativa WinToUSB vs Rufus">
+            <thead>
+              <tr><th>Función</th><th>WinToUSB</th><th>Rufus</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Windows To Go completo</td><td><span class="check">✓</span> Sí</td><td><span class="partial">~</span> Básico</td></tr>
+              <tr><td>Sin TPM 2.0</td><td><span class="check">✓</span> Sí</td><td><span class="check">✓</span> Sí</td></tr>
+              <tr><td>Clonar Windows actual</td><td><span class="check">✓</span> Pro</td><td><span class="cross">✗</span> No</td></tr>
+              <tr><td>BitLocker en USB</td><td><span class="check">✓</span> Pro</td><td><span class="cross">✗</span> No</td></tr>
+              <tr><td>Cuenta local auto</td><td><span class="check">✓</span> Sí</td><td><span class="check">✓</span> Sí</td></tr>
+              <tr><td>Soporte VHD/VHDX</td><td><span class="check">✓</span> Sí</td><td><span class="cross">✗</span> No</td></tr>
+              <tr><td>UEFI CA 2023</td><td><span class="check">✓</span> v10.8</td><td><span class="partial">~</span> Parcial</td></tr>
+              <tr><td>ISOs Linux</td><td><span class="cross">✗</span> No</td><td><span class="check">✓</span> Sí</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="what-aside reveal reveal-delay-2">
+        <div class="info-card" style="margin-top:0;">
+          <div class="info-card-title">📋 Formatos de imagen soportados</div>
+          <div style="display:flex;flex-direction:column;gap:0.7rem;margin-top:0.5rem;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--cyan);background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:4px;padding:4px 10px;min-width:60px;text-align:center;">ISO</span>
+              <span style="font-size:0.85rem;color:var(--text2);">Imagen de disco estándar de Microsoft</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--cyan);background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:4px;padding:4px 10px;min-width:60px;text-align:center;">WIM</span>
+              <span style="font-size:0.85rem;color:var(--text2);">Windows Imaging Format (dentro de ISOs)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--cyan);background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:4px;padding:4px 10px;min-width:60px;text-align:center;">ESD</span>
+              <span style="font-size:0.85rem;color:var(--text2);">Descarga electrónica comprimida de MS</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--cyan);background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:4px;padding:4px 10px;min-width:60px;text-align:center;">SWM</span>
+              <span style="font-size:0.85rem;color:var(--text2);">WIM dividido en múltiples partes</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--violet);background:rgba(123,47,255,0.08);border:1px solid rgba(123,47,255,0.2);border-radius:4px;padding:4px 10px;min-width:60px;text-align:center;">VHD</span>
+              <span style="font-size:0.85rem;color:var(--text2);">Disco duro virtual (Hyper-V)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--violet);background:rgba(123,47,255,0.08);border:1px solid rgba(123,47,255,0.2);border-radius:4px;padding:4px 10px;min-width:60px;text-align:center;">VHDX</span>
+              <span style="font-size:0.85rem;color:var(--text2);">Disco virtual dinámico expandible</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text3);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:4px 10px;min-width:60px;text-align:center;">CD/DVD</span>
+              <span style="font-size:0.85rem;color:var(--text2);">Medios físicos ópticos de Windows</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card" style="margin-top:1.5rem;">
+          <div class="info-card-title">⚡ Velocidad según tipo de USB</div>
+          <div style="display:flex;flex-direction:column;gap:0.9rem;margin-top:0.5rem;">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">
+                <span style="color:var(--text2);">USB 2.0 (pendrive)</span><span style="color:var(--orange);font-family:var(--font-mono);">~2-3 h</span>
+              </div>
+              <div style="background:var(--bg);border-radius:4px;height:6px;overflow:hidden;">
+                <div style="width:15%;height:100%;background:var(--orange);border-radius:4px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">
+                <span style="color:var(--text2);">USB 3.0 (pendrive)</span><span style="color:#FFD166;font-family:var(--font-mono);">~25-40 min</span>
+              </div>
+              <div style="background:var(--bg);border-radius:4px;height:6px;overflow:hidden;">
+                <div style="width:45%;height:100%;background:#FFD166;border-radius:4px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">
+                <span style="color:var(--text2);">USB 3.0 (SSD externo)</span><span style="color:var(--green);font-family:var(--font-mono);">~10-15 min</span>
+              </div>
+              <div style="background:var(--bg);border-radius:4px;height:6px;overflow:hidden;">
+                <div style="width:80%;height:100%;background:var(--green);border-radius:4px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">
+                <span style="color:var(--text2);">Thunderbolt (SSD)</span><span style="color:var(--cyan);font-family:var(--font-mono);">~5-8 min</span>
+              </div>
+              <div style="background:var(--bg);border-radius:4px;height:6px;overflow:hidden;">
+                <div style="width:98%;height:100%;background:var(--cyan);border-radius:4px;"></div>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.78rem;color:var(--text3);margin-top:1rem;font-family:var(--font-mono);">💡 Recomendado: SSD externo USB 3.0 para mejor rendimiento</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="funciones" class="features-bg section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// Funcionalidades</span>
+      <h2 class="section-title">Todo lo que WinToUSB hace por ti</h2>
+      <p class="section-desc">Una suite completa para tener Windows donde quieras, como quieras y en el PC que quieras — sin restricciones artificiales.</p>
+    </div>
+    <div class="features-grid">
+      <article class="feature-card reveal">
+        <div class="feature-icon">💾</div>
+        <h3 class="feature-title">Windows To Go Creator</h3>
+        <p class="feature-desc">Instala una copia completa de Windows 11, 10, 8.1 o 7 en un pendrive o disco externo. El resultado arranca en cualquier PC compatible con UEFI o BIOS Legacy, llevando tu sistema contigo a donde vayas.</p>
+        <span class="feature-tag">FREE</span>
+      </article>
+      <article class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">📋</div>
+        <h3 class="feature-title">Clonar tu Windows actual</h3>
+        <p class="feature-desc">Copia tu instalación actual de Windows al pendrive preservando todas tus aplicaciones, configuraciones y archivos. La tecnología Delta Clone permite sincronizaciones futuras mucho más rápidas, solo transfiriendo los cambios.</p>
+        <span class="feature-tag">PRO</span>
+      </article>
+      <article class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">⚙️</div>
+        <h3 class="feature-title">USB de instalación Windows</h3>
+        <p class="feature-desc">Convierte cualquier ISO, WIM, ESD, SWM o VHD/VHDX en un pendrive booteable de instalación. Similar a Rufus, pero compatible con más formatos de origen y con el asistente de particionado más claro del mercado.</p>
+        <span class="feature-tag">FREE</span>
+      </article>
+      <article class="feature-card reveal">
+        <div class="feature-icon">🩹</div>
+        <h3 class="feature-title">WinPE Booteable</h3>
+        <p class="feature-desc">Crea medios de recuperación basados en Windows PE que arrancan completamente en RAM. Perfectos para reparar sistemas que no arrancan, ejecutar herramientas de diagnóstico de disco o acceder a unidades cifradas.</p>
+        <span class="feature-tag">FREE</span>
+      </article>
+      <article class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">🔒</div>
+        <h3 class="feature-title">Cifrado BitLocker</h3>
+        <p class="feature-desc">Protege tu espacio de trabajo portable con cifrado completo de disco mediante BitLocker. Si pierdes el pendrive, nadie podrá acceder a tu información sin la clave de recuperación. Requiere Windows 10 Pro o superior en la imagen.</p>
+        <span class="feature-tag">PRO</span>
+      </article>
+      <article class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">🦾</div>
+        <h3 class="feature-title">Soporte ARM64 y UEFI CA 2023</h3>
+        <p class="feature-desc">Crea instalaciones portables de Windows 11 ARM64 para PCs con Qualcomm Snapdragon. Además, la versión 10.8 incorpora compatibilidad total con el certificado de autoridad UEFI CA 2023, eliminando errores de arranque en hardware fabricado a partir de 2024.</p>
+        <span class="feature-tag">v10.8</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section id="pasos" class="steps-section section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// Tutorial paso a paso</span>
+      <h2 class="section-title">De cero a Windows 11 en 30 minutos</h2>
+      <p class="section-desc">Sigue estos pasos en orden. No necesitas conocimientos técnicos avanzados. Solo necesitas un pendrive de 16 GB y conexión a internet para descargar la ISO.</p>
+    </div>
+    <div class="steps-wrapper">
+      <div class="step-list reveal" id="step-list">
+        <div class="step-item active" data-step="0">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <div class="step-title">Descarga la ISO oficial de Windows 11</div>
+            <div class="step-desc">Ve a microsoft.com y descarga la imagen de disco oficial de 64 bits (≈7,5 GB).</div>
+          </div>
+        </div>
+        <div class="step-item" data-step="1">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <div class="step-title">Descarga e instala WinToUSB</div>
+            <div class="step-desc">Descarga los 29 MB del instalador gratuito desde la web oficial de Hasleo Software.</div>
+          </div>
+        </div>
+        <div class="step-item" data-step="2">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <div class="step-title">Selecciona la ISO y el pendrive</div>
+            <div class="step-desc">Abre WinToUSB, elige "Instalación de Windows a USB", selecciona tu ISO y tu pendrive.</div>
+          </div>
+        </div>
+        <div class="step-item" data-step="3">
+          <div class="step-number">04</div>
+          <div class="step-content">
+            <div class="step-title">Activa las opciones anti-restricción</div>
+            <div class="step-desc">Marca las casillas para eliminar TPM, Secure Boot, BitLocker forzado y crear cuenta local.</div>
+          </div>
+        </div>
+        <div class="step-item" data-step="4">
+          <div class="step-number">05</div>
+          <div class="step-content">
+            <div class="step-title">Arranca desde el pendrive e instala</div>
+            <div class="step-desc">Reinicia, entra al menú de arranque (F11/F12), elige el USB y deja que Windows se instale solo.</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-panels reveal reveal-delay-2" id="step-panels">
+        <div class="step-panel active" data-panel="0">
+          <div class="panel-header"><div class="panel-dot"></div> Paso 1 — Descarga de ISO</div>
+          <div class="panel-body">
+            <div class="panel-cmd">$ web → <span>microsoft.com/es-es/software-download/windows11</span><br>$ seleccionar → <span>ISO para dispositivos de 64 bits</span><br>$ idioma → <span>Español (España)</span><br>$ descargar → <span>Win11_24H2_Spanish_x64.iso [7.5 GB]</span></div>
+            <p class="panel-detail">Necesitas un pendrive de al menos <strong>8 GB</strong> vacío. Descarga la ISO directamente desde Microsoft para garantizar que no está modificada. Acepta las condiciones y elige tu idioma antes de descargar.</p>
+            <div class="panel-tip">💡 <div><strong>Truco:</strong> Si la descarga se corta, Microsoft permite reanudarla en el mismo navegador sin empezar de cero. No cierres la pestaña.</div></div>
+          </div>
+        </div>
+        <div class="step-panel" data-panel="1">
+          <div class="panel-header"><div class="panel-dot"></div> Paso 2 — Instalar WinToUSB</div>
+          <div class="panel-body">
+            <div class="panel-cmd">$ descargar → <span>WinToUSB_Free.exe [29 MB]</span><br>$ verificar → <span>Firma digital: Hasleo Software ✓</span><br>$ instalar → <span>C:\Program Files\Hasleo\WinToUSB</span><br>$ ejecutar como administrador → <span>requerido ✓</span></div>
+            <p class="panel-detail">Si Windows SmartScreen aparece con una advertencia, haz clic en <strong>"Más información"</strong> y luego <strong>"Ejecutar de todas formas"</strong>. Es normal para programas de editores pequeños. El instalador no incluye barras de herramientas ni software adicional.</p>
+            <div class="panel-tip">💡 <div><strong>Importante:</strong> Siempre ejecuta WinToUSB como administrador (clic derecho → Ejecutar como administrador). Sin privilegios de admin obtendrás errores de acceso al disco.</div></div>
+          </div>
+        </div>
+        <div class="step-panel" data-panel="2">
+          <div class="panel-header"><div class="panel-dot"></div> Paso 3 — Configurar origen y destino</div>
+          <div class="panel-body">
+            <div class="panel-cmd">$ modo → <span>Instalación de Windows a USB</span><br>$ origen → <span>Win11_24H2_Spanish_x64.iso</span><br>$ edición → <span>Windows 11 Pro [recomendado]</span><br>$ destino → <span>SanDisk Ultra USB 3.0 (E:) 32 GB</span><br>$ esquema → <span>MBR para BIOS y UEFI [universal]</span></div>
+            <p class="panel-detail">Elige <strong>Windows 11 Pro</strong> si quieres más opciones de personalización y seguridad. Para el esquema de partición, selecciona <strong>MBR para BIOS y UEFI</strong>: funciona en prácticamente cualquier placa base, antigua o moderna, sin complicaciones.</p>
+            <div class="panel-tip">💡 <div><strong>¿GPT o MBR?</strong> Si tu PC tiene BIOS UEFI (casi todos los fabricados después de 2012), GPT para UEFI da mejor rendimiento. Usa MBR solo si tienes dudas o el PC es anterior a 2012.</div></div>
+          </div>
+        </div>
+        <div class="step-panel" data-panel="3">
+          <div class="panel-header"><div class="panel-dot"></div> Paso 4 — Eliminar restricciones</div>
+          <div class="panel-body">
+            <div class="panel-cmd">$ [✓] aplicar certificado UEFI CA 2023<br>$ [✓] desactivar requisitos de hardware<br>$ [✓] <span style="color:var(--green)">deshabilitar TPM 2.0 y Secure Boot</span><br>$ [✓] deshabilitar BitLocker obligatorio<br>$ [✓] desactivar telemetría de diagnóstico<br>$ [✓] <span style="color:var(--cyan)">crear cuenta local automática</span><br>$ usuario → <span>tunombre [sin espacios]</span></div>
+            <p class="panel-detail">Esta es la parte más importante. Estas opciones eliminan todas las restricciones que Microsoft impone en Windows 11: sin TPM, sin Secure Boot, sin obligación de cuenta Microsoft, y sin la recopilación de datos de diagnóstico. Al introducir tu nombre de usuario, el sistema creará tu cuenta local automáticamente sin pasar por el asistente de configuración.</p>
+            <div class="panel-tip">💡 <div><strong>Privacidad:</strong> Con cuenta local no hay sincronización con Microsoft. Tus archivos, contraseñas y configuración se quedan solo en tu PC. Puedes añadir una cuenta Microsoft después si quieres desde Configuración.</div></div>
+          </div>
+        </div>
+        <div class="step-panel" data-panel="4">
+          <div class="panel-header"><div class="panel-dot"></div> Paso 5 — Arranque e instalación</div>
+          <div class="panel-body">
+            <div class="panel-cmd">$ proceder → <span>formatear pendrive ✓</span><br>$ progreso → <span>[██████████] 100%</span><br>$ reiniciar PC<br>$ tecla boot → <span>F11 / F12 / F8 / ESC</span><br>$ seleccionar → <span>USB: SanDisk Ultra</span><br>$ instalar → <span>[automático — sin intervención]</span><br>$ resultado → <span style="color:var(--green)">Windows 11 listo ✓</span></div>
+            <p class="panel-detail">Una vez que el proceso llegue al 100%, cierra WinToUSB y reinicia el PC. Al arrancar, pulsa repetidamente la tecla de menú de arranque de tu placa base (generalmente F11 o F12, consulta el manual de tu placa). Selecciona el pendrive y la instalación correrá sola, sin pedirte nada.</p>
+            <div class="panel-tip">💡 <div><strong>No desconectes el USB</strong> durante la instalación. Si el proceso se interrumpe tendrás que reformatear el pendrive y empezar de cero.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUISITOS -->
+<section id="requisitos" class="req-section section-pad">
+  <div class="container">
+    <div class="req-grid">
+      <div class="reveal">
+        <span class="section-eyebrow">// Compatibilidad</span>
+        <h2 class="section-title" style="font-size:2rem;">Requisitos del sistema</h2>
+        <p class="section-desc" style="margin-bottom:1.5rem;">WinToUSB funciona en hardware muy modesto. La única variable importante es la velocidad de tu pendrive.</p>
+        <div class="compat-chips">
+          <div class="compat-chip">🪟 Windows 7</div>
+          <div class="compat-chip">🪟 Windows 8/8.1</div>
+          <div class="compat-chip">🪟 Windows 10</div>
+          <div class="compat-chip">🪟 Windows 11</div>
+          <div class="compat-chip">🖥 Server 2008 R2+</div>
+          <div class="compat-chip">💪 ARM64</div>
+          <div class="compat-chip">⚡ UEFI</div>
+          <div class="compat-chip">🔧 BIOS Legacy</div>
+        </div>
+        <div class="info-card" style="margin-top:1.5rem;">
+          <div class="info-card-title">🎯 Consejo de hardware</div>
+          <p style="font-size:0.85rem;color:var(--text2);line-height:1.7;">Un SSD externo Samsung T7 o similar en USB 3.1 completará la instalación en menos de 10 minutos y arrancará Windows en unos 15 segundos. Un pendrive USB 2.0 puede tardar más de 2 horas. La inversión en hardware de calidad cambia completamente la experiencia.</p>
+        </div>
+      </div>
+      <div class="req-table-wrapper reveal reveal-delay-2">
+        <table class="req-table" aria-label="Tabla de requisitos mínimos y recomendados de WinToUSB">
+          <thead>
+            <tr>
+              <th>Componente</th>
+              <th>Mínimo</th>
+              <th>Recomendado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sistema operativo</td>
+              <td><span class="req-min">Windows 7 SP1 (32/64 bit)</span></td>
+              <td><span class="req-rec">Windows 10/11 (64 bit)</span></td>
+            </tr>
+            <tr>
+              <td>Procesador</td>
+              <td><span class="req-min">1 GHz (x86/x64)</span></td>
+              <td><span class="req-rec">2 GHz dual-core</span></td>
+            </tr>
+            <tr>
+              <td>Memoria RAM</td>
+              <td><span class="req-min">512 MB</span></td>
+              <td><span class="req-rec">2 GB o más</span></td>
+            </tr>
+            <tr>
+              <td>Espacio en disco</td>
+              <td><span class="req-min">100 MB (app)</span></td>
+              <td><span class="req-rec">500 MB + ISO</span></td>
+            </tr>
+            <tr>
+              <td>Pendrive/USB</td>
+              <td><span class="req-min">USB 2.0 · 16 GB</span></td>
+              <td><span class="req-rec">USB 3.0 · 64 GB+</span></td>
+            </tr>
+            <tr>
+              <td>Pantalla</td>
+              <td><span class="req-min">800×600</span></td>
+              <td><span class="req-rec">1280×720 o superior</span></td>
+            </tr>
+            <tr>
+              <td>Conexión</td>
+              <td><span class="req-min">Para descargar ISO</span></td>
+              <td><span class="req-rec">No requerida después</span></td>
+            </tr>
+            <tr>
+              <td>Permisos</td>
+              <td><span class="req-min">Administrador</span></td>
+              <td><span class="req-rec">Administrador</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq-section section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">// Preguntas frecuentes</span>
+      <h2 class="section-title">Todo lo que necesitas saber</h2>
+      <p class="section-desc">Respuestas directas y completas a las preguntas más habituales sobre WinToUSB en español.</p>
+    </div>
+    <div class="faq-categories reveal">
+      <button class="faq-cat-btn active" data-cat="all">Todas</button>
+      <button class="faq-cat-btn" data-cat="seguridad">Seguridad</button>
+      <button class="faq-cat-btn" data-cat="requisitos">Requisitos</button>
+      <button class="faq-cat-btn" data-cat="uso">Uso</button>
+      <button class="faq-cat-btn" data-cat="problemas">Problemas</button>
+      <button class="faq-cat-btn" data-cat="precios">Precios</button>
+    </div>
+    <div class="faq-list reveal" id="faq-list">
+
+      <div class="faq-item" data-cat="seguridad">
+        <button class="faq-q" aria-expanded="false">
+          ¿WinToUSB es seguro? ¿Tiene virus o malware?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>Sí, WinToUSB es seguro cuando se descarga desde la fuente oficial. La versión 10.8 pasa los análisis de VirusTotal con <strong>0 detecciones en más de 70 motores antivirus</strong>, incluidos Windows Defender, Kaspersky y Malwarebytes. Hasleo Software lleva desarrollando esta herramienta desde 2013 y acumula más de 10 millones de descargas verificadas.</p>
+          <ul>
+            <li>Descarga siempre desde easyuefi.com o desde este tutorial</li>
+            <li>Verifica la firma digital: clic derecho en el .exe → Propiedades → Firmas digitales → debe decir "Hasleo Software"</li>
+            <li>El instalador no incluye barras de herramientas, extensiones de navegador ni software adicional</li>
+            <li>La aplicación no se ejecuta en segundo plano ni añade entradas de inicio automático</li>
+          </ul>
+          <p>Si Windows SmartScreen te avisa, es porque el ejecutable no está en el Microsoft Store — comportamiento normal para software de editores independientes.</p>
+          <div class="faq-highlight">Truco: Sube el archivo a virustotal.com antes de ejecutarlo para ver el análisis completo en tiempo real.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="uso">
+        <button class="faq-q" aria-expanded="false">
+          ¿WinToUSB realmente salta el TPM 2.0 y Secure Boot de Windows 11?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>Sí. Las instalaciones de tipo Windows To Go que crea WinToUSB <strong>no aplican las comprobaciones de TPM 2.0, Secure Boot ni generación de CPU</strong> que Microsoft exige en una instalación estándar en disco interno. Esto significa que puedes ejecutar Windows 11 en:</p>
+          <ul>
+            <li>Procesadores Intel de 4ª, 6ª y 7ª generación (los más afectados por las restricciones)</li>
+            <li>AMD Ryzen 1000 y procesadores AMD anteriores</li>
+            <li>Ordenadores sin módulo TPM o con TPM 1.2 (en lugar de 2.0)</li>
+            <li>Sistemas con BIOS Legacy sin Secure Boot</li>
+          </ul>
+          <p><strong>Importante:</strong> Windows Update funciona con normalidad en estas instalaciones. Microsoft puede restringir futuras actualizaciones de funciones en hardware no soportado, pero las actualizaciones de seguridad siguen llegando.</p>
+          <div class="faq-highlight">El truco técnico: las instalaciones Windows To Go están diseñadas para ejecutarse en hardware variable, por lo que el sistema operativo arranca sin imponer restricciones de hardware al iniciador.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="precios">
+        <button class="faq-q" aria-expanded="false">
+          ¿WinToUSB es completamente gratis? ¿Qué incluye la versión gratuita?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>La edición Free de WinToUSB es <strong>100% gratuita para uso personal y no comercial</strong>. No hay período de prueba, no hay funciones bloqueadas por temporizador ni pantallas de pago insistentes. Incluye:</p>
+          <ul>
+            <li>Crear Windows To Go desde ISO, WIM, ESD, SWM</li>
+            <li>Crear USB de instalación de Windows</li>
+            <li>Crear medios WinPE de recuperación</li>
+            <li>Soporte UEFI y BIOS Legacy</li>
+            <li>Certificado UEFI CA 2023 (desde v10.8)</li>
+          </ul>
+          <p>La edición <strong>Professional (29,95 €)</strong> añade clonación del Windows actual, BitLocker, Delta Clone y uso comercial. Para el 95% de usuarios domésticos, la edición gratuita es más que suficiente.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="uso">
+        <button class="faq-q" aria-expanded="false">
+          ¿Cuál es la diferencia entre WinToUSB y Rufus?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>Ambas son herramientas gratuitas para crear USB de Windows, pero con enfoques distintos:</p>
+          <ul>
+            <li><strong>WinToUSB</strong> está especializado en Windows To Go: crea un Windows que vive en el USB y arranca en cualquier PC. También puede clonar tu instalación actual.</li>
+            <li><strong>Rufus</strong> está especializado en crear USB de instalación rápidos y soporta ISOs de Linux. Su Windows To Go es básico y ha variado entre versiones.</li>
+          </ul>
+          <p>Recomendación: usa <strong>WinToUSB si quieres llevar Windows en el bolsillo</strong> o instalarlo en un PC antiguo. Usa Rufus si solo quieres un USB para reinstalar Windows en un PC nuevo o para ISOs de Linux.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="problemas">
+        <button class="faq-q" aria-expanded="false">
+          El PC no arranca desde el pendrive. ¿Qué hago?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>El error de arranque más común ocurre por <strong>incompatibilidad entre el esquema de partición y el modo de inicio</strong> configurado en la BIOS:</p>
+          <ul>
+            <li>Entra a la BIOS (normalmente Del, F2 o F12 al arrancar)</li>
+            <li>Desactiva <strong>Secure Boot</strong> en la pestaña de seguridad</li>
+            <li>Desactiva <strong>Fast Boot</strong> si existe esa opción</li>
+            <li>Asegúrate de que el USB está primero en el orden de arranque</li>
+            <li>Si usaste GPT, pon el modo de inicio en <strong>UEFI Only</strong></li>
+            <li>Si usaste MBR, prueba a activar el modo <strong>Legacy/CSM</strong></li>
+          </ul>
+          <p>Si obtienes una pantalla azul con <strong>INACCESSIBLE_BOOT_DEVICE</strong>, recrea el USB usando el modo de instalación <strong>"Legacy"</strong> en lugar de VHD. Prueba también un puerto USB 2.0 trasero en lugar del USB 3.0 frontal.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="problemas">
+        <button class="faq-q" aria-expanded="false">
+          WinToUSB tarda muchísimo. ¿Es normal?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>Depende de la velocidad de tu pendrive. Los tiempos esperados son:</p>
+          <ul>
+            <li>USB 2.0 (pendrive lento): 2-3 horas — normal pero muy lento</li>
+            <li>USB 3.0 (pendrive de calidad): 20-40 minutos — lo habitual</li>
+            <li>SSD externo USB 3.0: 8-15 minutos — excelente</li>
+            <li>Thunderbolt SSD: 5-8 minutos — óptimo</li>
+          </ul>
+          <p><strong>Consejo crítico:</strong> No dejes que el PC entre en modo suspensión durante el proceso. Configura "Suspensión" en "Nunca" en la Configuración de energía antes de empezar. Una interrupción corrompería el pendrive.</p>
+          <div class="faq-highlight">Invierte en hardware: un SSD externo barato de 120 GB (Samsung, Kingston, Crucial) cambia completamente la experiencia.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="requisitos">
+        <button class="faq-q" aria-expanded="false">
+          ¿Funciona WinToUSB en Mac o Linux?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>No. WinToUSB es exclusivamente para Windows. No existe versión para macOS ni Linux, y no funciona mediante Wine o Proton porque necesita acceso directo a las APIs de administración de discos de Windows.</p>
+          <ul>
+            <li><strong>Mac Intel:</strong> Instala Windows mediante Boot Camp, luego ejecuta WinToUSB desde esa partición</li>
+            <li><strong>Mac Apple Silicon (M1/M2/M3/M4):</strong> Usa Parallels Desktop o UTM para correr Windows en máquina virtual</li>
+            <li><strong>Linux:</strong> Instala Windows en VirtualBox o KVM con passthrough USB y ejecuta WinToUSB dentro</li>
+          </ul>
+          <p>Si solo necesitas un USB de instalación básico (no Windows To Go), balenaEtcher funciona en Mac y Linux para ese propósito concreto.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="uso">
+        <button class="faq-q" aria-expanded="false">
+          ¿Puedo clonar mi Windows actual al pendrive?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>Sí, pero esta función requiere la edición <strong>Professional (29,95 €)</strong>. El proceso copia tu Windows actual — con todas las aplicaciones, configuraciones y archivos — al pendrive USB. El resultado es una copia exacta de tu entorno de trabajo que arranca en cualquier otro PC.</p>
+          <ul>
+            <li>El pendrive debe tener al menos el mismo espacio que tu partición C: usada</li>
+            <li>Se recomienda un SSD externo, no un pendrive convencional</li>
+            <li>La tecnología Delta Clone permite actualizar la copia sin recrearla desde cero</li>
+            <li>Tras la primera clonación, las actualizaciones incrementales tardan 15-20 min en lugar de 60-90 min</li>
+          </ul>
+          <div class="faq-highlight">Consejo: instala los drivers de GPU de Microsoft genéricos (no NVIDIA/AMD específicos) en el clon para que funcione en PCs con tarjetas gráficas diferentes a la tuya.</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="uso">
+        <button class="faq-q" aria-expanded="false">
+          ¿Qué versión de WinToUSB debo usar en 2026?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a" role="region">
+          <p>La versión recomendada en 2026 es la <strong>10.8, publicada el 21 de enero de 2026</strong>. Es especialmente importante si tu PC tiene una placa base fabricada a partir de 2024, ya que incluye soporte para el nuevo certificado de autoridad UEFI CA 2023 que Microsoft y los fabricantes de hardware comenzaron a exigir.</p>
+          <ul>
+            <li>Soporte para Windows 11 ARM64 (Snapdragon X Elite y similares)</li>
+            <li>Compatibilidad UEFI CA 2023 — elimina errores de arranque en hardware 2024+</li>
+            <li>Mejoras de velocidad en USB 3.1 y Thunderbolt</li>
+            <li>Corrección de errores de BSOD en algunos SSD NVMe en enclosure USB</li>
+          </ul>
+          <p>Para actualizar desde versiones anteriores, abre WinToUSB → Ayuda → Buscar actualizaciones. O descarga el instalador directamente y ejecútalo sobre la versión anterior (no hace falta desinstalar).</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="precios" class="pricing-section section-pad">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <span class="section-eyebrow">// Ediciones disponibles</span>
+      <h2 class="section-title">Elige tu versión de WinToUSB</h2>
+      <p class="section-desc" style="margin:0 auto;">Para la mayoría de usuarios, la edición gratuita es todo lo que necesitas. Las ediciones de pago están pensadas para usuarios avanzados y empresas.</p>
+    </div>
+    <div class="pricing-grid reveal">
+      <div class="price-card">
+        <div class="price-tier">Free Edition</div>
+        <div class="price-amount">$0</div>
+        <div class="price-period">Para siempre · Uso personal</div>
+        <ul class="price-features">
+          <li><span class="pf-icon pf-yes">✓</span> Windows To Go desde ISO/WIM/ESD</li>
+          <li><span class="pf-icon pf-yes">✓</span> USB de instalación de Windows</li>
+          <li><span class="pf-icon pf-yes">✓</span> Medios WinPE de recuperación</li>
+          <li><span class="pf-icon pf-yes">✓</span> UEFI y BIOS Legacy</li>
+          <li><span class="pf-icon pf-yes">✓</span> Certificado UEFI CA 2023</li>
+          <li><span class="pf-icon pf-no" style="color:var(--text3)">–</span> <span style="color:var(--text3)">Clonar Windows actual</span></li>
+          <li><span class="pf-icon pf-no" style="color:var(--text3)">–</span> <span style="color:var(--text3)">BitLocker en USB</span></li>
+          <li><span class="pf-icon pf-no" style="color:var(--text3)">–</span> <span style="color:var(--text3)">Delta Clone</span></li>
+        </ul>
+        <a href="https://www.easyuefi.com/wintousb/downloads/WinToUSB_Free.exe" class="btn-price btn-price-outline">Descargar gratis</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Más popular</div>
+        <div class="price-tier">Professional</div>
+        <div class="price-amount"><sup>$</sup>29<span style="font-size:1.2rem;color:var(--text2)">.95</span></div>
+        <div class="price-period">Pago único · 2 PCs · Actualizaciones de por vida</div>
+        <ul class="price-features">
+          <li><span class="pf-icon pf-yes">✓</span> Todo lo de Free</li>
+          <li><span class="pf-icon pf-yes">✓</span> Clonar Windows actual al USB</li>
+          <li><span class="pf-icon pf-yes">✓</span> BitLocker en disco portable</li>
+          <li><span class="pf-icon pf-yes">✓</span> Delta Clone (sync incremental)</li>
+          <li><span class="pf-icon pf-yes">✓</span> ISOs de edición Enterprise</li>
+          <li><span class="pf-icon pf-yes">✓</span> Uso comercial permitido</li>
+          <li><span class="pf-icon pf-yes">✓</span> Soporte técnico prioritario</li>
+        </ul>
+        <a href="https://www.easyuefi.com/wintousb/" class="btn-price btn-price-main">Obtener Professional</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amount"><sup>$</sup>199<span style="font-size:1.2rem;color:var(--text2)">.95</span></div>
+        <div class="price-period">PCs ilimitados · Despliegue corporativo</div>
+        <ul class="price-features">
+          <li><span class="pf-icon pf-yes">✓</span> Todo lo de Professional</li>
+          <li><span class="pf-icon pf-yes">✓</span> Instalaciones ilimitadas</li>
+          <li><span class="pf-icon pf-yes">✓</span> VHD/VHDX expansión dinámica</li>
+          <li><span class="pf-icon pf-yes">✓</span> Windows 11 ARM64 completo</li>
+          <li><span class="pf-icon pf-yes">✓</span> Soporte técnico prioritario</li>
+          <li><span class="pf-icon pf-yes">✓</span> Herramientas de despliegue masivo</li>
+        </ul>
+        <a href="https://www.easyuefi.com/wintousb/" class="btn-price btn-price-outline">Ver planes Enterprise</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <h2 class="cta-title reveal">¿Listo para liberar tu PC de las restricciones?</h2>
+    <p class="cta-desc reveal">Descarga WinToUSB gratis ahora mismo. 29 MB. Sin registro. Sin trucos. Windows 11 en tu PC antiguo en menos de 30 minutos.</p>
+    <div class="cta-actions reveal">
+      <a href="https://www.easyuefi.com/wintousb/downloads/WinToUSB_Free.exe" class="btn-primary" style="font-size:1.1rem;padding:18px 36px;">
+        ⬇ Descargar WinToUSB Gratis
+      </a>
+      <a href="#pasos" class="btn-ghost">Ver tutorial completo</a>
+    </div>
+    <div class="cta-stats reveal">
+      <div class="cta-stat">
+        <span class="cta-stat-val">+10M</span>
+        <span class="cta-stat-label">descargas globales</span>
+      </div>
+      <div class="cta-stat">
+        <span class="cta-stat-val">0/70+</span>
+        <span class="cta-stat-label">detecciones VirusTotal</span>
+      </div>
+      <div class="cta-stat">
+        <span class="cta-stat-val">29 MB</span>
+        <span class="cta-stat-label">tamaño del instalador</span>
+      </div>
+      <div class="cta-stat">
+        <span class="cta-stat-val">v10.8</span>
+        <span class="cta-stat-label">última versión 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Tutorial no oficial de WinToUSB en español · Contenido educativo · 
+  <a href="https://www.easyuefi.com/wintousb/" target="_blank" rel="noopener">Web oficial de Hasleo Software</a> · 
+  WinToUSB es marca registrada de Hasleo Software</p>
+  <p style="margin-top:0.5rem;color:var(--text3);">Actualizado: Junio 2026 · v10.8</p>
+</footer>
+
+<script>
+// ===== CANVAS CIRCUIT BACKGROUND =====
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [], lines = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function init() {
+    resize();
+    nodes = [];
+    lines = [];
+    const count = Math.floor((W * H) / 18000);
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2 + 1,
+        color: Math.random() > 0.5 ? '#00D4FF' : '#7B2FFF'
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 140) {
+          const alpha = (1 - dist / 140) * 0.35;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    // draw nodes
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = n.color + '80';
+      ctx.fill();
+      // update
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  draw();
+})();
+
+// ===== TERMINAL ANIMATION =====
+(function() {
+  const output = document.getElementById('terminal-output');
+  if (!output) return;
+
+  const lines = [
+    { type: 'prompt', cmd: 'wintousb --mode "Windows To Go"' },
+    { type: 'output', text: '→ Iniciando WinToUSB v10.8...' },
+    { type: 'output', text: '→ Leyendo ISO: Win11_24H2_x64.iso' },
+    { type: 'success', text: '✓ ISO válida detectada [7.5 GB]' },
+    { type: 'output', text: '→ Destino: SanDisk Ultra USB 3.0 (E:)' },
+    { type: 'output', text: '→ Esquema: MBR para BIOS+UEFI' },
+    { type: 'output', text: '' },
+    { type: 'prompt', cmd: 'apply-patches --bypass-all' },
+    { type: 'success', text: '✓ TPM 2.0 — desactivado' },
+    { type: 'success', text: '✓ Secure Boot — desactivado' },
+    { type: 'success', text: '✓ Cuenta local — creada [usuario]' },
+    { type: 'success', text: '✓ UEFI CA 2023 — aplicado' },
+    { type: 'output', text: '' },
+    { type: 'prompt', cmd: 'proceed --format-usb' },
+    { type: 'progress' },
+    { type: 'success', text: '✓ Operación completada con éxito' },
+    { type: 'highlight', text: '→ Windows 11 listo en tu pendrive ✓' },
+  ];
+
+  let i = 0;
+  let progressVal = 0;
+  let progressInterval;
+
+  function addLine(line) {
+    if (i >= lines.length) return;
+    const l = lines[i];
+    const div = document.createElement('div');
+
+    if (l.type === 'prompt') {
+      div.className = 't-line';
+      div.innerHTML = `<span class="t-prompt">$</span><span class="t-cmd"> ${l.cmd}</span>`;
+    } else if (l.type === 'output') {
+      div.className = 't-output';
+      div.textContent = l.text;
+    } else if (l.type === 'success') {
+      div.className = 't-success';
+      div.textContent = l.text;
+    } else if (l.type === 'highlight') {
+      div.className = 't-highlight';
+      div.textContent = l.text;
+      div.style.fontWeight = '600';
+    } else if (l.type === 'progress') {
+      div.className = 't-output';
+      div.innerHTML = 'Escribiendo a USB... <span id="prog-pct">0%</span>';
+      output.appendChild(div);
+      const bar = document.createElement('div');
+      bar.className = 'terminal-progress';
+      bar.innerHTML = '<div class="terminal-progress-bar" id="prog-bar"></div>';
+      output.appendChild(bar);
+      i++;
+      progressInterval = setInterval(() => {
+        progressVal += Math.random() * 4 + 1;
+        if (progressVal >= 100) {
+          progressVal = 100;
+          clearInterval(progressInterval);
+          document.getElementById('prog-pct').textContent = '100%';
+          document.getElementById('prog-bar').style.width = '100%';
+          setTimeout(() => { i++; addLine(); }, 500);
+        }
+        const pct = Math.min(Math.floor(progressVal), 100);
+        const el = document.getElementById('prog-pct');
+        const bar2 = document.getElementById('prog-bar');
+        if (el) el.textContent = pct + '%';
+        if (bar2) bar2.style.width = pct + '%';
+      }, 80);
+      output.scrollTop = output.scrollHeight;
+      return;
+    }
+
+    output.appendChild(div);
+    output.scrollTop = output.scrollHeight;
+    i++;
+
+    const delay = l.type === 'prompt' ? 600 : l.type === 'output' && l.text === '' ? 200 : 300;
+    if (i < lines.length) setTimeout(addLine, delay);
+    else {
+      // loop
+      setTimeout(() => {
+        output.innerHTML = '';
+        i = 0;
+        progressVal = 0;
+        setTimeout(addLine, 800);
+      }, 5000);
+    }
+  }
+
+  setTimeout(addLine, 1000);
+})();
+
+// ===== SCROLL PROGRESS =====
+window.addEventListener('scroll', () => {
+  const el = document.getElementById('scroll-progress');
+  const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  el.style.width = scrolled + '%';
+});
+
+// ===== REVEAL ON SCROLL =====
+(function() {
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+})();
+
+// ===== STEP TABS =====
+(function() {
+  const items = document.querySelectorAll('.step-item');
+  const panels = document.querySelectorAll('.step-panel');
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const idx = item.dataset.step;
+      items.forEach(i => i.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      document.querySelector(`.step-panel[data-panel="${idx}"]`).classList.add('active');
+    });
+  });
+})();
+
+// ===== FAQ ACCORDION =====
+(function() {
+  const items = document.querySelectorAll('.faq-item');
+  const catBtns = document.querySelectorAll('.faq-cat-btn');
+
+  items.forEach(item => {
+    const btn = item.querySelector('.faq-q');
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      items.forEach(i => { i.classList.remove('open'); i.querySelector('.faq-q').setAttribute('aria-expanded', 'false'); });
+      if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+    });
+  });
+
+  catBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      catBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      items.forEach(item => {
+        if (cat === 'all' || item.dataset.cat === cat) {
+          item.style.display = '';
+        } else {
+          item.classList.remove('open');
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+})();
+
+// ===== FLOATING PARTICLES =====
+(function() {
+  const colors = ['rgba(0,212,255,0.4)', 'rgba(123,47,255,0.3)', 'rgba(0,255,136,0.25)'];
+  for (let i = 0; i < 8; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px;height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${Math.random()*100}%;
+      animation-duration:${Math.random()*20+15}s;
+      animation-delay:${Math.random()*10}s;
+    `;
+    document.body.appendChild(p);
+  }
+})();
+
+// ===== NAV SMOOTH =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
