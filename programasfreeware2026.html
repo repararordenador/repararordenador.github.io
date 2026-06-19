@@ -1,0 +1,699 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programas Freeware 2026 · Calin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b1120;
+      color: #e2e8f0;
+      padding: 1.5rem;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+    /* El canvas del fondo ocupará toda la pantalla fijo */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none; /* para que no interfiera con los clics */
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ---------- HEADER ---------- */
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+      backdrop-filter: blur(4px);
+      background: rgba(11, 17, 32, 0.5);
+      padding: 0.8rem 1.5rem;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .logo h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+    }
+    .logo span {
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      -webkit-text-fill-color: #94a3b8;
+      background: none;
+      display: block;
+      margin-top: 2px;
+    }
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 40px;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s, transform 0.2s;
+      font-weight: 500;
+      color: #f1f5f9;
+    }
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+    .author-badge {
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.3rem 0.9rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+    }
+    .author-badge i {
+      color: #f472b6;
+      margin-right: 4px;
+    }
+
+    /* ---------- FILTROS Y BÚSQUEDA ---------- */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.8rem 1.2rem;
+      margin-bottom: 2.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(8px);
+      padding: 0.8rem 1.5rem;
+      border-radius: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .filters .search-box {
+      flex: 1;
+      min-width: 180px;
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 40px;
+      padding: 0.2rem 0.2rem 0.2rem 1rem;
+      transition: background 0.3s;
+    }
+    .search-box i {
+      color: #94a3b8;
+      margin-right: 0.6rem;
+    }
+    .search-box input {
+      border: none;
+      background: transparent;
+      padding: 0.6rem 0.2rem;
+      font-size: 0.95rem;
+      width: 100%;
+      outline: none;
+      color: #e2e8f0;
+      font-family: inherit;
+    }
+    .search-box input::placeholder {
+      color: #94a3b8;
+    }
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 40px;
+      padding: 0.4rem 1.1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      color: #cbd5e1;
+      font-family: inherit;
+    }
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+    .filter-btn.active {
+      background: #3b82f6;
+      color: #fff;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+    .filter-btn.active:hover {
+      background: #2563eb;
+    }
+    .results-count {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ---------- GRID ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.8rem;
+      margin-top: 0.5rem;
+      animation: fadeUp 0.6s ease-out;
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 1.5rem 1.2rem 1.4rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: transform 0.25s ease, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.09);
+    }
+    .card .icon {
+      font-size: 2.4rem;
+      margin-bottom: 0.6rem;
+      color: #60a5fa;
+      transition: transform 0.3s;
+    }
+    .card:hover .icon {
+      transform: scale(1.1) rotate(-2deg);
+    }
+    .card .category-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #a5b4fc;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 0.7rem;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+      color: #f1f5f9;
+    }
+    .card p {
+      font-size: 0.85rem;
+      color: #a0b3cc;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+      line-height: 1.5;
+    }
+    .card .btn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #3b82f6;
+      color: #fff;
+      padding: 0.45rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      transition: background 0.25s, transform 0.2s;
+      align-self: flex-start;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .card .btn-link:hover {
+      background: #2563eb;
+      transform: scale(1.02);
+    }
+    .card .btn-link i {
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+    }
+    .card .btn-link:hover i {
+      transform: translateX(3px);
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #a78bfa);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover::after {
+      opacity: 1;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      margin-top: 3.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 2rem;
+    }
+    footer i {
+      color: #f472b6;
+      margin: 0 4px;
+    }
+    footer .credit {
+      color: #a5b4fc;
+      font-weight: 500;
+    }
+    footer .credit a {
+      color: #60a5fa;
+      border-bottom: 1px dotted rgba(96, 165, 250, 0.3);
+    }
+    footer .credit a:hover {
+      border-bottom-color: #60a5fa;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 700px) {
+      body { padding: 1rem; }
+      header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+        padding: 1rem;
+      }
+      .logo h1 { font-size: 1.6rem; }
+      .filters {
+        border-radius: 30px;
+        padding: 0.8rem 1.2rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+      }
+      .filter-buttons { justify-content: center; }
+      .results-count { text-align: center; margin-left: 0; }
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.2rem;
+      }
+      .card { padding: 1.2rem; }
+      .header-controls .author-badge { display: none; } /* se oculta en móvil para no saturar */
+    }
+    @media (max-width: 450px) {
+      .grid { grid-template-columns: 1fr; }
+      .filter-btn { padding: 0.3rem 0.8rem; font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- CANVAS PARA EL FONDO ANIMADO -->
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="container">
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <h1>🧩 Programas Freeware 2026</h1>
+        <span>100 herramientas gratuitas · Enlaces oficiales</span>
+      </div>
+      <div class="header-controls">
+        <span class="author-badge"><i class="fas fa-code"></i> Calin · <i class="fab fa-youtube"></i> @repararordenador</span>
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i> <span>Modo oscuro</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- FILTROS Y BÚSQUEDA -->
+    <div class="filters" id="filters">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Buscar programa..." autocomplete="off" />
+      </div>
+      <div class="filter-buttons" id="filterButtons">
+        <button class="filter-btn active" data-category="all">Todos</button>
+        <button class="filter-btn" data-category="navegador">Navegador</button>
+        <button class="filter-btn" data-category="ofimática">Ofimática</button>
+        <button class="filter-btn" data-category="multimedia">Multimedia</button>
+        <button class="filter-btn" data-category="graficos">Gráficos</button>
+        <button class="filter-btn" data-category="seguridad">Seguridad</button>
+        <button class="filter-btn" data-category="utilidad">Utilidad</button>
+        <button class="filter-btn" data-category="comunicación">Comunicación</button>
+        <button class="filter-btn" data-category="desarrollo">Desarrollo</button>
+        <button class="filter-btn" data-category="educación">Educación</button>
+      </div>
+      <span class="results-count" id="resultsCount">100 programas</span>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid" id="grid"></div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>
+        Hecho con <i class="fas fa-heart"></i> por 
+        <span class="credit">Calin</span> · 
+        <a href="https://youtube.com/@repararordenador" target="_blank" rel="noopener">
+          <i class="fab fa-youtube"></i> @repararordenador
+        </a>
+        <br />
+        <span style="font-size:0.75rem; color:#64748b;">Todos los enlaces son oficiales y actualizados para 2026</span>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // =============================================================
+    // 1. FONDO ANIMADO CON PARTÍCULAS (canvas)
+    // =============================================================
+    (function initParticles() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+      const PARTICLE_COUNT = 110;
+      const CONNECTION_DIST = 150;
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.vx = (Math.random() - 0.5) * 1.2;
+          this.vy = (Math.random() - 0.5) * 1.2;
+          this.radius = Math.random() * 2.5 + 1.5;
+          this.opacity = Math.random() * 0.6 + 0.2;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.x < 0 || this.x > width) this.vx *= -1;
+          if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(148, 163, 184, ${this.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new Particle());
+      }
+
+      function drawLines() {
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CONNECTION_DIST) {
+              const alpha = (1 - dist / CONNECTION_DIST) * 0.25;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(148, 163, 184, ${alpha})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        drawLines();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    // =============================================================
+    // 2. LISTA DE 100 PROGRAMAS (exactamente igual que antes)
+    // =============================================================
+    const programas = [
+      // NAVEGADORES (10)
+      { nombre: 'Mozilla Firefox', descrip: 'Navegador rápido, privado y de código abierto.', categoria: 'navegador', icono: 'fab fa-firefox-browser', url: 'https://www.mozilla.org/es-ES/firefox/new/' },
+      { nombre: 'Google Chrome', descrip: 'El navegador más popular con sincronización y extensiones.', categoria: 'navegador', icono: 'fab fa-chrome', url: 'https://www.google.com/chrome/' },
+      { nombre: 'Brave', descrip: 'Navegador con bloqueador de anuncios integrado y recompensas.', categoria: 'navegador', icono: 'fab fa-brave', url: 'https://brave.com/es/' },
+      { nombre: 'Opera', descrip: 'Navegador con VPN gratuita, WhatsApp integrado y más.', categoria: 'navegador', icono: 'fab fa-opera', url: 'https://www.opera.com/es' },
+      { nombre: 'Microsoft Edge', descrip: 'Navegador de Microsoft con integración con Windows y ChatGPT.', categoria: 'navegador', icono: 'fab fa-edge', url: 'https://www.microsoft.com/edge' },
+      { nombre: 'Vivaldi', descrip: 'Navegador altamente personalizable con multitud de herramientas.', categoria: 'navegador', icono: 'fas fa-compass', url: 'https://vivaldi.com/es/download/' },
+      { nombre: 'Tor Browser', descrip: 'Navegador para navegación anónima en la red Tor.', categoria: 'navegador', icono: 'fas fa-user-secret', url: 'https://www.torproject.org/download/' },
+      { nombre: 'Pale Moon', descrip: 'Navegador ligero basado en Firefox, enfocado en eficiencia.', categoria: 'navegador', icono: 'fas fa-moon', url: 'https://www.palemoon.org/download.shtml' },
+      { nombre: 'Waterfox', descrip: 'Navegador basado en Firefox con enfoque en privacidad.', categoria: 'navegador', icono: 'fas fa-water', url: 'https://www.waterfox.net/download/' },
+      { nombre: 'Falkon', descrip: 'Navegador web de KDE, rápido y con interfaz minimalista.', categoria: 'navegador', icono: 'fas fa-globe-americas', url: 'https://www.falkon.org/download/' },
+      // OFIMÁTICA (8)
+      { nombre: 'LibreOffice', descrip: 'Suite ofimática gratuita: Writer, Calc, Impress y más.', categoria: 'ofimática', icono: 'fas fa-file-alt', url: 'https://www.libreoffice.org/download/download/' },
+      { nombre: 'OnlyOffice', descrip: 'Suite ofimática compatible con formatos Microsoft Office.', categoria: 'ofimática', icono: 'fas fa-file-signature', url: 'https://www.onlyoffice.com/download-desktop.aspx' },
+      { nombre: 'WPS Office Free', descrip: 'Suite ofimática ligera compatible con Word, Excel y PowerPoint.', categoria: 'ofimática', icono: 'fas fa-file-pdf', url: 'https://www.wps.com/download/' },
+      { nombre: 'FreeOffice', descrip: 'Suite ofimática completa con procesador de textos, hojas de cálculo y presentaciones.', categoria: 'ofimática', icono: 'fas fa-file-word', url: 'https://www.freeoffice.com/en/download' },
+      { nombre: 'PDF24', descrip: 'Creador y editor de PDF con muchas herramientas gratuitas.', categoria: 'ofimática', icono: 'fas fa-file-pdf', url: 'https://www.pdf24.org/es/download/' },
+      { nombre: 'Foxit Reader', descrip: 'Lector de PDF ligero con anotaciones y edición básica.', categoria: 'ofimática', icono: 'fas fa-file-pdf', url: 'https://www.foxit.com/es/pdf-reader/' },
+      { nombre: 'SumatraPDF', descrip: 'Lector de PDF, ePub, MOBI, CBZ y más, muy ligero.', categoria: 'ofimática', icono: 'fas fa-book', url: 'https://www.sumatrapdfreader.org/download-free-pdf-viewer' },
+      { nombre: 'AbiWord', descrip: 'Procesador de textos ligero y rápido, compatible con varios formatos.', categoria: 'ofimática', icono: 'fas fa-font', url: 'https://www.abisource.com/download/' },
+      // MULTIMEDIA (10)
+      { nombre: 'VLC Media Player', descrip: 'Reproductor multimedia universal, soporta casi todos los formatos.', categoria: 'multimedia', icono: 'fas fa-play-circle', url: 'https://www.videolan.org/vlc/download-windows.html' },
+      { nombre: 'MPC-HC', descrip: 'Reproductor de vídeo ligero con excelente rendimiento.', categoria: 'multimedia', icono: 'fas fa-film', url: 'https://github.com/clsid2/mpc-hc/releases' },
+      { nombre: 'PotPlayer', descrip: 'Reproductor multimedia con gran cantidad de codecs y personalización.', categoria: 'multimedia', icono: 'fas fa-video', url: 'https://potplayer.daum.net/' },
+      { nombre: 'Audacity', descrip: 'Editor y grabador de audio de código abierto.', categoria: 'multimedia', icono: 'fas fa-microphone', url: 'https://www.audacityteam.org/download/windows/' },
+      { nombre: 'OBS Studio', descrip: 'Grabación y transmisión en vivo de alta calidad.', categoria: 'multimedia', icono: 'fas fa-video', url: 'https://obsproject.com/es/download' },
+      { nombre: 'Shotcut', descrip: 'Editor de vídeo no lineal, gratuito y multiplataforma.', categoria: 'multimedia', icono: 'fas fa-cut', url: 'https://shotcut.org/download/' },
+      { nombre: 'DaVinci Resolve', descrip: 'Editor de vídeo y color profesional (versión gratuita).', categoria: 'multimedia', icono: 'fas fa-video', url: 'https://www.blackmagicdesign.com/es/products/davinciresolve' },
+      { nombre: 'Blender', descrip: 'Suite de creación 3D: modelado, animación, renderizado.', categoria: 'multimedia', icono: 'fas fa-cube', url: 'https://www.blender.org/download/' },
+      { nombre: 'Kodi', descrip: 'Centro multimedia para organizar y reproducir contenido.', categoria: 'multimedia', icono: 'fas fa-tv', url: 'https://kodi.tv/download/' },
+      { nombre: 'MusicBee', descrip: 'Reproductor y administrador de música moderno y completo.', categoria: 'multimedia', icono: 'fas fa-music', url: 'https://www.getmusicbee.com/download/' },
+      // GRÁFICOS (8)
+      { nombre: 'GIMP', descrip: 'Editor de imágenes y retoque fotográfico profesional gratuito.', categoria: 'graficos', icono: 'fas fa-paint-brush', url: 'https://www.gimp.org/downloads/' },
+      { nombre: 'Inkscape', descrip: 'Editor de gráficos vectoriales similar a Illustrator.', categoria: 'graficos', icono: 'fas fa-vector-square', url: 'https://inkscape.org/es/download/' },
+      { nombre: 'Krita', descrip: 'Herramienta de pintura digital y animación 2D.', categoria: 'graficos', icono: 'fas fa-palette', url: 'https://krita.org/es/download/' },
+      { nombre: 'Paint.NET', descrip: 'Editor de imágenes sencillo pero potente para Windows.', categoria: 'graficos', icono: 'fas fa-image', url: 'https://www.getpaint.net/download.html' },
+      { nombre: 'MyPaint', descrip: 'Programa de pintura digital con pinceles personalizables.', categoria: 'graficos', icono: 'fas fa-brush', url: 'https://mypaint.app/download/' },
+      { nombre: 'Pencil2D', descrip: 'Herramienta de animación 2D cuadro a cuadro.', categoria: 'graficos', icono: 'fas fa-pencil-alt', url: 'https://www.pencil2d.org/download/' },
+      { nombre: 'IrfanView', descrip: 'Visor de imágenes rápido con soporte para muchos formatos.', categoria: 'graficos', icono: 'fas fa-eye', url: 'https://www.irfanview.com/download.htm' },
+      { nombre: 'XnView Classic', descrip: 'Visor de imágenes, conversor y organizador gráfico.', categoria: 'graficos', icono: 'fas fa-images', url: 'https://www.xnview.com/en/xnview/' },
+      // SEGURIDAD (8)
+      { nombre: 'Malwarebytes', descrip: 'Antimalware ligero que elimina amenazas avanzadas.', categoria: 'seguridad', icono: 'fas fa-shield-alt', url: 'https://www.malwarebytes.com/premium' },
+      { nombre: 'Bitdefender Free', descrip: 'Protección antivirus esencial con escaneo en la nube.', categoria: 'seguridad', icono: 'fas fa-shield-virus', url: 'https://www.bitdefender.com/solutions/free.html' },
+      { nombre: 'Avast Free Antivirus', descrip: 'Antivirus con protección en tiempo real y red segura.', categoria: 'seguridad', icono: 'fas fa-bug', url: 'https://www.avast.com/es-es/free-antivirus-download' },
+      { nombre: 'AVG AntiVirus Free', descrip: 'Protección básica contra virus y malware.', categoria: 'seguridad', icono: 'fas fa-shield', url: 'https://www.avg.com/es-es/free-antivirus-download' },
+      { nombre: 'Kaspersky Free', descrip: 'Antivirus gratuito con protección esencial.', categoria: 'seguridad', icono: 'fas fa-shield', url: 'https://www.kaspersky.es/free-antivirus' },
+      { nombre: 'Comodo Firewall', descrip: 'Firewall gratuito con protección avanzada contra intrusiones.', categoria: 'seguridad', icono: 'fas fa-fire', url: 'https://www.comodo.com/home/internet-security/firewall.php' },
+      { nombre: 'Spybot Search & Destroy', descrip: 'Herramienta antispyware y antimalware.', categoria: 'seguridad', icono: 'fas fa-skull', url: 'https://www.safer-networking.org/products/spybot-free-edition/' },
+      { nombre: 'AdwCleaner', descrip: 'Elimina adware, PUP y programas no deseados.', categoria: 'seguridad', icono: 'fas fa-broom', url: 'https://www.malwarebytes.com/adwcleaner/' },
+      // UTILIDADES (20)
+      { nombre: '7-Zip', descrip: 'Compresor de archivos de alto ratio, soporta múltiples formatos.', categoria: 'utilidad', icono: 'fas fa-archive', url: 'https://www.7-zip.org/download.html' },
+      { nombre: 'PeaZip', descrip: 'Compresor de archivos con interfaz moderna y cifrado.', categoria: 'utilidad', icono: 'fas fa-file-archive', url: 'https://peazip.github.io/' },
+      { nombre: 'Notepad++', descrip: 'Editor de texto y código con resaltado de sintaxis.', categoria: 'utilidad', icono: 'fas fa-code', url: 'https://notepad-plus-plus.org/downloads/' },
+      { nombre: 'Visual Studio Code', descrip: 'Editor de código fuente potente y extensible.', categoria: 'utilidad', icono: 'fas fa-code', url: 'https://code.visualstudio.com/download' },
+      { nombre: 'Sublime Text', descrip: 'Editor de código rápido y minimalista (gratuito con licencia).', categoria: 'utilidad', icono: 'fas fa-edit', url: 'https://www.sublimetext.com/download' },
+      { nombre: 'CudaText', descrip: 'Editor de texto ligero y multiplataforma.', categoria: 'utilidad', icono: 'fas fa-terminal', url: 'https://cudatext.github.io/' },
+      { nombre: 'WinMerge', descrip: 'Comparador y fusionador de archivos y carpetas.', categoria: 'utilidad', icono: 'fas fa-code-branch', url: 'https://winmerge.org/downloads/' },
+      { nombre: 'FileZilla', descrip: 'Cliente FTP, SFTP y FTPS de código abierto.', categoria: 'utilidad', icono: 'fas fa-cloud-upload-alt', url: 'https://filezilla-project.org/download.php' },
+      { nombre: 'WinSCP', descrip: 'Cliente SFTP, SCP y FTP para Windows.', categoria: 'utilidad', icono: 'fas fa-folder-open', url: 'https://winscp.net/eng/download.php' },
+      { nombre: 'PuTTY', descrip: 'Cliente SSH, Telnet y Rlogin ligero.', categoria: 'utilidad', icono: 'fas fa-terminal', url: 'https://www.putty.org/' },
+      { nombre: 'TeamViewer', descrip: 'Acceso remoto y soporte técnico (versión gratuita).', categoria: 'utilidad', icono: 'fas fa-handshake', url: 'https://www.teamviewer.com/es/download/' },
+      { nombre: 'AnyDesk', descrip: 'Escritorio remoto rápido y seguro (gratuito para uso personal).', categoria: 'utilidad', icono: 'fas fa-laptop', url: 'https://anydesk.com/es/download' },
+      { nombre: 'ShareX', descrip: 'Captura de pantalla, grabación de pantalla y subida a la nube.', categoria: 'utilidad', icono: 'fas fa-camera', url: 'https://getsharex.com/downloads/' },
+      { nombre: 'Greenshot', descrip: 'Captura de pantalla rápida y sencilla con anotaciones.', categoria: 'utilidad', icono: 'fas fa-image', url: 'https://getgreenshot.org/downloads/' },
+      { nombre: 'LightShot', descrip: 'Herramienta de captura de pantalla ligera.', categoria: 'utilidad', icono: 'fas fa-camera-retro', url: 'https://app.prntscr.com/es/download.html' },
+      { nombre: 'PicPick', descrip: 'Captura de pantalla, editor de imágenes y regla de píxeles.', categoria: 'utilidad', icono: 'fas fa-pencil-ruler', url: 'https://picpick.app/es/download' },
+      { nombre: 'Ditto', descrip: 'Administrador del portapapeles con historial.', categoria: 'utilidad', icono: 'fas fa-clipboard-list', url: 'https://ditto-cp.sourceforge.io/' },
+      { nombre: 'ClipboardFusion', descrip: 'Sincronización y administración avanzada del portapapeles.', categoria: 'utilidad', icono: 'fas fa-clipboard', url: 'https://www.clipboardfusion.com/Download/' },
+      { nombre: 'CPU-Z', descrip: 'Información detallada de hardware: CPU, memoria, placa base.', categoria: 'utilidad', icono: 'fas fa-microchip', url: 'https://www.cpuid.com/softwares/cpu-z.html' },
+      { nombre: 'HWMonitor', descrip: 'Monitoriza temperaturas, voltajes y velocidades de ventiladores.', categoria: 'utilidad', icono: 'fas fa-thermometer-half', url: 'https://www.cpuid.com/softwares/hwmonitor.html' },
+      // COMUNICACIÓN (8)
+      { nombre: 'Discord', descrip: 'Plataforma de chat y voz para comunidades y gaming.', categoria: 'comunicación', icono: 'fab fa-discord', url: 'https://discord.com/download' },
+      { nombre: 'Zoom', descrip: 'Videollamadas y reuniones virtuales con pantalla compartida.', categoria: 'comunicación', icono: 'fas fa-video', url: 'https://zoom.us/download' },
+      { nombre: 'Telegram', descrip: 'Mensajería instantánea con enfoque en seguridad y velocidad.', categoria: 'comunicación', icono: 'fab fa-telegram-plane', url: 'https://desktop.telegram.org/' },
+      { nombre: 'Signal', descrip: 'Mensajería privada y cifrada de extremo a extremo.', categoria: 'comunicación', icono: 'fas fa-lock', url: 'https://signal.org/download/' },
+      { nombre: 'Slack', descrip: 'Herramienta de colaboración en equipo (versión gratuita).', categoria: 'comunicación', icono: 'fab fa-slack', url: 'https://slack.com/downloads' },
+      { nombre: 'Microsoft Teams', descrip: 'Plataforma de comunicación empresarial (versión gratuita).', categoria: 'comunicación', icono: 'fab fa-microsoft', url: 'https://www.microsoft.com/es-es/microsoft-teams/download-app' },
+      { nombre: 'Element', descrip: 'Cliente de comunicación descentralizado basado en Matrix.', categoria: 'comunicación', icono: 'fas fa-comments', url: 'https://element.io/download' },
+      { nombre: 'Skype', descrip: 'Videollamadas y mensajería, clásico de Microsoft.', categoria: 'comunicación', icono: 'fab fa-skype', url: 'https://www.skype.com/es/get-skype/' },
+      // DESARROLLO (8)
+      { nombre: 'Git', descrip: 'Sistema de control de versiones distribuido.', categoria: 'desarrollo', icono: 'fab fa-git-alt', url: 'https://git-scm.com/downloads' },
+      { nombre: 'Python', descrip: 'Lenguaje de programación versátil y fácil de aprender.', categoria: 'desarrollo', icono: 'fab fa-python', url: 'https://www.python.org/downloads/' },
+      { nombre: 'Node.js', descrip: 'Entorno de ejecución de JavaScript en el servidor.', categoria: 'desarrollo', icono: 'fab fa-node', url: 'https://nodejs.org/es/download/' },
+      { nombre: 'Eclipse IDE', descrip: 'Entorno de desarrollo integrado para Java y otros lenguajes.', categoria: 'desarrollo', icono: 'fas fa-code', url: 'https://www.eclipse.org/downloads/' },
+      { nombre: 'NetBeans', descrip: 'IDE para Java, PHP, C++ y más.', categoria: 'desarrollo', icono: 'fas fa-code', url: 'https://netbeans.apache.org/download/index.html' },
+      { nombre: 'IntelliJ IDEA Community', descrip: 'IDE gratuito para Java, Kotlin y otros.', categoria: 'desarrollo', icono: 'fas fa-code', url: 'https://www.jetbrains.com/idea/download/' },
+      { nombre: 'Android Studio', descrip: 'IDE oficial para desarrollo de aplicaciones Android.', categoria: 'desarrollo', icono: 'fab fa-android', url: 'https://developer.android.com/studio' },
+      { nombre: 'XAMPP', descrip: 'Entorno de desarrollo web con Apache, MySQL, PHP y Perl.', categoria: 'desarrollo', icono: 'fas fa-server', url: 'https://www.apachefriends.org/es/download.html' },
+      // EDUCACIÓN (10)
+      { nombre: 'Anki', descrip: 'Sistema de repetición espaciada para memorizar y estudiar.', categoria: 'educación', icono: 'fas fa-brain', url: 'https://apps.ankiweb.net/' },
+      { nombre: 'GeoGebra', descrip: 'Herramienta matemática interactiva para geometría, álgebra y cálculo.', categoria: 'educación', icono: 'fas fa-chart-line', url: 'https://www.geogebra.org/download' },
+      { nombre: 'Stellarium', descrip: 'Planetario virtual en 3D para observar el cielo.', categoria: 'educación', icono: 'fas fa-star', url: 'https://stellarium.org/es/' },
+      { nombre: 'Celestia', descrip: 'Simulador espacial en 3D para explorar el universo.', categoria: 'educación', icono: 'fas fa-rocket', url: 'https://celestiaproject.space/download.html' },
+      { nombre: 'GCompris', descrip: 'Suite de actividades educativas para niños de 2 a 10 años.', categoria: 'educación', icono: 'fas fa-child', url: 'https://gcompris.net/downloads-es.html' },
+      { nombre: 'Tux Paint', descrip: 'Programa de dibujo infantil con interfaz sencilla.', categoria: 'educación', icono: 'fas fa-paint-brush', url: 'https://tuxpaint.org/download/' },
+      { nombre: 'Marble', descrip: 'Globo virtual y atlas mundial de código abierto.', categoria: 'educación', icono: 'fas fa-globe', url: 'https://marble.kde.org/install.php' },
+      { nombre: 'KStars', descrip: 'Planetario de escritorio con catálogos estelares.', categoria: 'educación', icono: 'fas fa-star', url: 'https://edu.kde.org/kstars/' },
+      { nombre: 'FreeMind', descrip: 'Herramienta de mapas mentales para organizar ideas.', categoria: 'educación', icono: 'fas fa-sitemap', url: 'https://freemind.sourceforge.net/wiki/index.php/Download' },
+      { nombre: 'TED Player', descrip: 'Reproductor offline de charlas TED (vídeos educativos).', categoria: 'educación', icono: 'fas fa-video', url: 'https://www.ted.com/ted_player' }
+    ];
+
+    // =============================================================
+    // 3. LÓGICA DE RENDER, FILTROS, MODO OSCURO
+    // =============================================================
+    const grid = document.getElementById('grid');
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const resultsCount = document.getElementById('resultsCount');
+    const themeToggle = document.getElementById('themeToggle');
+
+    let currentCategory = 'all';
+    let searchTerm = '';
+
+    function render() {
+      const filtered = programas.filter(item => {
+        const matchCategory = currentCategory === 'all' || item.categoria === currentCategory;
+        const term = searchTerm.toLowerCase().trim();
+        const matchSearch = term === '' ||
+          item.nombre.toLowerCase().includes(term) ||
+          item.descrip.toLowerCase().includes(term);
+        return matchCategory && matchSearch;
+      });
+
+      resultsCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'programa' : 'programas'}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #94a3b8;">
+            <i class="fas fa-search" style="font-size: 2.5rem; display: block; margin-bottom: 1rem;"></i>
+            <p style="font-size: 1.1rem;">No encontramos programas con esos criterios.</p>
+            <p style="font-size: 0.9rem;">Prueba con otra búsqueda o categoría.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(prog => {
+        html += `
+          <div class="card" data-category="${prog.categoria}">
+            <div class="icon"><i class="${prog.icono}"></i></div>
+            <span class="category-badge">${prog.categoria}</span>
+            <h3>${prog.nombre}</h3>
+            <p>${prog.descrip}</p>
+            <a href="${prog.url}" target="_blank" rel="noopener noreferrer" class="btn-link">
+              Sitio oficial <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value;
+      render();
+    });
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        render();
+      });
+    });
+
+    // Modo oscuro / claro (el fondo de partículas no se ve afectado, pero cambiamos el estilo base)
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      themeToggle.innerHTML = isDark
+        ? '<i class="fas fa-sun"></i> <span>Modo claro</span>'
+        : '<i class="fas fa-moon"></i> <span>Modo oscuro</span>';
+      localStorage.setItem('darkMode', isDark ? 'true' : 'false');
+      // Ajustar fondo del body según modo (ya que el canvas es fijo)
+      if (isDark) {
+        document.body.style.background = '#0b1120';
+      } else {
+        document.body.style.background = '#f4f7fc';
+      }
+    });
+
+    // Cargar preferencia de modo oscuro
+    (function loadTheme() {
+      const saved = localStorage.getItem('darkMode');
+      if (saved === 'true') {
+        document.body.classList.add('dark');
+        document.body.style.background = '#0b1120';
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i> <span>Modo claro</span>';
+      } else {
+        document.body.style.background = '#f4f7fc';
+      }
+    })();
+
+    render();
+  </script>
+</body>
+</html>
