@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Enciclopedia Definitiva DISM y Administración de Imágenes en Windows 11</title>
+    <meta name="description" content="Guía maestra de ingeniería y reparación avanzada en Windows 11. Domina DISM, SFC, modificación de imágenes WIM/ESD, solución de errores críticos y despliegue corporativo.">
+    <meta name="keywords" content="DISM Windows 11, RestoreHealth, WinSxS, CBS log, Sysprep, WIM, ESD, SFC Scannow, Bootrec, PowerShell Repair-WindowsImage">
+    <style>
+        :root {
+            --bg-main: #0a0e17;
+            --bg-card: rgba(20, 30, 48, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #0078d4;
+            --accent-hover: #106ebe;
+            --success: #107c41;
+            --warning: #fde7e9;
+            --warning-text: #a80000;
+            --code-bg: #011627;
+            --sidebar-width: 280px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+
+        .top-bar {
+            position: fixed;
+            top: 0; left: 0; right: 0; height: 60px;
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            justify-content: space-between;
+        }
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: #fff; font-size: 1.1rem; }
+        .brand svg { width: 24px; height: 24px; fill: var(--accent); }
+
+        .sidebar {
+            position: fixed;
+            top: 60px; left: 0; bottom: 0; width: var(--sidebar-width);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 990;
+        }
+        .sidebar h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; letter-spacing: 0.05em; }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin-bottom: 6px; }
+        .sidebar a {
+            display: block; color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
+            padding: 6px 10px; border-radius: 6px; transition: all 0.2s;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .sidebar a:hover { background: rgba(255,255,255,0.05); color: #fff; padding-left: 14px; }
+
+        .main-content {
+            margin-top: 60px;
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            width: calc(100% - var(--sidebar-width));
+            max-width: 1200px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 35px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            scroll-margin-top: 80px;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: #fff; font-weight: 800; }
+        h2 { font-size: 1.5rem; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        h3 { font-size: 1.15rem; margin: 20px 0 10px 0; color: #fff; }
+        p { margin-bottom: 16px; line-height: 1.7; color: var(--text-main); text-align: justify; }
+        ul { margin-left: 20px; margin-bottom: 16px; color: var(--text-main); }
+        li { margin-bottom: 6px; }
+
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-left: auto; }
+        .badge-basic { background: rgba(16, 124, 65, 0.2); color: #22c55e; border: 1px solid #16a34a; }
+        .badge-inter { background: rgba(255, 185, 0, 0.2); color: #eab308; border: 1px solid #ca8a04; }
+        .badge-adv { background: rgba(168, 0, 0, 0.2); color: #ef4444; border: 1px solid #dc2626; }
+        .badge-expert { background: rgba(147, 51, 234, 0.2); color: #c084fc; border: 1px solid #9333ea; }
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; }
+        th, td { padding: 12px 16px; border: 1px solid var(--border-color); text-align: left; }
+        th { background: rgba(255,255,255,0.05); color: #fff; font-weight: 600; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+        .code-container { position: relative; margin: 20px 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        pre { background: var(--code-bg); padding: 16px; overflow-x: auto; margin: 0; }
+        code { font-family: 'Cascadia Code', Consolas, Monaco, monospace; font-size: 0.9rem; color: #e2e8f0; }
+        .code-keyword { color: #f92672; font-weight: bold; }
+        .code-param { color: #a6e22e; }
+        .code-arg { color: #e6db74; }
+        .code-comment { color: #75715e; font-style: italic; }
+        .copy-btn {
+            position: absolute; top: 8px; right: 8px;
+            background: rgba(255,255,255,0.1); border: none; color: #fff;
+            padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover { background: var(--accent); }
+
+        .box { padding: 16px 20px; border-radius: 8px; margin: 20px 0; display: flex; gap: 16px; align-items: flex-start; }
+        .box-warning { background: rgba(168, 0, 0, 0.15); border-left: 4px solid #ef4444; color: #fcd3d3; }
+        .box-info { background: rgba(0, 120, 212, 0.15); border-left: 4px solid var(--accent); color: #dbeafe; }
+        .box-icon { font-size: 1.3rem; line-height: 1; }
+
+        .diagram-flow { display: flex; gap: 20px; align-items: center; justify-content: center; margin: 30px 0; flex-wrap: wrap; }
+        .diagram-step { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); padding: 12px 20px; border-radius: 8px; text-align: center; font-weight: 600; font-size: 0.9rem; min-width: 140px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .diagram-arrow { color: var(--accent); font-weight: bold; font-size: 1.5rem; }
+
+        @media (max-width: 992px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-bar">
+        <div class="brand">
+            <svg viewBox="0 0 24 24"><path d="M2 3h20v18H2W2z M4 5v14h16V5H4z"/></svg>
+            <span>DOCUMENTACIÓN TÉCNICA WINDOWS 11</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">SISTEMA DE SERVICIO Y ADMINISTRACIÓN DE IMÁGENES (DISM)</div>
+    </header>
+
+    <nav class="sidebar">
+        <h3>Índice Técnico</h3>
+        <ul>
+            <li><a href="#sec-1">1. Anatomía y Fundamentos</a></li>
+            <li><a href="#sec-2">2. Requisitos Previos</a></li>
+            <li><a href="#sec-3">3. Diagnóstico de Salud</a></li>
+            <li><a href="#sec-4">4. Reparación Avanzada</a></li>
+            <li><a href="#sec-5">5. Limpieza de Componentes</a></li>
+            <li><a href="#sec-6">6. Modificaciones en Vivo</a></li>
+            <li><a href="#sec-7">7. Gestión de Drivers</a></li>
+            <li><a href="#sec-8">8. Ingeniería Offline</a></li>
+            <li><a href="#sec-9">9. Resolución de Errores</a></li>
+            <li><a href="#sec-10">10. Preguntas Frecuentes</a></li>
+            <li><a href="#sec-11">11. Integración de Herramientas</a></li>
+            <li><a href="#sec-12">12. Logs y Diagnóstico</a></li>
+            <li><a href="#sec-13">13. DISM y Windows Update</a></li>
+            <li><a href="#sec-14">14. Configuración WinRE</a></li>
+            <li><a href="#sec-15">15. Reconstrucción de Arranque</a></li>
+            <li><a href="#sec-16">16. Control de Paquetes</a></li>
+            <li><a href="#sec-17">17. Features On Demand</a></li>
+            <li><a href="#sec-18">18. Conversión e Ingeniería</a></li>
+            <li><a href="#sec-19">19. Sysprep Avanzado</a></li>
+            <li><a href="#sec-20">20. Automatización PowerShell</a></li>
+            <li><a href="#sec-21">21. Scripts Inteligentes</a></li>
+            <li><a href="#sec-22">22. Matriz de Errores</a></li>
+            <li><a href="#sec-23">23. Optimización Extrema</a></li>
+            <li><a href="#sec-24">24. Tabla Comparativa</a></li>
+            <li><a href="#sec-25">25. Anexo de Arquitectura</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        
+        <div style="margin-bottom: 40px;">
+            <h1>Enciclopedia Avanzada DISM en Windows 11</h1>
+            <p style="font-size: 1.1rem; color: var(--text-muted);">El compendio definitivo y definitivo de ingeniería de imágenes, reparación del almacén de componentes, despliegue empresarial masivo y automatización.</p>
+        </div>
+
+        <section id="sec-1" class="card">
+            <h2>1. Anatomía y Fundamentos de DISM <span class="badge badge-basic">🟢 Básico</span></h2>
+            <p><strong>Deployment Image Servicing and Management (DISM)</strong> es una arquitectura modular basada en APIs nativas que interactúa directamente con el subsistema <strong>CBS (Component-Based Servicing)</strong> de Windows 11. Su función principal es servir como puente entre los paquetes de manifiesto lógico y la abstracción física de los archivos del disco duro.</p>
+            <p>A diferencia de su predecesor histórico (PKG_MGR), DISM permite realizar operaciones transaccionales. Si una inyección de paquetes falla a mitad del proceso, DISM realiza un *rollback* completo del estado lógico para evitar la inestabilidad de la imagen del sistema operativo.</p>
+        </section>
+
+        <section id="sec-2" class="card">
+            <h2>2. Requisitos Previos y Entorno de Ejecución <span class="badge badge-basic">🟢 Básico</span></h2>
+            <p>Para garantizar operaciones deterministas y evitar denegaciones de acceso bajo códigos de error criptográficos, DISM requiere ser inicializado desde una consola con privilegios de administrador de alta seguridad (High Integrity Process Context).</p>
+            <p>El servicio principal involucrado es el <strong>Instalador de módulos de Windows (TrustedInstaller)</strong>. DISM se comunica con él a través de llamadas de procedimiento remoto (RPC).</p>
+        </section>
+
+        <section id="sec-3" class="card">
+            <h2>3. Diagnóstico y Comprobación de Salud <span class="badge badge-basic">🟢 Básico</span></h2>
+            <p>El diagnóstico preventivo implementa análisis lógicos y binarios secuenciales para determinar el estado de corrupción del almacén de componentes.</p>
+            <h3>A. CheckHealth</h3>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /cleanup-image /checkhealth</code></pre>
+            </div>
+            <h3>B. ScanHealth</h3>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /cleanup-image /scanhealth</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-4" class="card">
+            <h2>4. Reparación Avanzada de la Imagen del Sistema <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>Cuando se confirma la existencia de corrupción, el comando tradicional descarga los elementos necesarios a través de la infraestructura pública de Windows Update:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /cleanup-image /restorehealth</code></pre>
+            </div>
+            <h3>Reparación mediante Origen Externo Aislado</h3>
+            <p>Si la red local está protegida por políticas que impiden las descargas externas, se puede mapear la ruta de montaje de un archivo <code>install.wim</code> limpio:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /cleanup-image /restorehealth /source:WIM:D:\sources\install.wim:1 /limitaccess</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-5" class="card">
+            <h2>5. Limpieza Profunda del Almacén de Componentes (WinSxS) <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>El mantenimiento rutinario del almacén de componentes libera gigabytes de espacio redundante retenido por actualizaciones acumulativas anteriores.</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /cleanup-image /startcomponentcleanup</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-6" class="card">
+            <h2>6. Administración de Características y Paquetes en Vivo <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>Habilitar características directamente omitiendo la interfaz web o los paneles de configuración avanzados de Windows 11:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /get-features /format:table</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-7" class="card">
+            <h2>7. Gestión Avanzada de Controladores (Drivers) <span class="badge badge-adv">🔴 Avanzado</span></h2>
+            <p>Exportar todos los controladores instalados de terceros en el equipo actual a una ruta segura de copia de respaldo:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /export-driver /destination:C:\DriverBackup</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-8" class="card">
+            <h2>8. Ingeniería de Imágenes Offline: Montaje y Captura <span class="badge badge-expert">⚫ Experto</span></h2>
+            <p>Montar físicamente un archivo de imagen <code>install.wim</code> en un directorio local mapeado para interactuar con sus binarios:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /mount-image /imagefile:C:\images\install.wim /index:1 /mountdir:C:\mount</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-9" class="card">
+            <h2>9. Resolución de Errores Críticos Comunes <span class="badge badge-adv">🔴 Avanzado</span></h2>
+            <p>La mayoría de los bloqueos de DISM se deben a la incompatibilidad entre la versión del kernel activo y la fuente de datos suministrada. Verifique los parámetros de espaciado sintáctico antes de cada ejecución.</p>
+        </section>
+
+        <section id="sec-10" class="card">
+            <h2>10. Preguntas Frecuentes (FAQ) <span class="badge badge-basic">🟢 Básico</span></h2>
+            <p><strong>¿Puede DISM romper mi sistema operativo?</strong> No, DISM valida la integridad criptográfica de cada bloque antes de escribirlo en disco, asegurando un entorno protegido.</p>
+        </section>
+
+        <section id="sec-11" class="card">
+            <h2>11. Integración Secuencial con SFC y CHKDSK <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>El orden jerárquico y algorítmico obligatorio es el siguiente:</p>
+            <div class="diagram-flow">
+                <div class="diagram-step">1. CHKDSK</div>
+                <div class="diagram-arrow">&rarr;</div>
+                <div class="diagram-step">2. DISM ScanHealth</div>
+                <div class="diagram-arrow">&rarr;</div>
+                <div class="diagram-step">3. DISM RestoreHealth</div>
+                <div class="diagram-arrow">&rarr;</div>
+                <div class="diagram-step">4. SFC Scannow</div>
+            </div>
+            <p>Este flujo garantiza que los errores físicos de disco se corrijan antes de verificar la integridad lógica del almacén de componentes de Windows.</p>
+        </section>
+
+        <section id="sec-12" class="card">
+            <h2>12. Logs y Diagnóstico Avanzado de Errores <span class="badge badge-adv">🔴 Avanzado</span></h2>
+            <p>Ubicaciones clave de registros analíticos:</p>
+            <ul>
+                <li><strong>DISM Log:</strong> <code>C:\Windows\Logs\DISM\dism.log</code></li>
+                <li><strong>CBS Log:</strong> <code>C:\Windows\Logs\CBS\CBS.log</code></li>
+            </ul>
+        </section>
+
+        <section id="sec-13" class="card">
+            <h2>13. DISM y Windows Update Isolation <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>Purgar el almacén temporal de Windows Update para forzar a DISM a utilizar canales de red completamente limpios:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">net stop</span> wuauserv
+<span class="code-keyword">net stop</span> bits
+<span class="code-keyword">net stop</span> cryptsvc
+<span class="code-keyword">del</span> /f /q /s C:\Windows\SoftwareDistribution\*
+<span class="code-keyword">net start</span> cryptsvc
+<span class="code-keyword">net start</span> bits
+<span class="code-keyword">net start</span> wuauserv</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-14" class="card">
+            <h2>14. Configuración del Entorno de Recuperación (WinRE) <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>Consultar y administrar el estado del entorno de recuperación nativo de Windows 11:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">reagentc</span> /info
+<span class="code-keyword">reagentc</span> /enable
+<span class="code-keyword">reagentc</span> /disable</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-15" class="card">
+            <h2>15. Reconstrucción de Arranque Crítico con Bootrec <span class="badge badge-expert">⚫ Experto</span></h2>
+            <p>Restaurar los sectores lógicos de inicio esenciales en sistemas dañados:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">bootrec</span> /fixmbr
+<span class="code-keyword">bootrec</span> /fixboot
+<span class="code-keyword">bootrec</span> /scanos
+<span class="code-keyword">bootrec</span> /rebuildbcd</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-16" class="card">
+            <h2>16. Control e Instalación de Paquetes CAB/MSU <span class="badge badge-adv">🔴 Avanzado</span></h2>
+            <p>Listar, inyectar o remover paquetes de actualización específicos del sistema:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /get-packages
+<span class="code-keyword">dism</span> /online /add-package /packagepath:C:\updates\patch.cab
+<span class="code-keyword">dism</span> /online /remove-package /packagename:Package_for_RollupFix~31bf3856ad364e35~amd64~~22621.100.1.0</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-17" class="card">
+            <h2>17. Features On Demand (FoD) Avanzados <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>Instalar capacidades modulares extendidas directamente desde los servidores de Microsoft:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /add-capability /capabilityname:OpenSSH.Client~~~~0.0.1.0
+<span class="code-keyword">dism</span> /online /enable-feature /featurename:NetFx3 /all
+<span class="code-keyword">dism</span> /online /enable-feature /featurename:Microsoft-Hyper-V-All</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-18" class="card">
+            <h2>18. Conversión e Ingeniería de Imágenes ESD y WIM <span class="badge badge-expert">⚫ Experto</span></h2>
+            <p>Procesar y re-comprimir archivos de distribución masiva de Windows:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /export-image /sourceimagefile:C:\data\install.esd /sourceindex:1 /destinationimagefile:C:\data\install.wim /compress:max
+<span class="code-keyword">dism</span> /split-image /imagefile:C:\data\install.wim /swmfile:C:\data\install.swm /filesize:4100</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-19" class="card">
+            <h2>19. Sysprep Avanzado y Captura de Imágenes Corporativas <span class="badge badge-expert">⚫ Experto</span></h2>
+            <p>Generalizar el sistema operativo eliminando identificadores únicos de seguridad (SID) para clonación masiva:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code>C:\Windows\System32\Sysprep\sysprep.exe /generalize /oobe /shutdown</code></pre>
+            </div>
+            <p>Posteriormente, capture la imagen modificada desde un entorno de preinstalación (WinPE):</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /capture-image /imagefile:D:\captured.wim /capturedir:C:\ /name:"Windows11_Corporate"</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-20" class="card">
+            <h2>20. Automatización con Cmdlets de PowerShell <span class="badge badge-inter">🟡 Intermedio</span></h2>
+            <p>Utilizar los equivalentes modernos de la API de administración de Windows mediante PowerShell:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">Repair-WindowsImage</span> -Online -RestoreHealth
+<span class="code-keyword">Get-WindowsOptionalFeature</span> -Online | Out-GridView</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-21" class="card">
+            <h2>21. Scripts Inteligentes de Automantenimiento <span class="badge badge-adv">🔴 Avanzado</span></h2>
+            <p>Automatizar auditorías completas generando reportes consolidados en disco:</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code>@echo off
+echo Ejecutando análisis de salud del sistema...
+dism /online /cleanup-image /scanhealth &gt; C:\dism_report.txt
+sfc /scannow &gt;&gt; C:\dism_report.txt
+echo Operación completada. Reporte guardado en C:\dism_report.txt
+pause</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-22" class="card">
+            <h2>22. Matriz Completa de Errores y Soluciones <span class="badge badge-adv">🔴 Avanzado</span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Error</th>
+                        <th>Significado Lógico</th>
+                        <th>Estrategia de Solución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>0x800f081f</td><td>No se encuentran archivos de origen</td><td>Especificar ruta válida con /Source:WIM</td></tr>
+                    <tr><td>87</td><td>Parámetro de comando incorrecto</td><td>Verificar sintaxis y espacios del comando</td></tr>
+                    <tr><td>1392</td><td>Archivo o directorio dañado</td><td>Ejecutar CHKDSK /F antes de DISM</td></tr>
+                    <tr><td>0x80070002</td><td>Archivo inexistente en la base de datos</td><td>Restablecer componentes de Windows Update</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-23" class="card">
+            <h2>23. Rendimiento y Optimización Extrema de Espacio <span class="badge badge-adv">🔴 Avanzado</span></h2>
+            <p>Consolidar la base de datos de componentes eliminando la capacidad de desinstalar actualizaciones anteriores (Reset Base):</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code><span class="code-keyword">dism</span> /online /cleanup-image /startcomponentcleanup /resetbase</code></pre>
+            </div>
+        </section>
+
+        <section id="sec-24" class="card">
+            <h2>24. Tabla Comparativa de Herramientas de Sistema <span class="badge badge-basic">🟢 Básico</span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Herramienta</th>
+                        <th>Ámbito de Aplicación Primario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>SFC</td><td>Archivos del sistema en producción (System32)</td></tr>
+                    <tr><td>CHKDSK</td><td>Sectores físicos y sistema de archivos (NTFS/FAT32)</td></tr>
+                    <tr><td>DISM</td><td>Almacén de componentes lógico (WinSxS)</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-25" class="card">
+            <h2>25. Anexo Técnico de Arquitectura Interna <span class="badge badge-expert">⚫ Experto</span></h2>
+            <p>A nivel de bajo nivel, la carpeta <code>WinSxS</code> utiliza punteros criptográficos y enlaces duros de NTFS para proyectar archivos sin duplicar espacio físico en el disco duro. Los archivos de manifiesto <code>.mum</code> y los catálogos firmados <code>.cat</code> controlan de forma estricta las dependencias de software, impidiendo modificaciones arbitrarias por parte de procesos de terceros que carezcan del token de seguridad de <strong>TrustedInstaller</strong>.</p>
+        </section>
+
+    </main>
+
+    <script>
+        function copyCode(button) {
+            const container = button.parentElement;
+            const code = container.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.innerText;
+                button.innerText = '¡Copiado!';
+                button.style.background = '#107c41';
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.style.background = 'rgba(255,255,255,0.1)';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
