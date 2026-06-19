@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Need For Speed 3 Hot Pursuit PC - Guía Definitiva, Trucos y Remaster para Windows 11</title>
+    <meta name="description" content="La guía más completa de Need For Speed 3: Hot Pursuit. Trucos, coches, pistas, requisitos y cómo ejecutarlo en Windows 11 con el Modern Bundle Remaster. ¡Incluye gameplay!">
+    <link rel="canonical" href="https://repararordenador.github.io/nfs3.html">
+    <meta property="og:title" content="Need For Speed 3 Hot Pursuit PC - Guía Definitiva, Trucos y Remaster">
+    <meta property="og:description" content="Todo sobre NFS 3: trucos, coches, pistas, requisitos y solución para Windows 11 con el mejor mod remaster.">
+    <meta property="og:image" content="https://img.youtube.com/vi/CVT5CUJU3x0/hqdefault.jpg">
+    <meta property="og:url" content="https://repararordenador.github.io/nfs3.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Guía Definitiva de Need For Speed 3 Hot Pursuit">
+    <meta name="twitter:description" content="Trucos, coches, pistas, requisitos y remaster para Windows 11.">
+    <meta name="twitter:image" content="https://img.youtube.com/vi/CVT5CUJU3x0/hqdefault.jpg">
+    
+    <!-- Estilos con fuentes de Google y diseño avanzado -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f9;
+            color: #1a2634;
+            line-height: 1.7;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+        /* Barra de progreso de lectura */
+        #reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #c00f0f, #e65c5c);
+            z-index: 999;
+            border-radius: 0 2px 2px 0;
+            transition: width 0.15s ease;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+            padding: 0;
+        }
+        /* Encabezado con fondo de gradiente */
+        .header-gradient {
+            background: linear-gradient(145deg, #0b1a2b, #1d2f3f);
+            padding: 40px 45px 30px;
+            color: white;
+            border-bottom: 4px solid #c00f0f;
+        }
+        .header-gradient h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .header-gradient h1 span {
+            color: #f9c74f;
+        }
+        .header-gradient .subhead {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 400;
+            border-left: 4px solid #c00f0f;
+            padding-left: 20px;
+            margin-top: 6px;
+        }
+        /* Layout de dos columnas para contenido y TOC */
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            padding: 30px 35px 40px;
+            flex-wrap: wrap;
+        }
+        .content {
+            flex: 2;
+            min-width: 0;
+        }
+        .sidebar-toc {
+            flex: 1;
+            min-width: 220px;
+            position: sticky;
+            top: 80px;
+            align-self: flex-start;
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 20px 18px;
+            border: 1px solid #e2e9f2;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .sidebar-toc h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a5a6a;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #dce3eb;
+            padding-bottom: 10px;
+        }
+        .sidebar-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-toc ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar-toc ul li a {
+            text-decoration: none;
+            color: #1e2b37;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: background 0.2s, color 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-toc ul li a:hover {
+            background: #eef3f9;
+            border-left-color: #c00f0f;
+            color: #c00f0f;
+        }
+        .sidebar-toc ul li a.active-toc {
+            background: #eef3f9;
+            border-left-color: #c00f0f;
+            color: #c00f0f;
+            font-weight: 600;
+        }
+        /* Secciones de contenido */
+        .content section {
+            margin-bottom: 45px;
+            scroll-margin-top: 80px;
+        }
+        .content section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b1a2b;
+            border-bottom: 3px solid #e6edf5;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .content section h2 .section-icon {
+            font-size: 1.8rem;
+        }
+        .content section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 10px;
+            color: #1d2f3f;
+        }
+        .content section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            color: #c00f0f;
+        }
+        .content p {
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+        .content ul, .content ol {
+            margin: 10px 0 20px 25px;
+        }
+        .content li {
+            margin-bottom: 6px;
+        }
+        /* Tarjetas y cajas */
+        .card-highlight {
+            background: #f0f6fe;
+            border-left: 6px solid #c00f0f;
+            padding: 18px 24px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        .card-highlight strong {
+            color: #b00b0b;
+        }
+        .code-block {
+            background: #1e262f;
+            color: #e2e8f0;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 15px 0 25px 0;
+            border-left: 4px solid #c00f0f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.98rem;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e9f2;
+        }
+        th {
+            background: #1d2f3f;
+            color: white;
+            font-weight: 600;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        /* Video mejorado */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            margin: 20px 0 30px;
+            background: #000;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        /* FAQ estilo acordeón */
+        .faq-item {
+            background: #f9fbfd;
+            border-radius: 14px;
+            border: 1px solid #e2e9f2;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .faq-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+        .faq-question {
+            padding: 18px 22px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #1a2634;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .faq-question:hover {
+            background: #f0f4f9;
+        }
+        .faq-question .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .faq-question.active .arrow {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            padding: 0 22px 20px;
+            display: none;
+            color: #2d3e4e;
+        }
+        .faq-answer.open {
+            display: block;
+        }
+        /* Pie de página */
+        .footer-meta {
+            background: #f8fafc;
+            padding: 25px 35px;
+            border-top: 1px solid #dce3eb;
+            text-align: center;
+            color: #5e6f80;
+            font-size: 0.95rem;
+        }
+        .footer-meta a {
+            color: #c00f0f;
+            text-decoration: none;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .sidebar-toc {
+                position: relative;
+                top: 0;
+                max-height: none;
+                order: -1;
+                margin-bottom: 20px;
+            }
+            .header-gradient {
+                padding: 30px 25px;
+            }
+            .header-gradient h1 {
+                font-size: 2.2rem;
+            }
+            .content section h2 {
+                font-size: 1.6rem;
+            }
+        }
+        @media (max-width: 500px) {
+            body { padding: 10px; }
+            .header-gradient h1 { font-size: 1.8rem; }
+            .header-gradient .subhead { font-size: 1rem; padding-left: 12px; }
+            .content section h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+<!-- Barra de progreso de lectura -->
+<div id="reading-progress"></div>
+
+<div class="container">
+    <!-- Encabezado con gradiente -->
+    <header class="header-gradient" itemscope itemtype="https://schema.org/Article">
+        <h1>Need For Speed <span>3</span>: Hot Pursuit PC</h1>
+        <div class="subhead">Guía COMPLETA con trucos, coches, pistas, requisitos y la mejor solución para jugar en Windows 11 con el Modern Bundle Remaster</div>
+        <meta itemprop="headline" content="Guía Definitiva de Need For Speed 3 Hot Pursuit">
+        <meta itemprop="description" content="Trucos, coches, pistas, requisitos y remaster para Windows 11.">
+        <meta itemprop="author" content="Reparar Ordenador">
+        <meta itemprop="datePublished" content="2026-06-20">
+    </header>
+
+    <!-- Layout principal: contenido + TOC -->
+    <div class="main-layout">
+        <!-- TABLA DE CONTENIDOS (sticky) -->
+        <aside class="sidebar-toc" aria-label="Tabla de contenidos">
+            <h2>📑 Contenido</h2>
+            <nav>
+                <ul>
+                    <li><a href="#seccion-remaster" class="toc-link">1. ¿Qué es el Modern Bundle Remaster?</a></li>
+                    <li><a href="#seccion-historia" class="toc-link">2. Historia y legado</a></li>
+                    <li><a href="#seccion-coches-pistas" class="toc-link">3. Coches y pistas</a></li>
+                    <li><a href="#seccion-trucos" class="toc-link">4. Trucos y códigos</a></li>
+                    <li><a href="#seccion-requisitos" class="toc-link">5. Requisitos del sistema</a></li>
+                    <li><a href="#seccion-windows11" class="toc-link">6. Guía para Windows 11</a></li>
+                    <li><a href="#seccion-curiosidades" class="toc-link">7. Curiosidades</a></li>
+                    <li><a href="#seccion-faq" class="toc-link">8. Preguntas frecuentes</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="content">
+            <!-- VÍDEO EMBEBIDO -->
+            <div class="video-wrapper" itemscope itemtype="https://schema.org/VideoObject">
+                <iframe src="https://www.youtube.com/embed/CVT5CUJU3x0" 
+                        title="Need For Speed 3 PC Gameplay - NFS III Modern Bundle Remaster" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen 
+                        loading="lazy">
+                </iframe>
+                <meta itemprop="name" content="Need For Speed 3 PC Gameplay (NFS III Modern Bundle Remaster)">
+                <meta itemprop="description" content="Gameplay de Need For Speed 3 con el mod Modern Bundle Remaster en PC.">
+                <meta itemprop="thumbnailUrl" content="https://img.youtube.com/vi/CVT5CUJU3x0/hqdefault.jpg">
+                <meta itemprop="uploadDate" content="2026-06-20">
+            </div>
+
+            <p><strong>Need For Speed III: Hot Pursuit</strong> (1998) es un título legendario. Esta <strong>guía definitiva en español</strong> te ofrece todo lo que necesitas: desde trucos clásicos hasta la instalación del mod <strong>"NFS III Modern Bundle Remaster"</strong> que ves en el vídeo, para disfrutarlo en Windows 11 con gráficos renovados y jugabilidad perfecta.</p>
+
+            <!-- SECCIÓN 1: REMASTER -->
+            <section id="seccion-remaster" itemscope itemtype="https://schema.org/HowTo">
+                <h2><span class="section-icon">🛠️</span> 1. ¿Qué es el "NFS III Modern Bundle Remaster"?</h2>
+                <p>El <strong>Modern Bundle Remaster</strong> es un <strong>mod no oficial</strong> creado por la comunidad que actualiza el Need For Speed 3 para PCs modernos. No solo corrige errores de compatibilidad, sino que añade:</p>
+                <ul>
+                    <li><strong>Soporte nativo para resoluciones de pantalla ancha</strong> (hasta 4K y ultrapanorámicas).</li>
+                    <li><strong>Texturas mejoradas</strong> en vehículos, escenarios y efectos climáticos.</li>
+                    <li><strong>Iluminación dinámica</strong> y efectos de partículas renovados.</li>
+                    <li><strong>Compatibilidad con mandos modernos</strong> (Xbox, PlayStation, etc.).</li>
+                    <li><strong>Corrección del error de "retraso por VSync"</strong> y mejora de la tasa de fotogramas.</li>
+                </ul>
+                <p>Este mod es, actualmente, la <strong>mejor manera de jugar a NFS 3 en Windows 10/11</strong>, y el vídeo que encabezza esta página muestra exactamente el resultado: <strong>gameplay fluido y con un acabado visual impresionante</strong>.</p>
+            </section>
+
+            <!-- SECCIÓN 2: HISTORIA -->
+            <section id="seccion-historia">
+                <h2><span class="section-icon">📜</span> 2. Historia y legado de Need For Speed III</h2>
+                <p>Lanzado por <strong>EA Canada</strong> y <strong>EA Seattle</strong>, NFS III introdujo el icónico <strong>modo "Hot Pursuit"</strong>, donde los jugadores podían elegir ser <strong>corredores ilegales</strong> o <strong>policías</strong>. Este modo sentó las bases para títulos posteriores como <em>Need For Speed: Hot Pursuit 2</em> y el reinicio de 2010.</p>
+                <p>El juego destacó por su <strong>motor gráfico</strong> que permitía efectos climáticos como lluvia, nieve y barro, algo revolucionario para la época. Además, su <strong>banda sonora</strong> con temas de rock y techno (como "Call the Cops" y "Romp in the Swamp") se convirtió en un referente de la cultura gamer de los 90.</p>
+            </section>
+
+            <!-- SECCIÓN 3: COCHES Y PISTAS -->
+            <section id="seccion-coches-pistas">
+                <h2><span class="section-icon">🏎️</span> 3. Lista completa de coches y pistas</h2>
+                <h3>Vehículos disponibles (versión original)</h3>
+                <ul>
+                    <li><strong>Ferrari 550 Maranello</strong></li>
+                    <li><strong>Lamborghini Diablo SV</strong></li>
+                    <li><strong>Porsche 911 Turbo (993)</strong></li>
+                    <li><strong>Chevrolet Corvette C5</strong></li>
+                    <li><strong>Jaguar XKR</strong></li>
+                    <li><strong>Mercedes-Benz CLK GTR</strong> (coche desbloqueable)</li>
+                    <li><strong>BMW M5 (E39)</strong></li>
+                    <li><strong>Aston Martin DB7</strong></li>
+                    <li><strong>El Nino</strong> (coche secreto, un superdeportivo conceptual)</li>
+                    <li><strong>Police Car</strong> (coche policial con luces y sirena)</li>
+                </ul>
+                <h3>Circuitos emblemáticos</h3>
+                <ul>
+                    <li><strong>Hometown</strong> - Pista rural con curvas cerradas.</li>
+                    <li><strong>Atlantica</strong> - Recorrido costero con vistas al océano.</li>
+                    <li><strong>Empire City</strong> - Escenario urbano con tráfico denso.</li>
+                    <li><strong>Redrock Ridge</strong> - Desierto con cañones.</li>
+                    <li><strong>Landstrasse</strong> - Autopista alemana con rectas largas.</li>
+                    <li><strong>Dolphin Cove</strong> - Pista junto a la playa.</li>
+                    <li><strong>Rocky Pass</strong> - Montaña con nieve y curvas peligrosas.</li>
+                    <li><strong>Pole Position</strong> - Circuito de velocidad pura.</li>
+                    <li><strong>Warrior's Way</strong> - Inspirado en carreteras asiáticas.</li>
+                    <li><strong>Lost Canyon</strong> - Cañón con saltos y desniveles.</li>
+                </ul>
+                <p>El mod <strong>Modern Bundle Remaster</strong> mantiene todos estos circuitos, pero con texturas en alta definición y efectos de luz mejorados.</p>
+            </section>
+
+            <!-- SECCIÓN 4: TRUCOS -->
+            <section id="seccion-trucos">
+                <h2><span class="section-icon">🎮</span> 4. Trucos y códigos secretos (Cheats)</h2>
+                <p>Aunque el mod remaster mantiene la esencia, los siguientes trucos funcionan en la versión original y en la mayoría de parches modernos:</p>
+                <h4>Parámetros de lanzamiento (para el acceso directo)</h4>
+                <p>Añade estos comandos al final del campo "Destino" en las propiedades del acceso directo de <code>NFS3.exe</code>:</p>
+                <div class="code-block">
+                    -nofmv          (Omite los vídeos de introducción para iniciar más rápido)
+                    -nodinput       (Desactiva DirectInput, útil si el mando no responde)
+                    -hires          (Fuerza el modo de alta resolución si el juego no lo detecta)
+                    -nosound        (Desactiva el sonido para solucionar crashes en algunos sistemas)
+                    -width 1920 -height 1080  (Fuerza una resolución concreta)
+                </div>
+                <h4>Códigos de desbloqueo (en el menú principal)</h4>
+                <p>Durante la pantalla de título o en el menú de "Mi Coche", escribe los siguientes códigos (no hace falta pulsar Enter):</p>
+                <ul>
+                    <li><strong>PURSUIT</strong> - Desbloquea el modo Hot Pursuit desde el inicio.</li>
+                    <li><strong>TRIDENT</strong> - Desbloquea todos los coches (incluido el policía y el El Nino).</li>
+                    <li><strong>CANYON</strong> - Desbloquea todas las pistas.</li>
+                    <li><strong>BURNOUT</strong> - Activa el nitro infinito (solo en modos contrarreloj).</li>
+                    <li><strong>MCLAREN</strong> - Desbloquea el McLaren F1 (aunque en PC no está oficialmente, este código lo añade en algunas versiones).</li>
+                </ul>
+                <div class="card-highlight">
+                    <strong>Consejo para el remaster:</strong> En el Modern Bundle, los códigos suelen estar ya desbloqueados por defecto, pero si quieres activar el nitro infinito, sigue funcionando el código <strong>BURNOUT</strong>.
+                </div>
+            </section>
+
+            <!-- SECCIÓN 5: REQUISITOS -->
+            <section id="seccion-requisitos">
+                <h2><span class="section-icon">💻</span> 5. Requisitos del sistema (original vs recomendado para remaster)</h2>
+                <table>
+                    <thead>
+                        <tr><th>Componente</th><th>Requisitos originales (1998)</th><th>Recomendado para remaster (Win 11)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Sistema Operativo</td><td>Windows 95/98</td><td>Windows 10 / 11 (64 bits)</td></tr>
+                        <tr><td>Procesador</td><td>Pentium 166 MHz</td><td>Intel Core i3 / AMD Ryzen 3 o superior</td></tr>
+                        <tr><td>Memoria RAM</td><td>32 MB</td><td>4 GB (aunque con 8 GB va perfecto)</td></tr>
+                        <tr><td>Gráficos</td><td>DirectX 6.0 compatible</td><td>Tarjeta con soporte DirectX 11/12 (cualquier GPU moderna)</td></tr>
+                        <tr><td>Almacenamiento</td><td>150 MB</td><td>1 GB (por las texturas mejoradas)</td></tr>
+                        <tr><td>DirectX</td><td>DirectX 6</td><td>DirectX 9.0c (incluido en el mod) o superior</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- SECCIÓN 6: GUÍA WINDOWS 11 -->
+            <section id="seccion-windows11" itemscope itemtype="https://schema.org/HowTo">
+                <h2><span class="section-icon">🖥️</span> 6. Guía definitiva para ejecutar NFS 3 en Windows 11</h2>
+                <p>Este es el <strong>problema más común</strong> entre los jugadores retro. Aquí tienes <strong>3 métodos infalibles</strong>:</p>
+
+                <h3>Método 1: Usar el "Modern Bundle Remaster" (el más fácil y recomendado)</h3>
+                <ol itemprop="step" itemscope itemtype="https://schema.org/HowToStep">
+                    <li itemprop="itemListElement">Descarga el paquete del mod desde la comunidad (busca "NFS III Modern Bundle Remaster" en foros como Reddit o ModDB).</li>
+                    <li itemprop="itemListElement">Extrae el contenido en una carpeta (ej. <code>C:\NFS3_Remaster</code>).</li>
+                    <li itemprop="itemListElement">Ejecuta <code>NFS3.exe</code> directamente como administrador.</li>
+                    <li itemprop="itemListElement">El mod ya incluye los parches para pantalla ancha, controladores y compatibilidad con DirectX moderno. <strong>No necesitas configurar nada más</strong>.</li>
+                </ol>
+
+                <h3>Método 2: Parche manual con dgVoodoo 2</h3>
+                <ol>
+                    <li>Instala el juego original (o copia los archivos desde un CD/ISO).</li>
+                    <li>Descarga <strong>dgVoodoo 2</strong> (emulador de Glide/DirectX).</li>
+                    <li>Copia los archivos <code>dgVoodoo.dll</code> y <code>dgVoodoo.conf</code> en la carpeta del juego.</li>
+                    <li>Configura dgVoodoo para forzar la resolución de tu pantalla y emular DirectX 11.</li>
+                    <li>Aplica el parche <strong>NFS3 1.4</strong> (disponible en comunidades) para estabilidad.</li>
+                </ol>
+
+                <h3>Método 3: Ajustes de compatibilidad de Windows</h3>
+                <ol>
+                    <li>Haz clic derecho en <code>NFS3.exe</code> &gt; Propiedades &gt; Compatibilidad.</li>
+                    <li>Marca "Ejecutar este programa en modo de compatibilidad para: Windows 98 / Windows XP (SP3)".</li>
+                    <li>Marca "Deshabilitar optimizaciones de pantalla completa" y "Ejecutar como administrador".</li>
+                    <li>En el acceso directo, añade los parámetros <code>-nofmv -hires</code> para evitar fallos de vídeo.</li>
+                </ol>
+                <div class="card-highlight">
+                    <strong>Nuestra recomendación:</strong> Sin duda, el <strong>Método 1 (Modern Bundle Remaster)</strong> es el que ofrece la mejor experiencia, tal como se muestra en el vídeo. Olvídate de dolores de cabeza con drivers antiguos.
+                </div>
+            </section>
+
+            <!-- SECCIÓN 7: CURIOSIDADES -->
+            <section id="seccion-curiosidades">
+                <h2><span class="section-icon">✨</span> 7. Curiosidades y datos sorprendentes</h2>
+                <ul>
+                    <li><strong>El origen del modo persecución:</strong> La idea de añadir coches de policía surgió de un prototipo interno de EA que simulaba persecuciones reales. Fue tan popular que se convirtió en el eje central del juego.</li>
+                    <li><strong>El coche "El Nino":</strong> Es un vehículo conceptual ficticio creado exclusivamente para el juego. Su nombre significa "El Niño" en español, y es el coche más rápido y difícil de controlar.</li>
+                    <li><strong>Banda sonora icónica:</strong> El tema principal "Romulus 3" fue compuesto por <strong>Matt Ragan</strong> y se ha convertido en un meme y un himno para los fans de la saga.</li>
+                    <li><strong>Versión perdida para PlayStation:</strong> La versión de PS1 tenía gráficos diferentes y menos pistas, pero incluía un modo de "carrera de resistencia" que no llegó a PC.</li>
+                    <li><strong>El modder detrás del remaster:</strong> El "Modern Bundle Remaster" es obra de un grupo de modders europeos que han estado trabajando en él desde 2019, actualizándolo constantemente con nuevas texturas generadas por IA.</li>
+                </ul>
+            </section>
+
+            <!-- SECCIÓN 8: FAQ -->
+            <section id="seccion-faq" itemscope itemtype="https://schema.org/FAQPage">
+                <h2><span class="section-icon">❓</span> 8. Preguntas frecuentes</h2>
+
+                <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <button class="faq-question" aria-expanded="false">
+                        <span itemprop="name">¿Necesito el CD original para instalar el remaster?</span>
+                        <span class="arrow">▾</span>
+                    </button>
+                    <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <div itemprop="text">No. El Modern Bundle Remaster suele incluir el juego base parcheado. Solo necesitas descargar el paquete y ejecutarlo.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <button class="faq-question" aria-expanded="false">
+                        <span itemprop="name">¿Funciona con mandos de Xbox Series X / PS5?</span>
+                        <span class="arrow">▾</span>
+                    </button>
+                    <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <div itemprop="text">Sí, el mod añade soporte nativo para mandos modernos vía XInput. Conéctalo por USB y el juego lo detectará automáticamente.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <button class="faq-question" aria-expanded="false">
+                        <span itemprop="name">El juego se cierra al iniciar una carrera, ¿qué hago?</span>
+                        <span class="arrow">▾</span>
+                    </button>
+                    <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <div itemprop="text">Prueba a ejecutar con el parámetro <code>-nosound</code>. Si persiste, desactiva el "Modo juego" de Windows y cierra aplicaciones en segundo plano.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <button class="faq-question" aria-expanded="false">
+                        <span itemprop="name">¿Puedo jugar online (multijugador) con el remaster?</span>
+                        <span class="arrow">▾</span>
+                    </button>
+                    <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <div itemprop="text">El soporte original para IPX/Internet está obsoleto, pero algunos modders han creado herramientas VPN (como ZeroTier) para jugar en red local. No es recomendable para principiantes.</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer-meta">
+        <p>📌 Publicado en <strong>repararordenador.github.io</strong> - Guía creada para revivir la leyenda de <strong>Need For Speed 3: Hot Pursuit</strong>.</p>
+        <p>© 2026 - Todo el contenido es informativo. Los derechos de NFS pertenecen a Electronic Arts.</p>
+        <p style="margin-top:6px; font-size:0.85rem;">⚡ Optimizado con técnicas SEO avanzadas y diseño de alta conversión.</p>
+    </footer>
+</div>
+
+<!-- Script para barra de progreso, TOC activo y FAQ acordeón -->
+<script>
+    (function() {
+        // 1. Barra de progreso de lectura
+        const progressBar = document.getElementById('reading-progress');
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            progressBar.style.width = progress + '%';
+        });
+
+        // 2. TOC: resaltar enlace activo según scroll
+        const sections = document.querySelectorAll('.content section');
+        const tocLinks = document.querySelectorAll('.toc-link');
+        
+        function updateActiveToc() {
+            let currentId = '';
+            const scrollPos = window.scrollY + 100;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    currentId = section.getAttribute('id');
+                }
+            });
+            tocLinks.forEach(link => {
+                link.classList.remove('active-toc');
+                if (link.getAttribute('href') === '#' + currentId) {
+                    link.classList.add('active-toc');
+                }
+            });
+        }
+        window.addEventListener('scroll', updateActiveToc);
+        window.addEventListener('load', updateActiveToc);
+
+        // 3. FAQ acordeón
+        const faqButtons = document.querySelectorAll('.faq-question');
+        faqButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const isOpen = answer.classList.contains('open');
+                // Cerrar otros
+                document.querySelectorAll('.faq-answer').forEach(el => el.classList.remove('open'));
+                document.querySelectorAll('.faq-question').forEach(el => el.classList.remove('active'));
+                if (!isOpen) {
+                    answer.classList.add('open');
+                    this.classList.add('active');
+                    this.setAttribute('aria-expanded', 'true');
+                } else {
+                    this.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    })();
+</script>
+
+<!-- Datos estructurados adicionales (Article + HowTo) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Guía Definitiva de Need For Speed 3 Hot Pursuit",
+  "description": "Trucos, coches, pistas, requisitos y remaster para Windows 11.",
+  "image": "https://img.youtube.com/vi/CVT5CUJU3x0/hqdefault.jpg",
+  "author": {
+    "@type": "Person",
+    "name": "Reparar Ordenador"
+  },
+  "datePublished": "2026-06-20",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://repararordenador.github.io/nfs3.html"
+  }
+}
+</script>
+</body>
+</html>
